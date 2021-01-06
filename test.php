@@ -8,8 +8,8 @@ require_once __DIR__ . '/Dispatcher.php';
 require_once __DIR__ . '/Route.php';
 
 
-$dispatcher = new \Routing\Dispatcher(
-    new \Routing\Parser\JsonParser()
+$dispatcher = new Swiftly\Routing\Dispatcher(
+    new Swiftly\Routing\Parser\JsonParser()
 );
 
 $dispatcher->load( __DIR__ . '/test.routes.json' );
