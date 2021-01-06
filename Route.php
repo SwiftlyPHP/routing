@@ -11,6 +11,13 @@ Class Route
 {
 
     /**
+     * The name of this route
+     *
+     * @var string $name Route name
+     */
+    public $name = '';
+
+    /**
      * The regex used to match this route
      *
      * @var string $regex Route regex

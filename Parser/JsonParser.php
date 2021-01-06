@@ -57,7 +57,11 @@ Class JsonParser Implements ParserInterface
                 continue;
             }
 
-            $routes->add( $name, $this->convert( $contents ) );
+            // Create route definition struct
+            $route = $this->convert( $contents );
+            $route->name = $name;
+
+            $routes->add( $name, $route );
         }
 
         return $routes;
