@@ -36,10 +36,12 @@ Class Dispatcher
      * @var string[] ALLOWED_METHODS HTTP methods
      */
     private const ALLOWED_METHODS = [
+        'OPTIONS',
+        'HEAD',
         'GET',
         'POST',
         'PUT',
-        'UPDATE',
+        'PATCH',
         'DELETE'
     ];
 
