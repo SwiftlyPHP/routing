@@ -1,8 +1,8 @@
 <?php
 
-namespace Routing\Parser;
+namespace Swiftly\Routing\Parser;
 
-use Routing\{
+use Swiftly\Routing\{
     Route,
     Collection\RouteCollection
 };

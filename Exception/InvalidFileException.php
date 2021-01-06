@@ -1,6 +1,6 @@
 <?php
 
-namespace Routing\Exception;
+namespace Swiftly\Routing\Exception;
 
 /**
  * Exception to be thrown if a routes file is not correctly formatted

@@ -1,6 +1,6 @@
 <?php
 
-namespace Routing\Collection;
+namespace Swiftly\Routing\Collection;
 
 /**
  * Class used to store a collection of cached routes

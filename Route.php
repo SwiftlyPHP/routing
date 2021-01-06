@@ -1,6 +1,6 @@
 <?php
 
-namespace Routing;
+namespace Swiftly\Routing;
 
 /**
  * Simple class used to represent a single route

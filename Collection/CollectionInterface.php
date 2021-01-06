@@ -1,8 +1,8 @@
 <?php
 
-namespace Routing\Collection;
+namespace Swiftly\Routing\Collection;
 
-use Routing\Route;
+use Swiftly\Routing\Route;
 
 /**
  * Common interface for managing a collection of routes
