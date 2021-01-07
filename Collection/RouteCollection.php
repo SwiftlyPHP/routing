@@ -7,7 +7,7 @@ use Swiftly\Routing\Route;
 /**
  * Class used to store and manage a collection of routes
  *
- * @author C Varley <clvarley>
+ * @author clvarley
  */
 Class RouteCollection Implements CollectionInterface
 {

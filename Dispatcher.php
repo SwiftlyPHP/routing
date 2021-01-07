@@ -11,7 +11,7 @@ use Swiftly\Routing\{
 /**
  * Simple regex dispatcher
  *
- * @author <clvarley>
+ * @author clvarley
  */
 Class Dispatcher
 {

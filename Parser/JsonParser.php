@@ -10,7 +10,7 @@ use Swiftly\Routing\{
 /**
  * Class responsible for loading routes from .json files
  *
- * @author <clvarley>
+ * @author clvarley
  */
 Class JsonParser Implements ParserInterface
 {

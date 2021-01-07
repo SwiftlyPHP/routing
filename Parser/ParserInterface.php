@@ -7,7 +7,7 @@ use Swiftly\Routing\Collection\CollectionInterface;
 /**
  * Interface for classes that parse route files
  *
- * @author <clvarley>
+ * @author clvarley
  */
 Interface ParserInterface
 {

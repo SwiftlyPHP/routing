@@ -5,7 +5,7 @@ namespace Swiftly\Routing\Collection;
 /**
  * Class used to store a collection of cached routes
  *
- * @author C Varley <clvarley>
+ * @author clvarley
  */
 Class CachedCollection Implements CollectionInterface
 {
