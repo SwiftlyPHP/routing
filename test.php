@@ -2,14 +2,14 @@
 
 require_once __DIR__ . '/CollectionInterface.php';
 require_once __DIR__ . '/Collection/RouteCollection.php';
-require_once __DIR__ . '/Parser/ParserInterface.php';
+require_once __DIR__ . '/ParserInterface.php';
 require_once __DIR__ . '/Parser/JsonParser.php';
 require_once __DIR__ . '/Dispatcher.php';
 require_once __DIR__ . '/Route.php';
 
 
 $dispatcher = new Swiftly\Routing\Dispatcher(
-    new Swiftly\Routing\Parser\JsonParser()
+    new Swiftly\Routing\Parser\JsonParser
 );
 
 $dispatcher->load( __DIR__ . '/test.routes.json' );
