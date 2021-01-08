@@ -2,6 +2,8 @@
 
 namespace Swiftly\Routing\Collection;
 
+use Swiftly\Routing\CollectionInterface;
+
 /**
  * Class used to store a collection of cached routes
  *

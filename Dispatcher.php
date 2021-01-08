@@ -4,8 +4,8 @@ namespace Swiftly\Routing;
 
 use Swiftly\Routing\{
     Route,
-    Parser\ParserInterface,
-    Collection\CollectionInterface
+    ParserInterface,
+    CollectionInterface
 };
 
 use function rtrim;

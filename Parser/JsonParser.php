@@ -3,8 +3,9 @@
 namespace Swiftly\Routing\Parser;
 
 use Swiftly\Routing\{
-    Route,
-    Collection\RouteCollection
+    Collection\RouteCollection,
+    ParserInterface,
+    Route
 };
 
 use function file_exists;

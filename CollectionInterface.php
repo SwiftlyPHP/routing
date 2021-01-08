@@ -1,6 +1,6 @@
 <?php
 
-namespace Swiftly\Routing\Collection;
+namespace Swiftly\Routing;
 
 use Swiftly\Routing\Route;
 use Iterator;

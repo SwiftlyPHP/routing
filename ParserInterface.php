@@ -1,8 +1,8 @@
 <?php
 
-namespace Swiftly\Routing\Parser;
+namespace Swiftly\Routing;
 
-use Swiftly\Routing\Collection\CollectionInterface;
+use Swiftly\Routing\CollectionInterface;
 
 /**
  * Interface for classes that parse route files

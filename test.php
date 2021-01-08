@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/Collection/CollectionInterface.php';
+require_once __DIR__ . '/CollectionInterface.php';
 require_once __DIR__ . '/Collection/RouteCollection.php';
 require_once __DIR__ . '/Parser/ParserInterface.php';
 require_once __DIR__ . '/Parser/JsonParser.php';
