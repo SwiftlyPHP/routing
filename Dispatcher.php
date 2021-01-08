@@ -114,8 +114,10 @@ Class Dispatcher
         $args = [];
 
         foreach ( $route->args as $index => $param ) {
-            $args[$param['name']] = $matches[0][$index + 1] ?? null;
+            $args[$param] = $matches[0][$index + 1] ?? null;
         }
+
+        $route->args = $args;
 
         return $route;
     }

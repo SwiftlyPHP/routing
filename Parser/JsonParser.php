@@ -117,7 +117,7 @@ Class JsonParser Implements ParserInterface
         $route = new Route;
 
         // Parse regex
-        $this->parseRoute( $json['path'], $route );
+        $route->regex = $this->compileRegex( $json['path'], $route );
 
         // Allowed HTTP verbs only
         if ( !empty( $json['methods'] ) && is_array( $json['methods'] ) ) {
@@ -133,28 +133,24 @@ Class JsonParser Implements ParserInterface
     }
 
     /**
-     * Parse the given route and build the neccessary regex
-     *
-     * The args parameter will be filled with the details of any arguments
-     * this route takes
+     * Parse route and build the neccessary regex
      *
      * @param string $path Route path
-     * @param Route $route Route object
-     * @return void        N/a
+     * @param Route $route Current route
+     * @return string      Compiled regex
      */
-    private function parseRoute( string $path, Route $route ) : void
+    private function compileRegex( string $path, Route $route ) : string
     {
         $path = rtrim( $path, " \n\r\t\0\x0B\\/" );
 
         // No route, assume root
         if ( empty( $path ) ) {
-            $route->regex = '/';
-            return;
+            return '/';
         }
 
-        // Route placeholders?
-        if ( !preg_match_all( self::ROUTE_REGEX, $path, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE ) ) {
-            return;
+        // Gather any route placeholders?
+        if ( !preg_match_all( self::ROUTE_REGEX, $path, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE ) ) {
+            $path;
         }
 
         $regex = '';
@@ -189,15 +185,9 @@ Class JsonParser Implements ParserInterface
 
             $regex .= ')';
 
-            // Register the param
-            $route->args[] = [
-                'name'    => $match['name'][0],
-                'type'    => $match['type'][0] ?: 's'
-            ];
+            $route->args[] = $match['name'][0];
         }
 
-        $route->regex = $regex;
-
-        return;
+        return $regex;
     }
 }
