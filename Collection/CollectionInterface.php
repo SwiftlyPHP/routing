@@ -3,13 +3,15 @@
 namespace Swiftly\Routing\Collection;
 
 use Swiftly\Routing\Route;
+use Iterator;
+use Countable;
 
 /**
  * Common interface for managing a collection of routes
  *
  * @author clvarley
  */
-Interface CollectionInterface Extends \Iterator, \Countable
+Interface CollectionInterface Extends Iterator, Countable
 {
 
     /**

@@ -4,6 +4,15 @@ namespace Swiftly\Routing\Collection;
 
 use Swiftly\Routing\Route;
 
+use function current;
+use function key;
+use function next;
+use function reset;
+use function current;
+use function count;
+use function in_array;
+use function implode;
+
 /**
  * Class used to store and manage a collection of routes
  *
@@ -70,7 +79,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function current() : Route
     {
-        return \current( $this->routes );
+        return current( $this->routes );
     }
 
     /**
@@ -80,7 +89,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function key() : string
     {
-      return \key( $this->routes );
+      return key( $this->routes );
     }
 
     /**
@@ -90,7 +99,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function next() : void
     {
-        \next( $this->routes );
+        next( $this->routes );
     }
 
     /**
@@ -100,7 +109,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function rewind() : void
     {
-        \reset( $this->routes );
+        reset( $this->routes );
     }
 
     /**
@@ -110,7 +119,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function valid() : bool
     {
-        return \current( $this->routes ) !== false;
+        return current( $this->routes ) !== false;
     }
 
     /**
@@ -120,7 +129,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function count() : int
     {
-        return \count( $this->routes );
+        return count( $this->routes );
     }
 
     /**
@@ -134,11 +143,11 @@ Class RouteCollection Implements CollectionInterface
         $regexes = [];
 
         foreach ( $this->routes as $name => $route ) {
-            if ( \in_array( $method, $route->methods ) ) {
+            if ( in_array( $method, $route->methods ) ) {
                 $regexes[] = '(?>' . $route->regex . '(*:' . $name . '))';
             }
         }
 
-        return '~^(?|' . \implode( '|', $regexes ) . ')$~ixX';
+        return '~^(?|' . implode( '|', $regexes ) . ')$~ixX';
     }
 }

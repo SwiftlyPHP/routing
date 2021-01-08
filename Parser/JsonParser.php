@@ -7,6 +7,20 @@ use Swiftly\Routing\{
     Collection\RouteCollection
 };
 
+use function file_exists;
+use function file_get_contents;
+use function json_decode;
+use function json_last_error;
+use function is_array;
+use function array_intersect;
+use function rtrim;
+use function preg_match_all;
+use function preg_quote;
+
+use const JSON_ERROR_NONE;
+use const PREG_SET_ORDER;
+use const PREG_OFFSET_CAPTURE;
+
 /**
  * Class responsible for loading routes from .json files
  *
@@ -75,20 +89,20 @@ Class JsonParser Implements ParserInterface
      */
     private function loadJson( string $filename ) : array
     {
-        if ( !\file_exists( $filename ) ) {
+        if ( !file_exists( $filename ) ) {
             return [];
         }
 
-        $raw = \file_get_contents( $filename );
+        $raw = file_get_contents( $filename );
 
         // Nothing here, exit out
         if ( empty( $raw ) ) {
             return [];
         }
 
-        $json = \json_decode( $raw, true, 4 );
+        $json = json_decode( $raw, true, 4 );
 
-        return \json_last_error() === \JSON_ERROR_NONE ? $json : [];
+        return json_last_error() === \JSON_ERROR_NONE ? $json : [];
     }
 
     /**
@@ -105,14 +119,14 @@ Class JsonParser Implements ParserInterface
         $this->parseRoute( $json['path'], $route );
 
         // Allowed HTTP verbs only
-        if ( !empty( $json['methods'] ) && \is_array( $json['methods'] ) ) {
-            $route->methods = \array_intersect( $json['methods'], self::HTTP_METHODS );
+        if ( !empty( $json['methods'] ) && is_array( $json['methods'] ) ) {
+            $route->methods = array_intersect( $json['methods'], self::HTTP_METHODS );
         } else {
             $route->methods = [ 'GET' ];
         }
 
         // Controller/handler function
-        $route->callable = \explode( '::', $json['handler'] );
+        $route->callable = explode( '::', $json['handler'] );
 
         return $route;
     }
@@ -129,7 +143,7 @@ Class JsonParser Implements ParserInterface
      */
     private function parseRoute( string $path, Route $route ) : void
     {
-        $path = \rtrim( $path, " \n\r\t\0\x0B\\/" );
+        $path = rtrim( $path, " \n\r\t\0\x0B\\/" );
 
         // No route, assume root
         if ( empty( $path ) ) {
@@ -138,7 +152,7 @@ Class JsonParser Implements ParserInterface
         }
 
         // Route placeholders?
-        if ( !\preg_match_all( self::ROUTE_REGEX, $path, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE ) ) {
+        if ( !preg_match_all( self::ROUTE_REGEX, $path, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE ) ) {
             return;
         }
 
@@ -153,7 +167,7 @@ Class JsonParser Implements ParserInterface
          */
         foreach ( $matches as $match ) {
             if ( empty( $match['name'] ) ) {
-                $regex .= \preg_quote( $match[0][0] );
+                $regex .= preg_quote( $match[0][0] );
                 continue;
             }
 

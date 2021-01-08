@@ -8,6 +8,12 @@ use Swiftly\Routing\{
     Collection\CollectionInterface
 };
 
+use function rtrim;
+use function in_array;
+use function preg_match_all;
+
+use const PREG_SET_ORDER;
+
 /**
  * Simple regex dispatcher
  *
@@ -84,20 +90,20 @@ Class Dispatcher
      */
     public function dispatch( string $method, string $path ) : ?Route
     {
-        $path = \rtrim( $path, " \n\r\t\0\x0B\\/" );
+        $path = rtrim( $path, " \n\r\t\0\x0B\\/" );
 
         if ( empty( $path ) ) {
             $path = '/';
         }
 
-        if ( !\in_array( $method, self::ALLOWED_METHODS ) ) {
+        if ( !in_array( $method, self::ALLOWED_METHODS ) ) {
             $method = 'GET';
         }
 
         // Compile the regex
         $regex = $this->routes->compile( $method );
 
-        if ( !\preg_match_all( $regex, $path, $matches, \PREG_SET_ORDER ) ) {
+        if ( !preg_match_all( $regex, $path, $matches, PREG_SET_ORDER ) ) {
             return null;
         }
 
