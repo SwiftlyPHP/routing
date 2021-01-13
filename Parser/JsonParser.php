@@ -4,6 +4,7 @@ namespace Swiftly\Routing\Parser;
 
 use Swiftly\Routing\{
     Collection\RouteCollection,
+    CollectionInterface,
     ParserInterface,
     Route
 };
@@ -56,7 +57,7 @@ Class JsonParser Implements ParserInterface
      * @param string $filename Path to file
      * @return RouteCollection Route collection
      */
-    public function parse( string $filename ) : RouteCollection
+    public function parse( string $filename ) : CollectionInterface
     {
         $routes = new RouteCollection();
 
