@@ -9,13 +9,14 @@ use Swiftly\Routing\{
     Route
 };
 
+use function rtrim;
 use function is_readable;
+use function is_array;
 use function file_get_contents;
+use function array_intersect;
+use function array_filter;
 use function json_decode;
 use function json_last_error;
-use function is_array;
-use function array_intersect;
-use function rtrim;
 use function preg_match_all;
 use function preg_quote;
 
@@ -125,6 +126,11 @@ Class JsonParser Implements ParserInterface
             $route->methods = array_intersect( $json['methods'], self::HTTP_METHODS );
         } else {
             $route->methods = [ 'GET' ];
+        }
+
+        // Has tags?
+        if ( !empty( $json['tags'] ) && is_array( $json['tags'] ) ) {
+            $route->tags = array_filter( $json['tags'], 'is_string' );
         }
 
         // Controller/handler function

@@ -39,6 +39,13 @@ Class Route
     public $args = [];
 
     /**
+     * List of tags that apply to this route
+     *
+     * @var string[] $tags Route tags
+     */
+    public $tags = [];
+
+    /**
      * The controller used to handle this route
      *
      * @var callable|null $callable Route controller
