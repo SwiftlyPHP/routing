@@ -9,7 +9,7 @@ use Swiftly\Routing\{
     Route
 };
 
-use function file_exists;
+use function is_readable;
 use function file_get_contents;
 use function json_decode;
 use function json_last_error;
@@ -91,7 +91,7 @@ Class JsonParser Implements ParserInterface
      */
     private function loadJson( string $filename ) : array
     {
-        if ( !file_exists( $filename ) ) {
+        if ( !is_readable( $filename ) ) {
             return [];
         }
 
