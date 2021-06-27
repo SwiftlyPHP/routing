@@ -24,14 +24,14 @@ Class RouteCollection Implements CollectionInterface
     /**
      * The contents of this collection
      *
-     * @var Route[] $routes Route collection
+     * @var array<string,Route> $routes Route collection
      */
     protected $routes;
 
     /**
      * Create a new collection around the given routes
      *
-     * @param Route[] $routes (Optional) Route definitions
+     * @param array<string,Route> $routes (Optional) Route definitions
      */
     public function __construct( array $routes = [] )
     {

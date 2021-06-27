@@ -72,7 +72,7 @@ Class Dispatcher
     /**
      * Loads the given routes file
      *
-     * @var string $filename File path
+     * @param string $filename File path
      */
     public function load( string $filename ) : void
     {
@@ -88,6 +88,11 @@ Class Dispatcher
      */
     public function dispatch( string $method, string $path ) : ?Route
     {
+        // TODO: Possibly throw exception if routes aren't loaded
+        if ( empty( $this->routes ) ) {
+            return null;
+        }
+
         $path = rtrim( $path, " \n\r\t\0\x0B\\/" );
 
         if ( empty( $path ) ) {

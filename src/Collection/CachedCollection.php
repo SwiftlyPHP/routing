@@ -2,14 +2,14 @@
 
 namespace Swiftly\Routing\Collection;
 
-use Swiftly\Routing\CollectionInterface;
+use Swiftly\Routing\Collection\RouteCollection;
 
 /**
  * Class used to store a collection of cached routes
  *
  * @author clvarley
  */
-Class CachedCollection Implements CollectionInterface
+Class CachedCollection Extends RouteCollection
 {
 
     /**
@@ -26,7 +26,8 @@ Class CachedCollection Implements CollectionInterface
      */
     public function __construct( array $compiled = [] )
     {
-        $this->compile = $compiled;
+        $this->compiled = $compiled;
+        $this->routes = [];
     }
 
     /**

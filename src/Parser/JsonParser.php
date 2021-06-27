@@ -11,8 +11,10 @@ use function rtrim;
 use function is_readable;
 use function is_array;
 use function file_get_contents;
-use function array_intersect;
 use function array_filter;
+use function array_intersect;
+use function is_string;
+use function explode;
 use function json_decode;
 use function json_last_error;
 use function preg_match_all;
@@ -74,9 +76,9 @@ Class JsonParser Implements ParserInterface
 
             // Create route definition struct
             $route = $this->convert( $contents );
-            $route->name = $name;
+            $route->name = (string)$name;
 
-            $routes->add( $name, $route );
+            $routes->add( $route->name, $route );
         }
 
         return $routes;
@@ -101,16 +103,22 @@ Class JsonParser Implements ParserInterface
             return [];
         }
 
+        /** @var array|false $json */
         $json = json_decode( $raw, true, 4 );
 
-        return json_last_error() === \JSON_ERROR_NONE ? $json : [];
+        // Parse error?
+        if ( json_last_error() !== JSON_ERROR_NONE || !is_array( $json ) ) {
+            $json = [];
+        }
+
+        return $json;
     }
 
     /**
      * Converts the JSON array into a Route object
      *
-     * @param array $route Route JSON
-     * @return Route       Route definition
+     * @param array $json Route JSON
+     * @return Route      Route definition
      */
     private function convert( array $json ) : Route
     {
@@ -132,7 +140,11 @@ Class JsonParser Implements ParserInterface
         }
 
         // Controller/handler function
-        $route->callable = explode( '::', $json['handler'] );
+        if ( is_string( $json['handler'] ) ) {
+            $route->callable = explode( '::', $json['handler'] );
+        } else {
+            $route->callable = $json['handler'];
+        }
 
         return $route;
     }
