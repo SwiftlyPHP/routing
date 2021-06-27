@@ -2,12 +2,10 @@
 
 namespace Swiftly\Routing\Parser;
 
-use Swiftly\Routing\{
-    Collection\RouteCollection,
-    CollectionInterface,
-    ParserInterface,
-    Route
-};
+use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\CollectionInterface;
+use Swiftly\Routing\ParserInterface;
+use Swiftly\Routing\Route;
 
 use function rtrim;
 use function is_readable;

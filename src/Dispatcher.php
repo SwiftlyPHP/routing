@@ -2,11 +2,9 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\{
-    Route,
-    ParserInterface,
-    CollectionInterface
-};
+use Swiftly\Routing\Route;
+use Swiftly\Routing\ParserInterface;
+use Swiftly\Routing\CollectionInterface;
 
 use function rtrim;
 use function in_array;

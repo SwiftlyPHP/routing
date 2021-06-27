@@ -2,10 +2,8 @@
 
 namespace Swiftly\Routing\Collection;
 
-use Swiftly\Routing\{
-    CollectionInterface,
-    Route
-};
+use Swiftly\Routing\CollectionInterface;
+use Swiftly\Routing\Route;
 
 use function current;
 use function key;
