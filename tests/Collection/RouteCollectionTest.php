@@ -17,6 +17,11 @@ use function count;
 Class RouteCollectionTest Extends TestCase
 {
 
+    const COMPILED_REGEX = [
+        'GET' => '~^(?|(?>/(*:home))|(?>/form/[s:name](*:form)))$~ixX',
+        'POST' => '~^(?|(?>/post/[i:id](*:post))|(?>/form/[s:name](*:form)))$~ixX'
+    ];
+
     /** @var RouteCollection $collection */
     private $collection;
 
@@ -103,15 +108,10 @@ Class RouteCollectionTest Extends TestCase
 
     public function testCompilesRegexForMethod() : void
     {
-        $expected = [
-            'GET' => '~^(?|(?>/(*:home))|(?>/form/[s:name](*:form)))$~ixX',
-            'POST' => '~^(?|(?>/post/[i:id](*:post))|(?>/form/[s:name](*:form)))$~ixX'
-        ];
+        foreach ( self::COMPILED_REGEX as $http_method => $expected ) {
+            $regex = $this->collection->compile( $http_method );
 
-        foreach ( $expected as $http_method => $regex ) {
-            $compiled = $this->collection->compile( $http_method );
-
-            self::assertSame( $regex, $compiled );
+            self::assertSame( $expected, $regex );
         }
     }
 }
