@@ -113,8 +113,14 @@ Class JsonParser Implements ParserInterface
     {
         $route = new Route;
 
-        // Parse regex
-        $route->raw = rtrim( $json['path'], " \n\r\t\0\x0B\\/" );
+        // Trim trailing chars
+        $path = rtrim( $json['path'], " \n\r\t\0\x0B\\/" );
+
+        if ( !empty( $path ) ) {
+            $route->raw = $path;
+        } else {
+            $route->raw = '/';
+        }
 
         // Allowed HTTP verbs only
         if ( !empty( $json['methods'] ) && is_array( $json['methods'] ) ) {
