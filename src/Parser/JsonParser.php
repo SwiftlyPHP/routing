@@ -46,13 +46,6 @@ Class JsonParser Implements ParserInterface
     ];
 
     /**
-     * The regex used to strip out URL args
-     *
-     * @var string ROUTE_REGEX Regular expression
-     */
-    private const ROUTE_REGEX = '~\[(?:(?P<type>i|s):)?(?P<name>\w+)\]|(?:[^\[]+)~ix';
-
-    /**
      * Parse the given json routes file
      *
      * @param string $filename Path to file

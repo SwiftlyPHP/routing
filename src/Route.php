@@ -11,6 +11,13 @@ Class Route
 {
 
     /**
+     * The regex used to strip out URL args
+     *
+     * @var string ARGS_REGEX Regular expression
+     */
+    const ARGS_REGEX = '~\[(?:(?P<type>i|s):)?(?P<name>\w+)\]|(?:[^\[]+)~ix';
+
+    /**
      * The name of this route
      *
      * @var string $name Route name
