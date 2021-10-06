@@ -115,11 +115,11 @@ Class Route
      */
     private function parseArg( array $arg ) : string
     {
-        if ( empty($arg['name']  ) ) {
+        if ( empty( $arg['name'] ) ) {
             return preg_quote( $arg[0][0] );
         }
 
-        switch ( $match['type'][0] ) {
+        switch ( $arg['type'][0] ) {
             case 'i':
                 $regex = '\d+';
             break;
@@ -130,7 +130,7 @@ Class Route
             break;
         }
 
-        $this->args[] = $match['name'][0];
+        $this->args[] = $arg['name'][0];
 
         return "($regex)";
     }
