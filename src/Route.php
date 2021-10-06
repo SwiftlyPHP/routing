@@ -108,10 +108,8 @@ Class Route
     /**
      * Parse the arg data and build the regex
      *
-     * @psalm-param array{0:array{0:string},name:string,type:string} $arg
-     *
-     * @param string[] $arg Argument data
-     * @return string       Argument regex
+     * @param array[] $arg Argument data
+     * @return string      Argument regex
      */
     private function parseArg( array $arg ) : string
     {
