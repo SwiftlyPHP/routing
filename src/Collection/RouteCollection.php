@@ -24,14 +24,18 @@ Class RouteCollection Implements CollectionInterface
     /**
      * The contents of this collection
      *
-     * @var array<string,Route> $routes Route collection
+     * @psalm-var array<string,Route> $routes
+     *
+     * @var Route[] $routes Route collection
      */
     protected $routes;
 
     /**
      * Create a new collection around the given routes
      *
-     * @param array<string,Route> $routes (Optional) Route definitions
+     * @psalm-param array<string,Route> $routes
+     *
+     * @param Route[] $routes (Optional) Route definitions
      */
     public function __construct( array $routes = [] )
     {
@@ -144,7 +148,7 @@ Class RouteCollection Implements CollectionInterface
 
         foreach ( $this->routes as $name => $route ) {
             if ( in_array( $method, $route->methods ) ) {
-                $regexes[] = '(?>' . $route->regex . '(*:' . $name . '))';
+                $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
             }
         }
 
