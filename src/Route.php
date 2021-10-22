@@ -80,6 +80,13 @@ Class Route
     public $callable = null;
 
     /**
+     * Assumes by default that routes are dynamic
+     *
+     * @var bool $static Route is static?
+     */
+    public $static = false;
+
+    /**
      * Compile the regex used to match this route
      *
      * @return string Compiled regex
@@ -93,6 +100,7 @@ Class Route
         // Static not dynamic route
         if ( !preg_match_all( self::ARGS_REGEX, $this->raw, $matches, self::REGEX_FLAGS ) ) {
             $this->regex = $this->raw;
+            $this->static = true;
 
             return $this->regex;
         }
