@@ -2,11 +2,12 @@
 
 namespace Swiftly\Routing;
 
-use const PREG_SET_ORDER;
-use const PREG_OFFSET_CAPTURE;
-
+use function strpos;
 use function preg_match_all;
 use function preg_quote;
+
+use const PREG_SET_ORDER;
+use const PREG_OFFSET_CAPTURE;
 
 /**
  * Simple class used to represent a single route
@@ -86,24 +87,45 @@ Class Route
      */
     public function compile() : string
     {
+        // Already compiled
         if ( !empty( $this->regex ) ) {
             return $this->regex;
         }
 
-        // Static not dynamic route
-        if ( !preg_match_all( self::ARGS_REGEX, $this->raw, $matches, self::REGEX_FLAGS ) ) {
-            $this->regex = $this->raw;
+        // Static not dynamic route?
+        if ( $this->static || strpos( $this->raw, '[', 1 ) === false ) {
             $this->static = true;
 
-            return $this->regex;
+            return $this->raw;
+        }
+
+        // Does it look URL-like?
+        $this->regex = $this->parseUrl();
+
+        return $this->regex;
+    }
+
+    /**
+     * Parse the URL into the regex
+     *
+     * @return string Route regex
+     */
+    private function parseUrl() : string
+    {
+        $regex = '';
+
+        // Something went wrong?
+        if ( !preg_match_all( self::ARGS_REGEX, $this->raw, $matches, self::REGEX_FLAGS ) ) {
+            // TODO: Throw maybe?
+            return $regex;
         }
 
         // Build regex
         foreach ( $matches as $match ) {
-            $this->regex .= $this->parseArg( $match );
+            $regex .= $this->parseArg( $match );
         }
 
-        return $this->regex;
+        return $regex;
     }
 
     /**
