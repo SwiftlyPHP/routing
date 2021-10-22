@@ -31,13 +31,6 @@ Class Route
     const REGEX_FLAGS = PREG_SET_ORDER | PREG_OFFSET_CAPTURE;
 
     /**
-     * The name of this route
-     *
-     * @var string $name Route name
-     */
-    public $name = '';
-
-    /**
      * The raw path from the routes file
      *
      * @var string $raw Route URL
