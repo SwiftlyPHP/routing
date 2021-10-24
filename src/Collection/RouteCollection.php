@@ -9,7 +9,6 @@ use function current;
 use function key;
 use function next;
 use function reset;
-use function count;
 use function in_array;
 use function implode;
 

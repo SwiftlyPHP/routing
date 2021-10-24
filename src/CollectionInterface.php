@@ -4,7 +4,6 @@ namespace Swiftly\Routing;
 
 use Swiftly\Routing\Route;
 use Iterator;
-use Countable;
 
 /**
  * Common interface for managing a collection of routes
