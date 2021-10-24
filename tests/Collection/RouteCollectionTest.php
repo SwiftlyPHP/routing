@@ -99,13 +99,6 @@ Class RouteCollectionTest Extends TestCase
         self::assertEmpty( $routes );
     }
 
-    public function testCanCountNumberOfRoutes() : void
-    {
-        self::assertInstanceOf( Countable::class, $this->collection );
-        self::assertSame( 3, $this->collection->count() );
-        self::assertSame( 3, count( $this->collection ) );
-    }
-
     public function testCompilesRegexForMethod() : void
     {
         foreach ( self::COMPILED_REGEX as $http_method => $expected ) {
