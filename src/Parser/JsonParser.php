@@ -29,8 +29,6 @@ Class JsonParser Implements ParserInterface
 
     /**
      * Allowed HTTP methods
-     *
-     * @var string[] HTTP_METHODS HTTP verbs
      */
     const HTTP_METHODS = [
         'GET',
@@ -109,34 +107,34 @@ Class JsonParser Implements ParserInterface
      */
     private function convert( array $json ) : Route
     {
-        $route = new Route;
-
         // Trim trailing chars
         $path = rtrim( $json['path'], " \n\r\t\0\x0B\\/" );
 
-        if ( !empty( $path ) ) {
-            $route->raw = $path;
-        } else {
-            $route->raw = '/';
-        }
-
-        // Allowed HTTP verbs only
-        if ( !empty( $json['methods'] ) && is_array( $json['methods'] ) ) {
-            $route->methods = array_intersect( $json['methods'], self::HTTP_METHODS );
-        } else {
-            $route->methods = [ 'GET' ];
-        }
-
-        // Has tags?
-        if ( !empty( $json['tags'] ) && is_array( $json['tags'] ) ) {
-            $route->tags = array_filter( $json['tags'], 'is_string' );
+        if ( empty( $path ) ) {
+            $path = '/';
         }
 
         // Controller/handler function
         if ( is_string( $json['handler'] ) ) {
-            $route->callable = explode( '::', $json['handler'] );
+          $handler = explode( '::', $json['handler'] );
         } else {
-            $route->callable = $json['handler'];
+          $handler = $json['handler'];
+        }
+
+        $route = new Route( $path, $handler );
+
+        // Allowed HTTP verbs only
+        if ( !empty( $json['methods'] ) && is_array( $json['methods'] ) ) {
+            $methods = array_intersect( $json['methods'], self::HTTP_METHODS );
+        } else {
+            $methods = [ 'GET' ];
+        }
+
+        $route->methods = $methods;
+
+        // Has tags?
+        if ( !empty( $json['tags'] ) && is_array( $json['tags'] ) ) {
+            $route->tags = array_filter( $json['tags'], 'is_string' );
         }
 
         return $route;
