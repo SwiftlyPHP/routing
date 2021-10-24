@@ -80,6 +80,6 @@ Class GenericCollection Implements Iterator
      */
     public function valid() : bool
     {
-        return current( $this->items ) !== null;
+        return current( $this->items ) !== false;
     }
 }
