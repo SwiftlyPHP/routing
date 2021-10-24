@@ -93,6 +93,7 @@ Class Dispatcher
         // Handle params (if any)
         $args = [];
 
+        /** @var Route $route */
         foreach ( $route->args as $index => $param ) {
             $args[$param] = $matches[0][$index + 1] ?? null;
         }

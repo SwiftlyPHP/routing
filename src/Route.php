@@ -55,7 +55,7 @@ Class Route
     /**
      * Arguments to be passed to the controller
      *
-     * @var array $args Route arguments
+     * @var string[] $args Route arguments
      */
     public $args = [];
 
