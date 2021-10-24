@@ -45,8 +45,7 @@ Class RouteTest Extends TestCase
     /** @dataProvider exampleUrlProvider */
     public function testCanCompileRoutes( string $url, string $regex, array $args ) : void
     {
-        $route = new Route;
-        $route->raw = $url;
+        $route = new Route( $url, function () {} );
 
         self::assertSame( $regex, $route->compile() );
         self::assertSame( $args, $route->args );

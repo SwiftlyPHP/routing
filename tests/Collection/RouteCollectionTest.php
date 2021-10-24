@@ -2,11 +2,10 @@
 
 namespace Swiftly\Routing\Tests\Collection;
 
+use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Collection\RouteCollection;
 use Swiftly\Routing\Route;
-use PHPUnit\Framework\TestCase;
 use Iterator;
-use Countable;
 
 use function array_shift;
 use function count;
@@ -28,22 +27,17 @@ Class RouteCollectionTest Extends TestCase
     protected function setUp() : void
     {
         $this->collection = new RouteCollection([
-            'home' => $this->createRoute( 'home', '/', ['GET'] ),
-            'post' => $this->createRoute( 'post', '/post/[i:id]', ['POST'] ),
-            'form' => $this->createRoute( 'form', '/form/[s:name]',
-                ['GET', 'POST']
-            )
+            'home' => $this->createRoute( '/', ['GET'] ),
+            'post' => $this->createRoute( '/post/[i:id]', ['POST'] ),
+            'form' => $this->createRoute( '/form/[s:name]', ['GET', 'POST'] )
         ]);
     }
 
     private function createRoute(
-        string $name,
-        string $regex,
+        string $url,
         array $methods
     ) : Route {
-        $route = new Route();
-        $route->name = $name;
-        $route->regex = $regex;
+        $route = new Route( $url, function () {} );
         $route->methods = $methods;
 
         return $route;
@@ -54,33 +48,22 @@ Class RouteCollectionTest Extends TestCase
         $route = $this->collection->get( 'home' );
 
         self::assertInstanceOf( Route::class, $route );
-        self::assertSame( 'home', $route->name );
-        self::assertSame( '/', $route->regex );
+        self::assertSame( '/', $route->raw );
         self::assertSame( ['GET'], $route->methods );
     }
 
-    public function testCanAddRoute() : void
+    public function testCanSetRoute() : void
     {
-        $this->collection->add(
+        $this->collection->set(
             'test',
-            $this->createRoute( 'test', '/my-url', ['GET'] )
+            $this->createRoute( '/my-url', ['GET'] )
         );
 
         $route = $this->collection->get( 'test' );
 
         self::assertInstanceOf( Route::class, $route );
-        self::assertSame( 'test', $route->name );
-        self::assertSame( '/my-url', $route->regex );
+        self::assertSame( '/my-url', $route->raw );
         self::assertSame( ['GET'], $route->methods );
-    }
-
-    public function testCanRemoveRoute() : void
-    {
-        $this->collection->remove( 'home' );
-
-        $route = $this->collection->get( 'home' );
-
-        self::assertNull( $route );
     }
 
     public function testCanIterateOverCollection() : void

@@ -98,9 +98,7 @@ Class Route
         }
 
         // Static not dynamic route?
-        if ( $this->static || strpos( $this->raw, '[', 1 ) === false ) {
-            $this->static = true;
-
+        if ( strpos( $this->raw, '[', 1 ) === false ) {
             return $this->raw;
         }
 
