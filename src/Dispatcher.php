@@ -2,9 +2,8 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\Route;
-use Swiftly\Routing\ParserInterface;
 use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\Route;
 
 use function rtrim;
 use function in_array;
@@ -21,18 +20,11 @@ Class Dispatcher
 {
 
     /**
-     * The route file parser to use
-     *
-     * @var ParserInterface $parser Route parser
-     */
-    private $parser;
-
-    /**
      * Collection of routes
      *
-     * @var RouteCollection|null $routes Route collection
+     * @var RouteCollection $routes Route collection
      */
-    private $routes = null;
+    private $routes;
 
     /**
      * HTTP methods supported by this router
@@ -50,33 +42,23 @@ Class Dispatcher
     ];
 
     /**
-     * Create a new router specifying the parser to use
+     * Create a new dispatcher for the given routes
      *
-     * @param ParserInterface $parser Route parser
+     * @param RouteCollection $routes Route collection
      */
-    public function __construct( ParserInterface $parser )
+    public function __construct( RouteCollection $routes )
     {
-        $this->parser = $parser;
+        $this->routes = $routes;
     }
 
     /**
-     * Gets all the registered routes
+     * Gets the route collection
      *
-     * @return RouteCollection|null Route definitions
+     * @return RouteCollection Route collection
      */
-    public function getRoutes() : ?RouteCollection
+    public function getRoutes() : RouteCollection
     {
         return $this->routes;
-    }
-
-    /**
-     * Loads the given routes file
-     *
-     * @param string $filename File path
-     */
-    public function load( string $filename ) : void
-    {
-        $this->routes = $this->parser->parse( $filename );
     }
 
     /**
@@ -88,11 +70,6 @@ Class Dispatcher
      */
     public function dispatch( string $method, string $path ) : ?Route
     {
-        // TODO: Possibly throw exception if routes aren't loaded
-        if ( empty( $this->routes ) ) {
-            return null;
-        }
-
         $path = rtrim( $path, " \n\r\t\0\x0B\\/" );
 
         if ( empty( $path ) ) {
