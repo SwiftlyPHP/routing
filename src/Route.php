@@ -2,6 +2,13 @@
 
 namespace Swiftly\Routing;
 
+use function strpos;
+use function preg_match_all;
+use function preg_quote;
+
+use const PREG_SET_ORDER;
+use const PREG_OFFSET_CAPTURE;
+
 /**
  * Simple class used to represent a single route
  *
@@ -11,16 +18,30 @@ Class Route
 {
 
     /**
-     * The name of this route
+     * The regex used to strip out URL args
      *
-     * @var string $name Route name
+     * @var string ARGS_REGEX Regular expression
      */
-    public $name = '';
+    const ARGS_REGEX = '~\[(?:(?P<type>i|s):)?(?P<name>\w+)\]|(?:[^\[]+)~ix';
+
+    /**
+     * Flags to be used on calls to `preg_match_all`
+     *
+     * @var int REGEX_FLAGS Flags
+     */
+    const REGEX_FLAGS = PREG_SET_ORDER | PREG_OFFSET_CAPTURE;
+
+    /**
+     * The raw path from the routes file
+     *
+     * @var string $raw Route URL
+     */
+    public $raw = '';
 
     /**
      * The regex used to match this route
      *
-     * @var string $regex Route regex
+     * @var string $regex Compiled regex
      */
     public $regex = '';
 
@@ -52,4 +73,86 @@ Class Route
      */
     public $callable = null;
 
+    /**
+     * Assumes by default that routes are dynamic
+     *
+     * @var bool $static Route is static?
+     */
+    public $static = false;
+
+    /**
+     * Compile the regex used to match this route
+     *
+     * @return string Compiled regex
+     */
+    public function compile() : string
+    {
+        // Already compiled
+        if ( !empty( $this->regex ) ) {
+            return $this->regex;
+        }
+
+        // Static not dynamic route?
+        if ( $this->static || strpos( $this->raw, '[', 1 ) === false ) {
+            $this->static = true;
+
+            return $this->raw;
+        }
+
+        // Does it look URL-like?
+        $this->regex = $this->parseUrl();
+
+        return $this->regex;
+    }
+
+    /**
+     * Parse the URL into the regex
+     *
+     * @return string Route regex
+     */
+    private function parseUrl() : string
+    {
+        $regex = '';
+
+        // Something went wrong?
+        if ( !preg_match_all( self::ARGS_REGEX, $this->raw, $matches, self::REGEX_FLAGS ) ) {
+            // TODO: Throw maybe?
+            return $regex;
+        }
+
+        // Build regex
+        foreach ( $matches as $match ) {
+            $regex .= $this->parseArg( $match );
+        }
+
+        return $regex;
+    }
+
+    /**
+     * Parse the arg data and build the regex
+     *
+     * @param array[] $arg Argument data
+     * @return string      Argument regex
+     */
+    private function parseArg( array $arg ) : string
+    {
+        if ( empty( $arg['name'] ) ) {
+            return preg_quote( $arg[0][0] );
+        }
+
+        switch ( $arg['type'][0] ) {
+            case 'i':
+                $regex = '\d+';
+            break;
+
+            case 's':
+            default:
+                $regex = '[a-zA-Z0-9-_]+';
+            break;
+        }
+
+        $this->args[] = $arg['name'][0];
+
+        return "($regex)";
+    }
 }
