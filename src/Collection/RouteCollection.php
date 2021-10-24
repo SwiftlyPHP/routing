@@ -2,44 +2,17 @@
 
 namespace Swiftly\Routing\Collection;
 
-use Swiftly\Routing\CollectionInterface;
+use Swiftly\Routing\Collection\GenericCollecion;
 use Swiftly\Routing\Route;
-
-use function current;
-use function key;
-use function next;
-use function reset;
-use function in_array;
-use function implode;
 
 /**
  * Class used to store and manage a collection of routes
  *
+ * @extends GenericCollecion<string,Route>
  * @author clvarley
  */
-Class RouteCollection Implements CollectionInterface
+Class RouteCollection Extends GenericCollecion
 {
-
-    /**
-     * The contents of this collection
-     *
-     * @psalm-var array<string,Route> $routes
-     *
-     * @var Route[] $routes Route collection
-     */
-    protected $routes;
-
-    /**
-     * Create a new collection around the given routes
-     *
-     * @psalm-param array<string,Route> $routes
-     *
-     * @param Route[] $routes (Optional) Route definitions
-     */
-    public function __construct( array $routes = [] )
-    {
-        $this->routes = $routes;
-    }
 
     /**
      * Adds an existing route to the collection
@@ -50,7 +23,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function set( string $name, Route $route ) : void
     {
-        $this->routes[$name] = $route;
+        $this->items[$name] = $route;
     }
 
     /**
@@ -61,57 +34,7 @@ Class RouteCollection Implements CollectionInterface
      */
     public function get( string $name ) : ?Route
     {
-        return $this->routes[$name] ?? null;
-    }
-
-    /**
-     * Returns the current route
-     *
-     * @return Route Current route
-     */
-    public function current() : Route
-    {
-        return current( $this->routes );
-    }
-
-    /**
-     * Returns the current route name
-     *
-     * @return string Route name
-     */
-    public function key() : string
-    {
-      return key( $this->routes );
-    }
-
-    /**
-     * Move the pointer to the next element
-     *
-     * @return void N/a
-     */
-    public function next() : void
-    {
-        next( $this->routes );
-    }
-
-    /**
-     * Reset the pointer to the first element
-     *
-     * @return void N/a
-     */
-    public function rewind() : void
-    {
-        reset( $this->routes );
-    }
-
-    /**
-     * Check if the current position is valid
-     *
-     * @return bool Valid position
-     */
-    public function valid() : bool
-    {
-        return current( $this->routes ) !== false;
+        return $this->items[$name] ?? null;
     }
 
     /**
@@ -124,7 +47,7 @@ Class RouteCollection Implements CollectionInterface
     {
         $regexes = [];
 
-        foreach ( $this->routes as $name => $route ) {
+        foreach ( $this->items as $name => $route ) {
             if ( in_array( $method, $route->methods ) ) {
                 $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
             }
