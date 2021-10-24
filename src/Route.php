@@ -36,7 +36,14 @@ Class Route
      *
      * @var string $raw Route URL
      */
-    public $raw = '';
+    public $raw;
+
+    /**
+    * Function used to handle this route
+    *
+    * @var callable $handler Route controller
+    */
+    public $handler;
 
     /**
      * The regex used to match this route
@@ -53,7 +60,7 @@ Class Route
     public $methods = [];
 
     /**
-     * Arguments to be passed to the controller
+     * Arguments to be passed to the handler
      *
      * @var string[] $args Route arguments
      */
@@ -67,18 +74,16 @@ Class Route
     public $tags = [];
 
     /**
-     * The controller used to handle this route
+     * Associate a handler with a route
      *
-     * @var callable|null $callable Route controller
+     * @param string $route     Route URL
+     * @param callable $handler Route handler
      */
-    public $callable = null;
-
-    /**
-     * Assumes by default that routes are dynamic
-     *
-     * @var bool $static Route is static?
-     */
-    public $static = false;
+    public function __construct( string $route, callable $handler )
+    {
+        $this->raw = $route;
+        $this->callable = $handler;
+    }
 
     /**
      * Compile the regex used to match this route
