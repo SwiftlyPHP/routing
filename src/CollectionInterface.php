@@ -16,11 +16,21 @@ Interface CollectionInterface Extends Iterator
     /**
      * Adds a new route to the collection
      *
+     * @param string $url          Route URL
+     * @param callable $controller Route handler
+     * @param string[] $methods    Acceptable HTTP methods
+     * @return Route               New route
+     */
+    public function add( string $url, callable $controller, array $methods = [] ) : Route;
+
+    /**
+     * Adds an existing route to the collection
+     *
      * @param string $name Route identifier
      * @param Route $route Route definition
      * @return void        N/a
      */
-    public function add( string $name, Route $route ) : void;
+    public function set( string $name, Route $route ) : void;
 
     /**
      * Gets the named route from the collection
@@ -29,14 +39,6 @@ Interface CollectionInterface Extends Iterator
      * @return Route|null  Route definition
      */
     public function get( string $name ) : ?Route;
-
-    /**
-     * Removes the named route from the collection
-     *
-     * @param string $name Route identifier
-     * @return void        N/a
-     */
-    public function remove( string $name ) : void;
 
     /**
      * Compiles the regex for the given HTTP method

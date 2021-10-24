@@ -42,13 +42,13 @@ Class RouteCollection Implements CollectionInterface
     }
 
     /**
-     * Adds a new route to the collection
+     * Adds an existing route to the collection
      *
      * @param string $name Route identifier
      * @param Route $route Route definition
      * @return void        N/a
      */
-    public function add( string $name, Route $route ) : void
+    public function set( string $name, Route $route ) : void
     {
         $this->routes[$name] = $route;
     }
@@ -62,17 +62,6 @@ Class RouteCollection Implements CollectionInterface
     public function get( string $name ) : ?Route
     {
         return $this->routes[$name] ?? null;
-    }
-
-    /**
-     * Removes the named route from the collection
-     *
-     * @param string $name Route identifier
-     * @return void        N/a
-     */
-    public function remove( string $name ) : void
-    {
-        unset( $this->routes[$name] );
     }
 
     /**
