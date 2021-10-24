@@ -17,8 +17,8 @@ Class RouteCollectionTest Extends TestCase
 {
 
     const COMPILED_REGEX = [
-        'GET' => '~^(?|(?>/(*:home))|(?>/form/[s:name](*:form)))$~ixX',
-        'POST' => '~^(?|(?>/post/[i:id](*:post))|(?>/form/[s:name](*:form)))$~ixX'
+        'GET' => '~^(?|(?>/(*:home))|(?>/form/([a-zA-Z0-9-_]+)(*:form)))$~ixX',
+        'POST' => '~^(?|(?>/post/(\d+)(*:post))|(?>/form/([a-zA-Z0-9-_]+)(*:form)))$~ixX'
     ];
 
     /** @var RouteCollection $collection */
