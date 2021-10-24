@@ -18,6 +18,24 @@ Class RouteCollection extends GenericCollection
 {
 
     /**
+     * Adds a new route to this collection
+     *
+     * @param string $name      Route name
+     * @param string $url       Route URL
+     * @param callable $handler Route handler
+     * @param string[] $methods Accepted HTTP methods
+     */
+    public function add( string $name, string $url, callable $handler, array $methods = [] ) : Route
+    {
+        $route = new Route( $url, $handler );
+        $route->methods = $methods;
+
+        $this->items[$name] = $route;
+
+        return $route;
+    }
+
+    /**
      * Adds an existing route to the collection
      *
      * @param string $name Route name
