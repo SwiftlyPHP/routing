@@ -4,7 +4,7 @@ namespace Swiftly\Routing;
 
 use Swiftly\Routing\Route;
 use Swiftly\Routing\ParserInterface;
-use Swiftly\Routing\CollectionInterface;
+use Swiftly\Routing\Collection\RouteCollection;
 
 use function rtrim;
 use function in_array;
@@ -30,7 +30,7 @@ Class Dispatcher
     /**
      * Collection of routes
      *
-     * @var CollectionInterface|null $routes Route collection
+     * @var RouteCollection|null $routes Route collection
      */
     private $routes = null;
 
@@ -62,9 +62,9 @@ Class Dispatcher
     /**
      * Gets all the registered routes
      *
-     * @return CollectionInterface|null Route definitions
+     * @return RouteCollection|null Route definitions
      */
-    public function getRoutes() : ?CollectionInterface
+    public function getRoutes() : ?RouteCollection
     {
         return $this->routes;
     }
