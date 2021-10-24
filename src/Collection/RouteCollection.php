@@ -5,6 +5,9 @@ namespace Swiftly\Routing\Collection;
 use Swiftly\Routing\Collection\GenericCollecion;
 use Swiftly\Routing\Route;
 
+use function in_array;
+use function implode;
+
 /**
  * Class used to store and manage a collection of routes
  *
@@ -17,8 +20,8 @@ Class RouteCollection Extends GenericCollecion
     /**
      * Adds an existing route to the collection
      *
-     * @param string $name Route identifier
-     * @param Route $route Route definition
+     * @param string $name Route name
+     * @param Route $route Route object
      * @return void        N/a
      */
     public function set( string $name, Route $route ) : void
@@ -29,8 +32,8 @@ Class RouteCollection Extends GenericCollecion
     /**
      * Gets the named route from the collection
      *
-     * @param string $name Route identifier
-     * @return Route|null  Route definition
+     * @param string $name Route name
+     * @return Route|null  Route object
      */
     public function get( string $name ) : ?Route
     {
@@ -40,10 +43,10 @@ Class RouteCollection Extends GenericCollecion
     /**
      * Compiles the regex for the given HTTP method
      *
-     * @param string $method (Optional) HTTP method
+     * @param string $method HTTP method
      * @return string        Compiled regex
      */
-    public function compile( string $method = 'GET' ) : string
+    public function compile( string $method ) : string
     {
         $regexes = [];
 
