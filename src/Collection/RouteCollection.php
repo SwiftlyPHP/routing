@@ -127,16 +127,6 @@ Class RouteCollection Implements CollectionInterface
     }
 
     /**
-     * Returns the number of routes in this collection
-     *
-     * @return int Route count
-     */
-    public function count() : int
-    {
-        return count( $this->routes );
-    }
-
-    /**
      * Compiles the regex for the given HTTP method
      *
      * @param string $method (Optional) HTTP method

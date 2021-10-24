@@ -11,7 +11,7 @@ use Countable;
  *
  * @author clvarley
  */
-Interface CollectionInterface Extends Iterator, Countable
+Interface CollectionInterface Extends Iterator
 {
 
     /**
