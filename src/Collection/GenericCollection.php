@@ -17,7 +17,7 @@ use function reset;
  * @template TVal
  * @author clvarley
  */
-Class GenericCollecion Implements Iterator
+Class GenericCollection Implements Iterator
 {
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Swiftly\Routing\Collection;
 
-use Swiftly\Routing\Collection\GenericCollecion;
+use Swiftly\Routing\Collection\GenericCollection;
 use Swiftly\Routing\Route;
 
 use function in_array;
@@ -11,10 +11,10 @@ use function implode;
 /**
  * Class used to store and manage a collection of routes
  *
- * @extends GenericCollecion<string,Route>
+ * @extends GenericCollection<string,Route>
  * @author clvarley
  */
-Class RouteCollection Extends GenericCollecion
+Class RouteCollection extends GenericCollection
 {
 
     /**
