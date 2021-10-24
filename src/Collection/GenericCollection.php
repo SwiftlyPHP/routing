@@ -4,6 +4,11 @@ namespace Swiftly\Routing\Collection;
 
 use Iterator;
 
+use function current;
+use function key;
+use function next;
+use function reset;
+
 /**
  * Class used to represent a collection of objects
  *
@@ -37,30 +42,44 @@ Class GenericCollecion Implements Iterator
      *
      * @return TVal
      */
-    public function current() /* : mixed */;
+    public function current() /* : mixed */
+    {
+        return current( $this->items );
+    }
 
     /**
      * Get the key of the current element
      *
      * @return TKey
      */
-    public function key() /* : mixed */;
+    public function key() /* : mixed */
+    {
+        return key( $this->items );
+    }
 
     /**
      * Move to the next element
      */
-    public function next() : void;
+    public function next() : void
+    {
+        next( $this->items );
+    }
 
     /**
      * Rewind to the first element
      */
-    public function rewind() : void;
+    public function rewind() : void
+    {
+        reset( $this->items );
+    }
 
     /**
      * Check if the current position is valid
      *
      * @return bool Valid position
      */
-    public function valid() : void;
-    
+    public function valid() : bool
+    {
+        return current( $this->items ) !== null;
+    }
 }
