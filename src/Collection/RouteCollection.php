@@ -25,7 +25,7 @@ Class RouteCollection extends GenericCollection
      * @param callable $handler Route handler
      * @param string[] $methods Accepted HTTP methods
      */
-    public function add( string $name, string $url, callable $handler, array $methods = [] ) : Route
+    public function add( string $name, string $url, $handler, array $methods = [] ) : Route
     {
         $route = new Route( $url, $handler );
         $route->methods = $methods;
