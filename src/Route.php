@@ -101,7 +101,7 @@ Class Route
      */
     public function supports( string $method ) : bool
     {
-        return empty( $method ) || in_array( $this->methods, $method );
+        return empty( $method ) || in_array( $method, $this->methods );
     }
 
     /**
