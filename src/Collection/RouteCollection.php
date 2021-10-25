@@ -69,7 +69,7 @@ Class RouteCollection extends GenericCollection
         $regexes = [];
 
         foreach ( $this->items as $name => $route ) {
-            if ( in_array( $method, $route->methods ) ) {
+            if ( empty( $route->methods ) || in_array( $method, $route->methods ) ) {
                 $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
             }
         }

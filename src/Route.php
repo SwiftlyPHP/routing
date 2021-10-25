@@ -76,8 +76,8 @@ Class Route
     /**
      * Associate a handler with a route
      *
-     * It is worth noting: we cannot use the `callable` typehint here is it
-     * can cause "Non-static method" warnings when using the older :: string
+     * It is worth noting: we cannot use the `callable` typehint here as it
+     * can cause "Non-static method" warnings when using the older `::` string
      * syntax.
      *
      * @param string $route     Route URL
