@@ -98,7 +98,7 @@ Class JsonProvider Implements ProviderInterface
     private function getJson() : array
     {
         $content = (string)file_get_contents( $this->filepath );
-        /** @var array|false $content */
+        /** @psalm-var array|false $content */
         $content = json_decode( $content, true, 4 );
 
         // Parse error?
@@ -146,7 +146,8 @@ Class JsonProvider Implements ProviderInterface
 
         // Controller/handler function
         if ( is_string( $definition['handler'] ) ) {
-            $handler = explode( '::', $definition['handler'] );
+            /** @psalm-var callable $handler */
+            $handler = explode( '::', $definition['handler'], 2 );
         } else {
             $handler = $definition['handler'];
         }
@@ -155,7 +156,7 @@ Class JsonProvider Implements ProviderInterface
 
         // Allowed HTTP verbs only
         if ( !empty( $definition['methods'] ) && is_array( $definition['methods'] ) ) {
-            $methods = array_intersect( $definition['methods'], self::HTTP_METHODS );
+            $methods = array_intersect( self::HTTP_METHODS, $definition['methods'] );
         } else {
             $methods = [ 'GET' ];
         }
