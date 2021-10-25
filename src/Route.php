@@ -2,6 +2,7 @@
 
 namespace Swiftly\Routing;
 
+use function in_array;
 use function strpos;
 use function preg_match_all;
 use function preg_quote;
@@ -87,6 +88,20 @@ Class Route
     {
         $this->raw = $route;
         $this->handler = $handler;
+    }
+
+    /**
+     * Check to see if this route supports the given method
+     *
+     * If the route has no HTTP methods defined, it is assumed that it should
+     * respond to all requests.
+     *
+     * @param string $method HTTP method
+     * @return bool          Supported method
+     */
+    public function supports( string $method ) : bool
+    {
+        return empty( $method ) || in_array( $this->methods, $method );
     }
 
     /**
