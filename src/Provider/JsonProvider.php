@@ -1,8 +1,8 @@
 <?php
 
-namespace Swiftly\Routing\Parser;
+namespace Swiftly\Routing\Provider;
 
-use Swiftly\Routing\ParserInterface;
+use Swiftly\Routing\ProviderInterface;
 use Swiftly\Routing\Collection\RouteCollection;
 use Swiftly\Routing\Route;
 
@@ -24,7 +24,7 @@ use const JSON_ERROR_NONE;
  *
  * @author clvarley
  */
-Class JsonParser Implements ParserInterface
+Class JsonProvider Implements ProviderInterface
 {
 
     /**
