@@ -82,7 +82,7 @@ Class Route
     public function __construct( string $route, callable $handler )
     {
         $this->raw = $route;
-        $this->callable = $handler;
+        $this->handler = $handler;
     }
 
     /**
