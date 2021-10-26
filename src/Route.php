@@ -31,11 +31,11 @@ Class Route
     const REGEX_FLAGS = PREG_SET_ORDER | PREG_OFFSET_CAPTURE;
 
     /**
-     * The raw path from the routes file
+     * The url path for this route
      *
-     * @var string $raw Route URL
+     * @var string $url Route URL
      */
-    public $raw;
+    public $url;
 
     /**
     * Function used to handle this route
@@ -43,13 +43,6 @@ Class Route
     * @var callable $handler Route controller
     */
     public $handler;
-
-    /**
-     * The regex used to match this route
-     *
-     * @var string $regex Compiled regex
-     */
-    public $regex = '';
 
     /**
      * Allowed HTTP methods for this route
@@ -79,12 +72,12 @@ Class Route
      * can cause "Non-static method" warnings when using the older `::` string
      * syntax.
      *
-     * @param string $route     Route URL
+     * @param string $url       URL path
      * @param callable $handler Route handler
      */
-    public function __construct( string $route, $handler )
+    public function __construct( string $url, $handler )
     {
-        $this->raw = $route;
+        $this->url = $url;
         $this->handler = $handler;
     }
 
@@ -117,8 +110,8 @@ Class Route
         }
 
         // Static not dynamic route?
-        if ( strpos( $this->raw, '[', 1 ) === false ) {
-            return $this->raw;
+        if ( strpos( $this->url, '[', 1 ) === false ) {
+            return $this->url;
         }
 
         // Does it look URL-like?
@@ -137,7 +130,7 @@ Class Route
         $regex = '';
 
         // Something went wrong?
-        if ( !preg_match_all( self::ARGS_REGEX, $this->raw, $matches, self::REGEX_FLAGS ) ) {
+        if ( !preg_match_all( self::ARGS_REGEX, $this->url, $matches, self::REGEX_FLAGS ) ) {
             // TODO: Throw maybe?
             return $regex;
         }

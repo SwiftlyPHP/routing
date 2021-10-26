@@ -3,11 +3,7 @@
 namespace Swiftly\Routing\Collection;
 
 use Swiftly\Routing\Collection\GenericCollection;
-use Swiftly\Routing\Collection\FilterableTrait;
 use Swiftly\Routing\Route;
-
-use function in_array;
-use function implode;
 
 /**
  * Class used to store and manage a collection of routes
@@ -49,6 +45,8 @@ Class RouteCollection extends GenericCollection
 
     /**
      * Gets the named route from the collection
+     *
+     * @psalm-mutation-free
      *
      * @param string $name Route name
      * @return Route|null  Route object

@@ -86,6 +86,8 @@ Class GenericCollection Implements Iterator
     /**
      * Check to see if this collection is empty
      *
+     * @psalm-mutation-free
+     *
      * @return bool Empty collection
      */
     public function empty() : bool
