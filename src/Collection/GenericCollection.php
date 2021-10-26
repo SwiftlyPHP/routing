@@ -29,6 +29,7 @@ Class GenericCollection Implements Iterator
     /**
      * Create a new collection over the given items
      *
+     * @final
      * @param array<TKey,TVal> $items
      */
     final public function __construct( array $items = [] )
@@ -80,5 +81,38 @@ Class GenericCollection Implements Iterator
     public function valid() : bool
     {
         return current( $this->items ) !== false;
+    }
+
+    /**
+     * Check to see if this collection is empty
+     *
+     * @return bool Empty collection
+     */
+    public function empty() : bool
+    {
+        return empty( $this->items );
+    }
+
+    /**
+     * Filters the collection using the provided callback
+     *
+     * @psalm-mutation-free
+     * @psalm-param callable(TVal):bool $callback
+     * @psalm-return static<TKey,TVal>
+     *
+     * @param callable $callback Filter function
+     * @return static            Filtered collection
+     */
+    public function filter( callable $callback ) // : static
+    {
+        $items = [];
+
+        foreach ( $this->items as $key => $item ) {
+            if ( $callback( $item ) ) {
+                $items[$key] = $item;
+            }
+        }
+
+        return new static( $items );
     }
 }
