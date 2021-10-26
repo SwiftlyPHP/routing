@@ -5,6 +5,7 @@ namespace Swiftly\Routing\Compiler;
 use Swiftly\Routing\CompilerInterface;
 use Swiftly\Routing\Collection\RouteCollection;
 use Swiftly\Routing\MatcherInterface;
+use Swiftly\Routing\Route;
 use Swiftly\Routing\Matcher\AggregateMatcher;
 use Swiftly\Routing\Matcher\StaticMatcher;
 use Swiftly\Routing\Matcher\RegexMatcher;
@@ -25,52 +26,54 @@ Class StandardCompiler Implements CompilerInterface
     {
         $matchers = [];
 
-        if (( $static = $this->handleStatic( $routes )) !== null ) {
-            $matchers[] = $static;
+        // Get the static routes
+        $static = $routes->filter( function ( Route $route ) : bool {
+            return strpos( $route->url, '[', 1 ) === false;
+        });
+
+        if ( !$static->empty() ) {
+            $matchers[] = $this->handleStatic( $static );
         }
 
-        if (( $regex = $this->handleRegex( $routes )) !== null ) {
-            $matchers[] = $regex;
+        // Get remaining routes
+        $dynamic = $routes->diff( $static );
+
+        if ( !$dynamic->empty() ) {
+            $matchers[] = $this->handleRegex( $dynamic );
         }
 
         return new AggregateMatcher( $matchers );
     }
 
     /**
-     * Creates a new StaticMatcher if any static routes are found
+     * Creates a new StaticMatcher
      *
-     * @param RouteCollection $routes Route collection
-     * @return StaticMatcher|null     Static route matcher
+     * @param RouteCollection $routes Static routes
+     * @return StaticMatcher          Static route matcher
      */
-    private function handleStatic( RouteCollection $routes ) : ?StaticMatcher
+    private function handleStatic( RouteCollection $routes ) : StaticMatcher
     {
         $mapping = [];
 
         foreach ( $routes as $route ) {
-            if ( strpos( $route->url, '[', 1 ) === false ) {
-                $mapping[$route->url] = $route;
-            }
+            $mapping[$route->url] = $route;
         }
 
-        return empty( $mapping ) ? null : new StaticMatcher( $mapping );
+        return new StaticMatcher( $mapping );
     }
 
     /**
-     * Creates a new RegexMatcher if any dynamic routes are found
+     * Creates a new RegexMatcher
      *
-     * @param RouteCollection $routes Route collection
-     * @return RegexMatcher|null      Dynamic route matcher
+     * @param RouteCollection $routes Dynamic routes
+     * @return RegexMatcher           Dynamic route matcher
      */
-    private function handleRegex( RouteCollection $routes ) : ?RegexMatcher
+    private function handleRegex( RouteCollection $routes ) : RegexMatcher
     {
         $regexes = [];
 
         foreach ( $routes as $name => $route ) {
             $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
-        }
-
-        if ( empty( $regexes ) ) {
-            return null;
         }
 
         $regex = '~^(?|' . implode( '|', $regexes ) . ')$~ixX';

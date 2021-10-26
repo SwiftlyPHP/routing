@@ -101,7 +101,7 @@ Class GenericCollection Implements Iterator
      *
      * @psalm-mutation-free
      * @psalm-param callable(TVal):bool $callback
-     * @psalm-return self<TKey,TVal>
+     * @psalm-return static
      *
      * @param callable $callback Filter function
      * @return static            Filtered collection
@@ -124,7 +124,7 @@ Class GenericCollection Implements Iterator
      *
      * @psalm-param self<TKey,TVal> $collection
      * @psalm-param ?callable(TVal,TVal):(-1|0|1) $comparator
-     * @psalm-return self<TKey,TVal>
+     * @psalm-return static
      *
      * @param static $collection   Comparable collection
      * @param callable $comparator Comparison function
