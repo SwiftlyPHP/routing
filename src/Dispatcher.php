@@ -8,6 +8,7 @@ use Swiftly\Routing\Route;
 use function rtrim;
 use function in_array;
 use function preg_match_all;
+use function implode;
 
 use const PREG_SET_ORDER;
 
@@ -80,8 +81,15 @@ Class Dispatcher
             $method = 'GET';
         }
 
+        // Get routes that support the method
+        $routes = $this->routes->filter(
+            function ( Route $route ) use ( $method ) {
+                return $route->supports( $method );
+            }
+        );
+
         // Compile the regex
-        $regex = $this->routes->compile( $method );
+        $regex = $this->compile( $routes );
 
         if ( !preg_match_all( $regex, $path, $matches, PREG_SET_ORDER ) ) {
             return null;
@@ -101,5 +109,22 @@ Class Dispatcher
         $route->args = $args;
 
         return $route;
+    }
+
+    /**
+     * Compile the regex for the given routes
+     *
+     * @param RouteCollection $routes Route collection
+     * @return string                 Compiled regex
+     */
+    private function compile( RouteCollection $routes ) : string
+    {
+          $regexes = [];
+
+          foreach ( $routes as $name => $route ) {
+              $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
+          }
+
+          return '~^(?|' . implode( '|', $regexes ) . ')$~ixX';
     }
 }

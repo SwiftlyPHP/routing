@@ -17,10 +17,7 @@ use function implode;
  */
 Class RouteCollection extends GenericCollection
 {
-
-    /**
-     * @use FilterableTrait<Route>
-     */
+    /** @use FilterableTrait<Route> */
     use FilterableTrait;
 
     /**
@@ -62,24 +59,5 @@ Class RouteCollection extends GenericCollection
     public function get( string $name ) : ?Route
     {
         return $this->items[$name] ?? null;
-    }
-
-    /**
-     * Compiles the regex for the given HTTP method
-     *
-     * @param string $method HTTP method
-     * @return string        Compiled regex
-     */
-    public function compile( string $method ) : string
-    {
-        $regexes = [];
-
-        foreach ( $this->items as $name => $route ) {
-            if ( $route->supports( $method ) ) {
-                $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
-            }
-        }
-
-        return '~^(?|' . implode( '|', $regexes ) . ')$~ixX';
     }
 }
