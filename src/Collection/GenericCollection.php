@@ -15,7 +15,6 @@ use function reset;
  * @internal
  * @template TKey of array-key
  * @template TVal
- * @author clvarley
  */
 Class GenericCollection Implements Iterator
 {

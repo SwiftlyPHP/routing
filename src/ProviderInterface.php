@@ -6,8 +6,6 @@ use Swiftly\Routing\Collection\RouteCollection;
 
 /**
  * Interface for classes that can provide/load route definitions
- *
- * @author clvarley
  */
 Interface ProviderInterface
 {

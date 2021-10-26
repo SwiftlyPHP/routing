@@ -7,8 +7,6 @@ use Swiftly\Routing\MatcherInterface;
 
 /**
  * Interface for classes that can compile/create route matchers
- *
- * @author clvarley
  */
 Interface CompilerInterface
 {

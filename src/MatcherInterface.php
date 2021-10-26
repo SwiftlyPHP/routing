@@ -6,8 +6,6 @@ use Swiftly\Routing\Route;
 
 /**
  * Interface for classes that can match URLs to routes
- *
- * @author clvarley
  */
 Interface MatcherInterface
 {

@@ -8,8 +8,6 @@ use Swiftly\Routing\Route;
 
 /**
  * Class that matches URLs to static routes
- *
- * @author clvarley
  */
 Class StaticMatcher Implements MatcherInterface
 {

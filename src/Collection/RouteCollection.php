@@ -13,7 +13,6 @@ use function implode;
  * Class used to store and manage a collection of routes
  *
  * @extends GenericCollection<string,Route>
- * @author clvarley
  */
 Class RouteCollection extends GenericCollection
 {

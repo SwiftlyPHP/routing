@@ -12,8 +12,6 @@ use const PREG_OFFSET_CAPTURE;
 
 /**
  * Simple class used to represent a single route
- *
- * @author clvarley
  */
 Class Route
 {

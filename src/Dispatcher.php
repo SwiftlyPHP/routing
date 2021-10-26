@@ -14,8 +14,6 @@ use const PREG_SET_ORDER;
 
 /**
  * Simple regex dispatcher
- *
- * @author clvarley
  */
 Class Dispatcher
 {

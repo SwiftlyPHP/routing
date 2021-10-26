@@ -9,7 +9,6 @@ use Swiftly\Routing\Collection\GenericCollection;
  *
  * @template TVal
  * @psalm-require-extends GenericCollection
- * @author clvarley
  */
 Trait FilterableTrait
 {

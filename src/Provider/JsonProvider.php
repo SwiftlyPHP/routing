@@ -23,8 +23,6 @@ use const JSON_ERROR_NONE;
  * Class responsible for loading routes from .json files
  *
  * @psalm-type RDef=array{path: string, handler: callable}
- *
- * @author clvarley
  */
 Class JsonProvider Implements ProviderInterface
 {
