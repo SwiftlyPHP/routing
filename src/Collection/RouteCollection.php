@@ -3,6 +3,7 @@
 namespace Swiftly\Routing\Collection;
 
 use Swiftly\Routing\Collection\GenericCollection;
+use Swiftly\Routing\Collection\FilterableTrait;
 use Swiftly\Routing\Route;
 
 use function in_array;
@@ -16,6 +17,11 @@ use function implode;
  */
 Class RouteCollection extends GenericCollection
 {
+
+    /**
+     * @use FilterableTrait<Route>
+     */
+    use FilterableTrait;
 
     /**
      * Adds a new route to this collection

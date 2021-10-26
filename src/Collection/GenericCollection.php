@@ -13,7 +13,7 @@ use function reset;
  * Class used to represent a collection of objects
  *
  * @internal
- * @template TKey as array-key
+ * @template TKey of array-key
  * @template TVal
  * @author clvarley
  */
@@ -32,7 +32,7 @@ Class GenericCollection Implements Iterator
      *
      * @param array<TKey,TVal> $items
      */
-    public function __construct( array $items = [] )
+    final public function __construct( array $items = [] )
     {
         $this->items = $items;
     }
