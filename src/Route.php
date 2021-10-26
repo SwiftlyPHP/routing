@@ -94,6 +94,8 @@ Class Route
      * If the route has no HTTP methods defined, it is assumed that it should
      * respond to all requests.
      *
+     * @psalm-mutation-free
+     *
      * @param string $method HTTP method
      * @return bool          Supported method
      */

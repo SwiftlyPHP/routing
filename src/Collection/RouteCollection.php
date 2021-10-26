@@ -16,8 +16,6 @@ use function implode;
  */
 Class RouteCollection extends GenericCollection
 {
-    /** @use FilterableTrait<Route> */
-    use FilterableTrait;
 
     /**
      * Adds a new route to this collection
@@ -58,5 +56,26 @@ Class RouteCollection extends GenericCollection
     public function get( string $name ) : ?Route
     {
         return $this->items[$name] ?? null;
+    }
+
+    /**
+     * Filter collection to routes that support the given HTTP method
+     *
+     * @psalm-mutation-free
+     *
+     * @param string $method HTTP method
+     * @return self          Filtered content
+     */
+    public function filterByMethod( string $method ) : self
+    {
+        $items = [];
+
+        foreach ( $this->items as $name => $item ) {
+            if ( $item->supports( $method ) ) {
+                $items[$name] = $item;
+            }
+        }
+
+        return new self( $items );
     }
 }
