@@ -8,6 +8,7 @@ use function current;
 use function key;
 use function next;
 use function reset;
+use function array_diff;
 
 /**
  * Class used to represent a collection of objects
@@ -100,7 +101,7 @@ Class GenericCollection Implements Iterator
      *
      * @psalm-mutation-free
      * @psalm-param callable(TVal):bool $callback
-     * @psalm-return static<TKey,TVal>
+     * @psalm-return self<TKey,TVal>
      *
      * @param callable $callback Filter function
      * @return static            Filtered collection
@@ -116,5 +117,22 @@ Class GenericCollection Implements Iterator
         }
 
         return new static( $items );
+    }
+
+    /**
+     * Compute the difference between this and another collection
+     *
+     * @psalm-mutation-free
+     * @psalm-param self<TKey,TVal> $collection
+     * @psalm-return self<TKey,TVal>
+     *
+     * @param static $collection Comparable collection
+     * @return static            Computed difference
+     */
+    public function diff( self $collection ) // : static
+    {
+        $difference = array_diff( $this->items, $collection->items );
+
+        return new static( $difference );
     }
 }
