@@ -8,7 +8,7 @@ use function current;
 use function key;
 use function next;
 use function reset;
-use function array_diff;
+use function array_udiff;
 
 /**
  * Class used to represent a collection of objects
@@ -122,17 +122,37 @@ Class GenericCollection Implements Iterator
     /**
      * Compute the difference between this and another collection
      *
-     * @psalm-mutation-free
      * @psalm-param self<TKey,TVal> $collection
+     * @psalm-param ?callable(TVal,TVal):(-1|0|1) $comparator
      * @psalm-return self<TKey,TVal>
      *
-     * @param static $collection Comparable collection
-     * @return static            Computed difference
+     * @param static $collection   Comparable collection
+     * @param callable $comparator Comparison function
+     * @return static              Computed difference
      */
-    public function diff( self $collection ) // : static
+    public function diff( self $collection, ?callable $comparator = null ) // : static
     {
-        $difference = array_diff( $this->items, $collection->items );
+        $comparator = $comparator ?: [ $this, 'compare' ];
+
+        $difference = array_udiff( $this->items, $collection->items, $comparator );
 
         return new static( $difference );
+    }
+
+    /**
+     * Fallback comparison functions for calls to `array_udiff`
+     *
+     * @psalm-mutation-free
+     * @psalm-param TVal $val1
+     * @psalm-param TVal $val2
+     * @psalm-return -1|0|1
+     *
+     * @param mixed $val1 Comparison value
+     * @param mixed $val2 Comparison value
+     * @return int
+     */
+    protected function compare( $val1, $val2 ) : int
+    {
+        return $val1 <=> $val2;
     }
 }
