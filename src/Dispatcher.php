@@ -3,11 +3,11 @@
 namespace Swiftly\Routing;
 
 use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\CompilerInterface;
 use Swiftly\Routing\Route;
 
 use function rtrim;
 use function in_array;
-use function preg_match_all;
 use function implode;
 
 use const PREG_SET_ORDER;
@@ -24,6 +24,13 @@ Class Dispatcher
      * @var RouteCollection $routes Route collection
      */
     private $routes;
+
+    /**
+     * Compiler used to create the route matcher
+     *
+     * @var CompilerInterface $compiler Match compiler
+     */
+    private $compiler;
 
     /**
      * HTTP methods supported by this router
@@ -43,68 +50,39 @@ Class Dispatcher
     /**
      * Create a new dispatcher for the given routes
      *
-     * @param RouteCollection $routes Route collection
+     * @param RouteCollection $routes     Route collection
+     * @param CompilerInterface $compiler Match compiler
      */
-    public function __construct( RouteCollection $routes )
+    public function __construct( RouteCollection $routes, CompilerInterface $compiler )
     {
         $this->routes = $routes;
+        $this->compiler = $compiler;
     }
 
     /**
-     * Gets the route collection
-     *
-     * @return RouteCollection Route collection
-     */
-    public function getRoutes() : RouteCollection
-    {
-        return $this->routes;
-    }
-
-    /**
-     * Returns all the routes that match the path
+     * Returns all the routes that match the URL
      *
      * @param string $method HTTP method
-     * @param string $path   URL path
+     * @param string $url    URL path
      * @return Route|null    Route definition
      */
-    public function dispatch( string $method, string $path ) : ?Route
+    public function dispatch( string $method, string $url ) : ?Route
     {
-        $path = rtrim( $path, " \n\r\t\0\x0B\\/" );
+        $url = rtrim( $url, " \n\r\t\0\x0B\\/" );
 
-        if ( empty( $path ) ) {
-            $path = '/';
+        if ( empty( $url ) ) {
+            $url = '/';
         }
 
         if ( !in_array( $method, self::ALLOWED_METHODS ) ) {
             $method = 'GET';
         }
 
-        // Get routes that support the method
-        $routes = $this->routes->filter(
-            function ( Route $route ) use ( $method ) {
-                return $route->supports( $method );
-            }
-        );
+        // Filter to routes that support the method
+        $routes = $this->routes->filterByMethod( $method );
 
-        // Compile the regex
-        $regex = $this->compile( $routes );
-
-        if ( !preg_match_all( $regex, $path, $matches, PREG_SET_ORDER ) ) {
-            return null;
-        }
-
-        // Get the named route
-        $route = $this->routes->get( $matches[0]['MARK'] );
-
-        // Handle params (if any)
-        $args = [];
-
-        /** @var Route $route */
-        foreach ( $route->args as $index => $param ) {
-            $args[$param] = $matches[0][$index + 1] ?? null;
-        }
-
-        $route->args = $args;
+        // Try and match the route!
+        $route = $this->compiler->compile( $routes )->match( $url );
 
         return $route;
     }
