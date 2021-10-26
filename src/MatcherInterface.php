@@ -5,7 +5,7 @@ namespace Swiftly\Routing;
 use Swiftly\Routing\Route;
 
 /**
- * Interface for classes that can match URLs to routes
+ * Interface for all classes capable of matching URLs to routes
  */
 Interface MatcherInterface
 {
