@@ -39,10 +39,6 @@ Class StaticMatcher Implements MatcherInterface
      */
     public function match( string $url ) : ?Route
     {
-        if ( !isset( $this->routes[$url] ) ) {
-            return null;
-        }
-
-        return $this->routes[$url];
+        return $this->routes[$url] ?? null;
     }
 }
