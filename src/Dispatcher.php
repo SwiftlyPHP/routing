@@ -8,9 +8,6 @@ use Swiftly\Routing\Route;
 
 use function rtrim;
 use function in_array;
-use function implode;
-
-use const PREG_SET_ORDER;
 
 /**
  * Simple regex dispatcher
@@ -37,7 +34,7 @@ Class Dispatcher
      *
      * @var string[] ALLOWED_METHODS HTTP methods
      */
-    private const ALLOWED_METHODS = [
+    const ALLOWED_METHODS = [
         'OPTIONS',
         'HEAD',
         'GET',
@@ -79,28 +76,15 @@ Class Dispatcher
         }
 
         // Filter to routes that support the method
-        $routes = $this->routes->filterByMethod( $method );
+        $routes = $this->routes->filter(
+            function ( Route $route ) use ( $method ) : bool {
+                return $route->supports( $method );
+            }
+        );
 
         // Try and match the route!
         $route = $this->compiler->compile( $routes )->match( $url );
 
         return $route;
-    }
-
-    /**
-     * Compile the regex for the given routes
-     *
-     * @param RouteCollection $routes Route collection
-     * @return string                 Compiled regex
-     */
-    private function compile( RouteCollection $routes ) : string
-    {
-          $regexes = [];
-
-          foreach ( $routes as $name => $route ) {
-              $regexes[] = '(?>' . $route->compile() . '(*:' . $name . '))';
-          }
-
-          return '~^(?|' . implode( '|', $regexes ) . ')$~ixX';
     }
 }
