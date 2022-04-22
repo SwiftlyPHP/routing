@@ -3,7 +3,7 @@
 namespace Swiftly\Routing\Compiler;
 
 use Swiftly\Routing\CompilerInterface;
-use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\MatcherInterface;
 use Swiftly\Routing\Route;
 use Swiftly\Routing\Matcher\AggregateMatcher;
@@ -15,6 +15,8 @@ use function implode;
 
 /**
  * Standard compiler that can handle both static and dynamic routes
+ *
+ * @psalm-immutable
  */
 Class StandardCompiler Implements CompilerInterface
 {
@@ -22,7 +24,7 @@ Class StandardCompiler Implements CompilerInterface
     /**
      * {@inheritdoc}
      */
-    public function compile( RouteCollection $routes ) : MatcherInterface
+    public function compile( Collection $routes ) : MatcherInterface
     {
         $matchers = [];
 
@@ -31,14 +33,14 @@ Class StandardCompiler Implements CompilerInterface
             return strpos( $route->url, '[', 1 ) === false;
         });
 
-        if ( !$static->empty() ) {
+        if ( !$static->isEmpty() ) {
             $matchers[] = $this->handleStatic( $static );
         }
 
         // Get remaining routes
         $dynamic = $routes->diff( $static );
 
-        if ( !$dynamic->empty() ) {
+        if ( !$dynamic->isEmpty() ) {
             $matchers[] = $this->handleRegex( $dynamic );
         }
 
@@ -48,10 +50,10 @@ Class StandardCompiler Implements CompilerInterface
     /**
      * Creates a new StaticMatcher
      *
-     * @param RouteCollection $routes Static routes
-     * @return StaticMatcher          Static route matcher
+     * @param Collection $routes Static routes
+     * @return StaticMatcher     Static route matcher
      */
-    private function handleStatic( RouteCollection $routes ) : StaticMatcher
+    private function handleStatic( Collection $routes ) : StaticMatcher
     {
         $mapping = [];
 
@@ -65,10 +67,10 @@ Class StandardCompiler Implements CompilerInterface
     /**
      * Creates a new RegexMatcher
      *
-     * @param RouteCollection $routes Dynamic routes
-     * @return RegexMatcher           Dynamic route matcher
+     * @param Collection $routes Dynamic routes
+     * @return RegexMatcher      Dynamic route matcher
      */
-    private function handleRegex( RouteCollection $routes ) : RegexMatcher
+    private function handleRegex( Collection $routes ) : RegexMatcher
     {
         $regexes = [];
 

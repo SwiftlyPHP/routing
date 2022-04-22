@@ -100,6 +100,8 @@ Class Route
     /**
      * Compile the regex used to match this route
      *
+     * @psalm-mutation-free
+     *
      * @return string Compiled regex
      */
     public function compile() : string

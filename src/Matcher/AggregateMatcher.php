@@ -7,6 +7,8 @@ use Swiftly\Routing\Route;
 
 /**
  * Class that calls matchers in series until a route is found
+ *
+ * @psalm-immutable
  */
 Class AggregateMatcher Implements MatcherInterface
 {

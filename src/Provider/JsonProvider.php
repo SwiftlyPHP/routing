@@ -3,7 +3,7 @@
 namespace Swiftly\Routing\Provider;
 
 use Swiftly\Routing\ProviderInterface;
-use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 
 use function is_array;
@@ -55,7 +55,7 @@ Class JsonProvider Implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function populate( RouteCollection $collection ) : RouteCollection
+    public function populate( Collection $collection ) : Collection
     {
         // Can't progress, file invalid
         if ( !$this->readable() ) {

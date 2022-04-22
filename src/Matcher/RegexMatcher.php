@@ -3,7 +3,7 @@
 namespace Swiftly\Routing\Matcher;
 
 use Swiftly\Routing\MatcherInterface;
-use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 
 use function preg_match_all;
@@ -12,12 +12,14 @@ use const PREG_SET_ORDER;
 
 /**
  * Class that uses regex to match a URL to a route
+ *
+ * @psalm-immutable
  */
 Class RegexMatcher Implements MatcherInterface
 {
 
     /**
-     * @var RouteCollection $routes Route collection
+     * @var Collection $routes Route collection
      */
     private $routes;
 
@@ -29,10 +31,10 @@ Class RegexMatcher Implements MatcherInterface
     /**
      * Create a new regex matcher using the routes and expression provided
      *
-     * @param RouteCollection $routes Route collection
-     * @param string $regex           Match expression
+     * @param Collection $routes Route collection
+     * @param string $regex      Match expression
      */
-    public function __construct( RouteCollection $routes, string $regex )
+    public function __construct( Collection $routes, string $regex )
     {
         $this->routes = $routes;
         $this->regex = $regex;

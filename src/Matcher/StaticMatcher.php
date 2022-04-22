@@ -3,11 +3,12 @@
 namespace Swiftly\Routing\Matcher;
 
 use Swiftly\Routing\MatcherInterface;
-use Swiftly\Routing\Collection\RouteCollection;
 use Swiftly\Routing\Route;
 
 /**
  * Class that matches URLs to static routes
+ *
+ * @psalm-immutable
  */
 Class StaticMatcher Implements MatcherInterface
 {

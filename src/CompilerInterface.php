@@ -2,7 +2,7 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\MatcherInterface;
 
 /**
@@ -14,9 +14,9 @@ Interface CompilerInterface
     /**
      * Compile the appropriate matcher for the given routes
      *
-     * @param RouteCollection $routes Route collection
-     * @return MatcherInterface       Compiled matcher
+     * @param Collection $routes Route collection
+     * @return MatcherInterface  Compiled matcher
      */
-    public function compile( RouteCollection $routes ) : MatcherInterface;
+    public function compile( Collection $routes ) : MatcherInterface;
 
 }

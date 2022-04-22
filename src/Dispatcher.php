@@ -2,7 +2,7 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\Collection\RouteCollection;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\CompilerInterface;
 use Swiftly\Routing\Route;
 
@@ -18,7 +18,7 @@ Class Dispatcher
     /**
      * Collection of routes
      *
-     * @var RouteCollection $routes Route collection
+     * @var Collection $routes Route collection
      */
     private $routes;
 
@@ -47,10 +47,10 @@ Class Dispatcher
     /**
      * Create a new dispatcher for the given routes
      *
-     * @param RouteCollection $routes     Route collection
+     * @param Collection $routes          Route collection
      * @param CompilerInterface $compiler Match compiler
      */
-    public function __construct( RouteCollection $routes, CompilerInterface $compiler )
+    public function __construct( Collection $routes, CompilerInterface $compiler )
     {
         $this->routes = $routes;
         $this->compiler = $compiler;
