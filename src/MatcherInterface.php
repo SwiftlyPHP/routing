@@ -6,6 +6,8 @@ use Swiftly\Routing\Route;
 
 /**
  * Interface for all classes capable of matching URLs to routes
+ *
+ * @psalm-immutable
  */
 Interface MatcherInterface
 {
