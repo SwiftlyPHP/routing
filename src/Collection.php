@@ -2,12 +2,14 @@
 
 namespace Swiftly\Routing;
 
+use IteratorAggregate;
+use Traversable;
 use Swiftly\Routing\Route;
 
 /**
  * Represents a collection of named routes
  */
-Final Class Collection
+Final Class Collection Implements IteratorAggregate
 {
 
     /**
@@ -86,5 +88,17 @@ Final Class Collection
         }
 
         return new self( $routes );
+    }
+
+    /**
+     * Provide ability to loop over this collection
+     *
+     * @internal
+     */
+    public function getIterator() : Traversable
+    {
+        foreach ( $this->routes as $name => $route ) {
+            yield $name => $route;
+        }
     }
 }
