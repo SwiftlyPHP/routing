@@ -7,6 +7,8 @@ use Swiftly\Routing\MatcherInterface;
 
 /**
  * Interface for classes that can compile/create route matchers
+ *
+ * @psalm-immutable
  */
 Interface CompilerInterface
 {

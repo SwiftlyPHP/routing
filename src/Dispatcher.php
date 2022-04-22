@@ -11,6 +11,8 @@ use function in_array;
 
 /**
  * Simple regex dispatcher
+ *
+ * @psalm-immutable
  */
 Class Dispatcher
 {
