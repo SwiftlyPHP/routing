@@ -30,7 +30,7 @@ Class StandardCompiler Implements CompilerInterface
         $static = [];
         $dynamic = [];
 
-        foreach ( $routes as $name => $route ) {
+        foreach ( $routes->all() as $name => $route ) {
             if ( $this->isStatic( $route ) ) {
                 $static[$name] = $route;
             } else {
