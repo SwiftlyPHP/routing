@@ -45,7 +45,7 @@ Final Class Collection
     /**
      * Retrieves a named route from the collection
      *
-     * @psalm-immutable
+     * @psalm-mutation-free
      *
      * @param string $name Route name
      * @return Route|null  Route definition
@@ -58,7 +58,7 @@ Final Class Collection
     /**
      * Check to see if this collection contains any routes
      *
-     * @psalm-immutable
+     * @psalm-mutation-free
      *
      * @return bool Is empty?
      */
@@ -70,8 +70,8 @@ Final Class Collection
     /**
      * Return a new collection of routes that pass the provided filter
      *
-     * @psalm-immutable
-     * @psalm-param callable(Route):bool $filter
+     * @psalm-mutation-free
+     * @psalm-param pure-callable(Route):bool $filter
      *
      * @param callable $filter Filter function
      */
@@ -91,7 +91,7 @@ Final Class Collection
     /**
      * Returns the underlying Route array
      *
-     * @psalm-immutable
+     * @psalm-mutation-free
      * @psalm-return array<string, Route>
      *
      * @return Route[]
