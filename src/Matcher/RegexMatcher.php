@@ -19,7 +19,9 @@ Class RegexMatcher Implements MatcherInterface
 {
 
     /**
-     * @var Collection $routes Route collection
+     * @psalm-var array<string, Route> $routes
+     *
+     * @var array $routes Dynamic routes
      */
     private $routes;
 
@@ -31,10 +33,12 @@ Class RegexMatcher Implements MatcherInterface
     /**
      * Create a new regex matcher using the routes and expression provided
      *
-     * @param Collection $routes Route collection
-     * @param string $regex      Match expression
+     * @psalm-param array<string, Route> $routes
+     *
+     * @param Route[] $routes Dynamic routes
+     * @param string $regex   Match expression
      */
-    public function __construct( Collection $routes, string $regex )
+    public function __construct( array $routes, string $regex )
     {
         $this->routes = $routes;
         $this->regex = $regex;
@@ -50,12 +54,11 @@ Class RegexMatcher Implements MatcherInterface
         }
 
         // Get the named route
-        $route = $this->routes->get( $matches[0]['MARK'] );
+        $route = $this->routes[$matches[0]['MARK']];
 
         // Handle params (if any)
         $args = [];
 
-        /** @var Route $route */
         foreach ( $route->args as $index => $param ) {
             $args[$param] = $matches[0][$index + 1] ?? null;
         }
