@@ -27,20 +27,24 @@ Class StandardCompiler Implements CompilerInterface
     public function compile( Collection $routes ) : MatcherInterface
     {
         $matchers = [];
+        $static = [];
+        $dynamic = [];
+
+        foreach ( $routes as $name => $route ) {
+            if ( $this->isStatic( $route ) ) {
+                $static[$name] = $route;
+            } else {
+                $dynamic[$name] = $route;
+            }
+        }
 
         // Get the static routes
-        $static = $routes->filter( function ( Route $route ) : bool {
-            return strpos( $route->url, '[', 1 ) === false;
-        });
-
-        if ( !$static->isEmpty() ) {
+        if ( !empty( $static ) ) {
             $matchers[] = $this->handleStatic( $static );
         }
 
         // Get remaining routes
-        $dynamic = $routes->diff( $static );
-
-        if ( !$dynamic->isEmpty() ) {
+        if ( !empty( $dynamic ) ) {
             $matchers[] = $this->handleRegex( $dynamic );
         }
 
@@ -48,12 +52,25 @@ Class StandardCompiler Implements CompilerInterface
     }
 
     /**
+     * Determine if the provided route is static
+     *
+     * @param Route $route Route definition
+     * @return bool        Is static?
+     */
+    private function isStatic( Route $route ) : bool
+    {
+        return strpos( $route->url, '[', 1 ) === false;
+    }
+
+    /**
      * Creates a new StaticMatcher
      *
-     * @param Collection $routes Static routes
-     * @return StaticMatcher     Static route matcher
+     * @psalm-param array<string, Route> $routes
+     *
+     * @param Route[] $routes Static routes
+     * @return StaticMatcher  Static route matcher
      */
-    private function handleStatic( Collection $routes ) : StaticMatcher
+    private function handleStatic( array $routes ) : StaticMatcher
     {
         $mapping = [];
 
@@ -67,10 +84,12 @@ Class StandardCompiler Implements CompilerInterface
     /**
      * Creates a new RegexMatcher
      *
-     * @param Collection $routes Dynamic routes
+     * @psalm-param array<string, Route> $routes
+     *
+     * @param Route[] $routes Dynamic routes
      * @return RegexMatcher      Dynamic route matcher
      */
-    private function handleRegex( Collection $routes ) : RegexMatcher
+    private function handleRegex( array $routes ) : RegexMatcher
     {
         $regexes = [];
 

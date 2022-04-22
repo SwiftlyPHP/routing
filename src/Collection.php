@@ -93,6 +93,9 @@ Final Class Collection Implements IteratorAggregate
     /**
      * Provide ability to loop over this collection
      *
+     * @psalm-immutable
+     * @psalm-return Traversable<string, Route>
+     *
      * @internal
      */
     public function getIterator() : Traversable
