@@ -48,4 +48,12 @@ Class StringParameter Implements ParameterInterface
         // TODO: Could filter out invalid chars here?
         return $value;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function regex() : string
+    {
+        return '[a-zA-Z0-9-_]+';
+    }
 }

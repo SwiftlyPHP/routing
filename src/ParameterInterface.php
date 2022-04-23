@@ -31,4 +31,11 @@ Interface ParameterInterface
      */
     public function escape( string $value ) : string;
 
+    /**
+     * Return the regex used to match this parameter
+     *
+     * @return string Regex
+     */
+    public function regex() : string;
+
 }

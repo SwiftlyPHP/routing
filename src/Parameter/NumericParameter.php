@@ -49,4 +49,12 @@ Class NumericParameter Implements ParameterInterface
     {
         return (string)intval( $value );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function regex() : string
+    {
+        return '\d+';
+    }
 }
