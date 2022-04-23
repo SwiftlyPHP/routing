@@ -31,7 +31,7 @@ Class StandardCompiler Implements CompilerInterface
         $dynamic = [];
 
         foreach ( $routes->all() as $name => $route ) {
-            if ( $this->isStatic( $route ) ) {
+            if ( $route->isStatic() ) {
                 $static[$name] = $route;
             } else {
                 $dynamic[$name] = $route;
@@ -49,17 +49,6 @@ Class StandardCompiler Implements CompilerInterface
         }
 
         return new AggregateMatcher( $matchers );
-    }
-
-    /**
-     * Determine if the provided route is static
-     *
-     * @param Route $route Route definition
-     * @return bool        Is static?
-     */
-    private function isStatic( Route $route ) : bool
-    {
-        return strpos( $route->url, '[', 1 ) === false;
     }
 
     /**
