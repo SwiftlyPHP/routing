@@ -2,6 +2,8 @@
 
 namespace Swiftly\Routing;
 
+use Swiftly\Routing\ParameterInterface;
+
 use function in_array;
 use function strpos;
 use function preg_match_all;
@@ -31,11 +33,13 @@ Class Route
     const REGEX_FLAGS = PREG_SET_ORDER | PREG_OFFSET_CAPTURE;
 
     /**
-     * The url path for this route
+     * URL components for this route
      *
-     * @var string $url Route URL
+     * @psalm-var list<string|ParameterInterface> $parts
+     *
+     * @var string[]|ParameterInterface[] $parts URL components
      */
-    public $url;
+    public $components;
 
     /**
     * Function used to handle this route
@@ -72,12 +76,14 @@ Class Route
      * can cause "Non-static method" warnings when using the older `::` string
      * syntax.
      *
-     * @param string $url       URL path
+     * @psalm-param string|list<string|ParameterInterface> $url
+     *
+     * @param string|array $url URL components
      * @param callable $handler Route handler
      */
-    public function __construct( string $url, $handler )
+    public function __construct( $url, $handler )
     {
-        $this->url = $url;
+        $this->components = (array)$url;
         $this->handler = $handler;
     }
 
@@ -98,36 +104,40 @@ Class Route
     }
 
     /**
-     * Compile the regex used to match this route
+     * Check to see if this route is static or dynamic
      *
      * @psalm-mutation-free
+     *
+     * @return bool Is static?
+     */
+    public function isStatic() : bool
+    {
+        return ( count( $this->components ) === 1
+            && is_string( $this->components[0] )
+        );
+    }
+
+    /**
+     * Compile the regex used to match this route
      *
      * @return string Compiled regex
      */
     public function compile() : string
     {
-        // Already compiled
-        if ( !empty( $this->regex ) ) {
-            return $this->regex;
-        }
-
         // Static not dynamic route?
-        if ( strpos( $this->url, '[', 1 ) === false ) {
-            return $this->url;
+        if ( $this->isStatic() ) {
+            return $this->components[0];
         }
 
-        // Does it look URL-like?
-        $this->regex = $this->parseUrl();
-
-        return $this->regex;
+        return $this->build();
     }
 
     /**
-     * Parse the URL into the regex
+     * Builds the regex for this route
      *
      * @return string Route regex
      */
-    private function parseUrl() : string
+    private function build() : string
     {
         $regex = '';
 
@@ -137,9 +147,9 @@ Class Route
             return $regex;
         }
 
-        // Build regex
-        foreach ( $matches as $match ) {
-            $regex .= $this->parseArg( $match );
+        // Coerce any ParameterInterface into string
+        foreach ( $this->components as $component ) {
+            $regex .= (string)$component;
         }
 
         return $regex;

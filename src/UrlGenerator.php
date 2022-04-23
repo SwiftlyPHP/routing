@@ -5,6 +5,9 @@ namespace Swiftly\Routing;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Exception\RouteNotFoundException;
 use Swiftly\Routing\Exception\MissingArgumentException;
+use Swiftly\Routing\ParameterInterface;
+
+use function is_string;
 
 /**
  * Generates URLs for routes based on provided args
@@ -48,12 +51,37 @@ Class UrlGenerator
             throw new RouteNotFoundException( $name );
         }
 
+        $url = '';
 
+        foreach ( $route->components as $component ) {
+            if ( $component instanceof ParameterInterface ) {
+                $url .= $this->escape( $name, $component, $args );
+            } else {
+                $url .= $component;
+            }
+        }
 
-        // TODO
+        return $url;
+    }
 
+    /**
+     * Escape a URL parameter
+     *
+     * @psalm-param array<string, scalar> $args
+     *
+     * @param string $route                 Route name
+     * @param ParameterInterface $component URL component
+     * @param array $args                   Route arguments
+     * @return string                       Escaped component
+     */
+    private function escape( string $route, ParameterInterface $component, array $args ) : string
+    {
+        $name = $component->name();
 
+        if ( !isset( $args[$name] ) || !$component->validate( $args[$name] ) ) {
+            throw new MissingArgumentException( $route, $name );
+        }
 
-        return '';
+        return $component->escape( $args[$name] );
     }
 }
