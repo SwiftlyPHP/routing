@@ -9,6 +9,8 @@ use function intval;
 
 /**
  * Represents a simple numeric URL parameter
+ *
+ * @psalm-immutable
  */
 Class NumericParameter Implements ParameterInterface
 {
@@ -37,7 +39,7 @@ Class NumericParameter Implements ParameterInterface
     /**
      * {@inheritdoc}
      */
-    public function validate( string $value ) : bool
+    public function validate( $value ) : bool
     {
         return is_numeric( $value );
     }
@@ -45,7 +47,7 @@ Class NumericParameter Implements ParameterInterface
     /**
      * {@inheritdoc}
      */
-    public function escape( string $value ) : string
+    public function escape( $value ) : string
     {
         return (string)intval( $value );
     }

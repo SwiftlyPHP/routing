@@ -6,6 +6,8 @@ use Swiftly\Routing\ParameterInterface;
 
 /**
  * Represents a simple string URL parameter
+ *
+ * @psalm-immutable
  */
 Class StringParameter Implements ParameterInterface
 {
@@ -34,7 +36,7 @@ Class StringParameter Implements ParameterInterface
     /**
      * {@inheritdoc}
      */
-    public function validate( string $value ) : bool
+    public function validate( $value ) : bool
     {
         // TODO: Could do some URL validation here?
         return !empty( $value );
@@ -43,10 +45,10 @@ Class StringParameter Implements ParameterInterface
     /**
      * {@inheritdoc}
      */
-    public function escape( string $value ) : string
+    public function escape( $value ) : string
     {
         // TODO: Could filter out invalid chars here?
-        return $value;
+        return (string)$value;
     }
 
     /**
