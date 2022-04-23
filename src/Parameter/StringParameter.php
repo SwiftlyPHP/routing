@@ -56,4 +56,12 @@ Class StringParameter Implements ParameterInterface
     {
         return '[a-zA-Z0-9-_]+';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->regex();
+    }
 }

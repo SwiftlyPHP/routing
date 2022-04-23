@@ -38,4 +38,11 @@ Interface ParameterInterface
      */
     public function regex() : string;
 
+    /**
+     * Return the regex used to match this parameter
+     *
+     * @see ParameterInterface::regex
+     * @return string Regex
+     */
+    public function __toString();
 }

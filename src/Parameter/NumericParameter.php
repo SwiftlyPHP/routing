@@ -57,4 +57,12 @@ Class NumericParameter Implements ParameterInterface
     {
         return '\d+';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->regex();
+    }
 }
