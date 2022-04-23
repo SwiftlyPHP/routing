@@ -1,9 +1,10 @@
 <?php
 
-namespace Swiftly\Routing\UrlGenerator;
+namespace Swiftly\Routing;
 
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Exception\RouteNotFoundException;
+use Swiftly\Routing\Exception\MissingArgumentException;
 
 /**
  * Generates URLs for routes based on provided args
@@ -33,7 +34,8 @@ Class UrlGenerator
      *
      * @psalm-param array<string, scalar> $args
      *
-     * @throws RouteNotFoundException If the named route does not exist
+     * @throws RouteNotFoundException   If the named route does not exist
+     * @throws MissingArgumentException If a required argument is missing
      *
      * @param string $name Route name
      * @param array $args  Route arguments
@@ -46,7 +48,11 @@ Class UrlGenerator
             throw new RouteNotFoundException( $name );
         }
 
+
+
         // TODO
+
+
 
         return '';
     }
