@@ -9,14 +9,6 @@ Interface ParameterInterface
 {
 
     /**
-     * Create a new parameter with the given name
-     *
-     * @param string $name Parameter name
-     */
-    public function __construct( string $name );
-
-
-    /**
      * Get the name of this parameter
      *
      * @return string Parameter name

@@ -10,4 +10,42 @@ use Swiftly\Routing\ParameterInterface;
 Class StringParameter Implements ParameterInterface
 {
 
+    /** @var string $name */
+    private $name;
+
+    /**
+     * Creates a new string parameter with the given name
+     *
+     * @param string $name Parameter name
+     */
+    public function __construct( string $name )
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function name() : string
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate( string $value ) : bool
+    {
+        // TODO: Could do some URL validation here?
+        return !empty( $value );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function escape( string $value ) : string
+    {
+        // TODO: Could filter out invalid chars here?
+        return $value;
+    }
 }
