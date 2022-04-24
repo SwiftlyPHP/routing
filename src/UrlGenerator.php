@@ -11,8 +11,6 @@ use function is_string;
 
 /**
  * Generates URLs for routes based on provided args
- *
- * @psalm-immutable
  */
 Class UrlGenerator
 {
