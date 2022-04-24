@@ -3,6 +3,8 @@
 namespace Swiftly\Routing;
 
 use Swiftly\Routing\ParameterInterface;
+use Swiftly\Routing\Parameter\NumericParameter;
+use Swiftly\Routing\Parameter\StringParameter;
 
 use function in_array;
 use function strpos;
@@ -33,13 +35,20 @@ Class Route
     const REGEX_FLAGS = PREG_SET_ORDER | PREG_OFFSET_CAPTURE;
 
     /**
+     * The raw (unparsed) URL of this route
+     *
+     * @var string $url Route URL
+     */
+    public $url;
+
+    /**
      * URL components for this route
      *
      * @psalm-var list<string|ParameterInterface> $parts
      *
      * @var string[]|ParameterInterface[] $parts URL components
      */
-    public $components;
+    private $components = [];
 
     /**
     * Function used to handle this route
@@ -76,14 +85,12 @@ Class Route
      * can cause "Non-static method" warnings when using the older `::` string
      * syntax.
      *
-     * @psalm-param string|list<string|ParameterInterface> $url
-     *
-     * @param string|array $url URL components
+     * @param string $url       Route URL
      * @param callable $handler Route handler
      */
-    public function __construct( $url, $handler )
+    public function __construct( string $url, $handler )
     {
-        $this->components = (array)$url;
+        $this->url = $url;
         $this->handler = $handler;
     }
 
@@ -112,9 +119,7 @@ Class Route
      */
     public function isStatic() : bool
     {
-        return ( count( $this->components ) === 1
-            && is_string( $this->components[0] )
-        );
+        return strpos( $this->url, '[', ) === false;
     }
 
     /**
@@ -126,7 +131,7 @@ Class Route
     {
         // Static not dynamic route?
         if ( $this->isStatic() ) {
-            return $this->components[0];
+            return $this->url;
         }
 
         return $this->build();
@@ -141,14 +146,8 @@ Class Route
     {
         $regex = '';
 
-        // Something went wrong?
-        if ( !preg_match_all( self::ARGS_REGEX, $this->url, $matches, self::REGEX_FLAGS ) ) {
-            // TODO: Throw maybe?
-            return $regex;
-        }
-
         // Coerce any ParameterInterface into string
-        foreach ( $this->components as $component ) {
+        foreach ( $this->components() as $component ) {
             $regex .= (string)$component;
         }
 
@@ -156,30 +155,62 @@ Class Route
     }
 
     /**
-     * Parse the arg data and build the regex
+     * Parse the URL and generate the components of this route
      *
-     * @param array[] $arg Argument data
-     * @return string      Argument regex
+     * @psalm-external-mutation-free
+     * @psalm-return list<string|ParameterInterface>
+     *
+     * @return string[]|ParameterInterface[] URL components
      */
-    private function parseArg( array $arg ) : string
+    public function components() : array
     {
-        if ( empty( $arg['name'] ) ) {
-            return preg_quote( $arg[0][0] );
+        if ( !empty( $this->components ) ) {
+            return $this->components;
         }
 
-        switch ( $arg['type'][0] ) {
-            case 'i':
-                $regex = '\d+';
-            break;
+        // Static routes are just a single component
+        if ( $this->isStatic() ) {
+            return [ $this->url ];
+        }
 
+        // Parse the dynamic portion of the route
+        if ( !preg_match_all( self::ARGS_REGEX, $this->url, $matches, self::REGEX_FLAGS ) ) {
+            // TODO: Throw maybe?
+            return [ $this->url ];
+        }
+
+        foreach ( $matches as $match ) {
+            $this->components[] = $this->component( $match );
+        }
+
+        return $this->components;
+    }
+
+    /**
+     * Turn the regex captured component into the correct type
+     *
+     * @return string|ParameterInterface component
+     */
+    private function component( array $component ) // : string|ParameterInterface
+    {
+        if ( empty( $component['name'] ) ) {
+            return preg_quote( $component[0][0] );
+        }
+
+        $name = $component['name'][0];
+
+        switch ( $component['type'][0] ) {
+            case 'i':
+                $component = new NumericParameter( $name );
+                break;
             case 's':
             default:
-                $regex = '[a-zA-Z0-9-_]+';
-            break;
+                $component = new StringParameter( $name );
+                break;
         }
 
-        $this->args[] = $arg['name'][0];
+        $this->args[] = $name;
 
-        return "($regex)";
+        return $component;
     }
 }

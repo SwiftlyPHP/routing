@@ -53,7 +53,7 @@ Class UrlGenerator
 
         $url = '';
 
-        foreach ( $route->components as $component ) {
+        foreach ( $route->components() as $component ) {
             if ( $component instanceof ParameterInterface ) {
                 $url .= $this->escape( $name, $component, $args );
             } else {
