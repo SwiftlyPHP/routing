@@ -49,7 +49,7 @@ Class NumericParameter Implements ParameterInterface
      */
     public function escape( $value ) : string
     {
-        return (string)intval( $value );
+        return (string)$value;
     }
 
     /**
