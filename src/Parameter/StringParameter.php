@@ -56,7 +56,7 @@ Class StringParameter Implements ParameterInterface
      */
     public function regex() : string
     {
-        return '[a-zA-Z0-9-_]+';
+        return '([a-zA-Z0-9-_]+)';
     }
 
     /**

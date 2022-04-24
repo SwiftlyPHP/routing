@@ -57,7 +57,7 @@ Class NumericParameter Implements ParameterInterface
      */
     public function regex() : string
     {
-        return '\d+';
+        return '(\d+)';
     }
 
     /**
