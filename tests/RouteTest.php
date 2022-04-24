@@ -72,4 +72,12 @@ Class RouteTest Extends TestCase
             }
         }
     }
+
+    /** @dataProvider exampleUrlProvider */
+    public function testCanTellIfStatic( string $url, string $regex, array $args ) : void
+    {
+        $route = new Route( $url, function () {} );
+
+        self::assertSame( empty( $args ), $route->isStatic() );
+    }
 }
