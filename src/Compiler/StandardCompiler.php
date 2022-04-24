@@ -15,8 +15,6 @@ use function implode;
 
 /**
  * Standard compiler that can handle both static and dynamic routes
- *
- * @psalm-immutable
  */
 Class StandardCompiler Implements CompilerInterface
 {

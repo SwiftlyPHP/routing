@@ -12,8 +12,6 @@ use const PREG_SET_ORDER;
 
 /**
  * Class that uses regex to match a URL to a route
- *
- * @psalm-immutable
  */
 Class RegexMatcher Implements MatcherInterface
 {
