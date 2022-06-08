@@ -25,7 +25,7 @@ Class EnumParameterTest Extends TestCase
     {
         $parameter = new EnumParameter( 'post', [ 'update', 'delete' ] );
 
-        $expected = '("update"|"delete")';
+        $expected = '(update|delete)';
 
         self::assertSame( $expected, $parameter->regex() );
         self::assertSame( $expected, (string)$parameter );
