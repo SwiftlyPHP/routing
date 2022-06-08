@@ -65,7 +65,7 @@ Class EnumParameter Implements ParameterInterface
         $choices = [];
 
         foreach ( $this->choices as $choice ) {
-            $choices[] = '"' . preg_quote( $choice ) . '"';
+            $choices[] = preg_quote( $choice );
         }
 
         return '(' . implode( '|', $choices ) . ')';
