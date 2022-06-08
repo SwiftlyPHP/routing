@@ -3,6 +3,7 @@
 namespace Swiftly\Routing;
 
 use Swiftly\Routing\ParameterInterface;
+use Swiftly\Routing\Parameter\EnumParameter;
 use Swiftly\Routing\Parameter\NumericParameter;
 use Swiftly\Routing\Parameter\StringParameter;
 
@@ -10,6 +11,7 @@ use function in_array;
 use function strpos;
 use function preg_match_all;
 use function preg_quote;
+use function explode;
 
 use const PREG_SET_ORDER;
 use const PREG_OFFSET_CAPTURE;
@@ -25,7 +27,7 @@ Class Route
      *
      * @var string ARGS_REGEX Regular expression
      */
-    const ARGS_REGEX = '~\[(?:(?P<type>i|s):)?(?P<name>\w+)\]|(?:[^\[]+)~ix';
+    const ARGS_REGEX = '~\[(?:(?P<type>i|s|e)(?:<(?P<choices>[^>]+)>)?:)?(?P<name>\w+)\]|(?:[^\[]+)~ix';
 
     /**
      * Flags to be used on calls to `preg_match_all`
@@ -200,6 +202,12 @@ Class Route
         $name = $component['name'][0];
 
         switch ( $component['type'][0] ) {
+            case 'e':
+                $component = new EnumParameter(
+                    $name,
+                    explode( ',', $component['choices'][0] )
+                );
+                break;
             case 'i':
                 $component = new NumericParameter( $name );
                 break;
