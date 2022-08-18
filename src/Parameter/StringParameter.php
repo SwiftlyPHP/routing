@@ -4,6 +4,10 @@ namespace Swiftly\Routing\Parameter;
 
 use Swiftly\Routing\ParameterInterface;
 
+use function is_scalar;
+use function is_object;
+use function method_exists;
+
 /**
  * Represents a simple string URL parameter
  *
@@ -39,7 +43,11 @@ Class StringParameter Implements ParameterInterface
     public function validate( $value ) : bool
     {
         // TODO: Could do some URL validation here?
-        return !empty( $value );
+        return ( !empty( $value )
+            && ( is_scalar( $value )
+                || ( is_object( $value ) && $this->isStringable( $value ) )
+            )
+        );
     }
 
     /**
@@ -65,5 +73,16 @@ Class StringParameter Implements ParameterInterface
     public function __toString()
     {
         return $this->regex();
+    }
+
+    /**
+     * Determine if an object implements Stringable or has a toString method
+     *
+     * @param object $object Subject object
+     * @return bool          Is stringable?
+     */
+    private function isStringable( object $object ) : bool
+    {
+        return method_exists( $object, '__toString' );
     }
 }
