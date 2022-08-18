@@ -10,6 +10,12 @@ use PHPUnit\Framework\TestCase;
  */
 Class StringParameterTest Extends TestCase
 {
+    public function testCanGetName() : void
+    {
+        $parameter = new StringParameter( 'string' );
+
+        self::assertSame( 'string', $parameter->name() );
+    }
 
     public function testCanValidateString() : void
     {

@@ -10,6 +10,12 @@ use PHPUnit\Framework\TestCase;
  */
 Class NumericParameterTest Extends TestCase
 {
+    public function testCanGetName() : void
+    {
+        $parameter = new NumericParameter( 'numeric' );
+
+        self::assertSame( 'numeric', $parameter->name() );
+    }
 
     public function testCanValidateNumber() : void
     {

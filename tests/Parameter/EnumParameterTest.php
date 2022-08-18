@@ -11,6 +11,13 @@ use PHPUnit\Framework\TestCase;
 Class EnumParameterTest Extends TestCase
 {
 
+    public function testCanGetName() : void
+    {
+        $parameter = new EnumParameter( 'post', [ 'update', 'delete' ] );
+
+        self::assertSame( 'post', $parameter->name() );
+    }
+
     public function testCanValidateEnum() : void
     {
         $parameter = new EnumParameter( 'post', [ 'update', 'delete' ] );
