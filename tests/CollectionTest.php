@@ -76,9 +76,7 @@ Class CollectionTest Extends TestCase
     {
         self::assertFalse( $this->collection->isEmpty() );
 
-        $empty_collection = $this->collection->filter( function () {
-            return false;
-        });
+        $empty_collection = new Collection([]);
 
         self::assertTrue( $empty_collection->isEmpty() );
     }
