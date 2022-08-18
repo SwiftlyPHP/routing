@@ -71,4 +71,15 @@ Class CollectionTest Extends TestCase
         self::assertInstanceOf( Route::class, $routes['login'] );
         self::assertInstanceOf( Route::class, $routes['dynamic'] );
     }
+
+    public function testCanTellIfEmpty() : void
+    {
+        self::assertFalse( $this->collection->isEmpty() );
+
+        $empty_collection = $this->collection->filter( function () {
+            return false;
+        });
+
+        self::assertTrue( $empty_collection->isEmpty() );
+    }
 }
