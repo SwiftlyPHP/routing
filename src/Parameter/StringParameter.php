@@ -78,6 +78,8 @@ Class StringParameter Implements ParameterInterface
     /**
      * Determine if an object implements Stringable or has a toString method
      *
+     * @psalm-assert-if-true \Stringable $object
+     *
      * @param object $object Subject object
      * @return bool          Is stringable?
      */
