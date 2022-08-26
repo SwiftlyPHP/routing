@@ -5,6 +5,7 @@ namespace Swiftly\Routing;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Exception\RouteNotFoundException;
 use Swiftly\Routing\Exception\MissingArgumentException;
+use Swiftly\Routing\Exception\InvalidArgumentException;
 use Swiftly\Routing\ParameterInterface;
 
 use function is_string;
@@ -37,6 +38,7 @@ Class UrlGenerator
      *
      * @throws RouteNotFoundException   If the named route does not exist
      * @throws MissingArgumentException If a required argument is missing
+     * @throws InvalidArgumentException If a given argument is invalid
      *
      * @param string $name Route name
      * @param array $args  Route arguments
@@ -76,8 +78,12 @@ Class UrlGenerator
     {
         $name = $component->name();
 
-        if ( !isset( $args[$name] ) || !$component->validate( $args[$name] ) ) {
+        if ( !isset( $args[$name] ) ) {
             throw new MissingArgumentException( $route, $name );
+        }
+
+        if ( !$component->validate( $args[$name] ) ) {
+            throw new InvalidArgumentException( $route, $name );
         }
 
         return $component->escape( $args[$name] );
