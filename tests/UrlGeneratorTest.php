@@ -43,8 +43,8 @@ Class UrlGeneratorTest Extends TestCase
 
     public function testCanGenerateDynamicRoute() : void
     {
-        self::assertSame( '/team/conor', $this->generator->generate( 'team', [
-            'member' => 'conor'
+        self::assertSame( '/team/john', $this->generator->generate( 'team', [
+            'member' => 'john'
         ]));
         self::assertSame( '/post/2022/example-post', $this->generator->generate( 'post', [
             'year' => 2022,
