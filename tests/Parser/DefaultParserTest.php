@@ -17,20 +17,6 @@ Class DefaultParserTest Extends TestCase
         $this->parser = new Parser();
     }
 
-    /**
-     * Assert that an array contains only strings and {@see ComponentInterface} types
-     */
-    private static function assertContainsOnlyStringsAndComponents(array $subject): void
-    {
-        self::assertThat(
-            $subject,
-            self::logicalOr(
-                self::containsOnly('string'),
-                self::containsOnlyInstancesOf(ComponentInterface::class)
-            )
-        );
-    }
-
     public function testCanParseStaticUrl(): void
     {
         $components = $this->parser->parse('/admin/users');
@@ -47,7 +33,6 @@ Class DefaultParserTest Extends TestCase
 
         self::assertIsArray($components);
         self::assertCount(4, $components);
-        self::assertContainsOnlyStringsAndComponents($components);
 
         // Return order *IS* important
         self::assertArrayHasKey(0, $components);
