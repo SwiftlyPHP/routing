@@ -1,11 +1,11 @@
 <?php
 
-namespace Swiftly\Routing\Tests;
+namespace Swiftly\Routing\Tests\Parser;
 
 use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Parser\DefaultParser;
 use Swiftly\Routing\ComponentInterface;
-use Swiftly\Routing\Exception\ParsingException;
+use Swiftly\Routing\Exception\ParseException;
 
 Class DefaultParserTest Extends TestCase
 {
@@ -49,6 +49,7 @@ Class DefaultParserTest Extends TestCase
         self::assertCount(4, $components);
         self::assertContainsOnlyStringsAndComponents($components);
 
+        // Return order *IS* important
         self::assertArrayHasKey(0, $components);
         self::assertSame('/posts/', $components[0]);
 
@@ -64,7 +65,7 @@ Class DefaultParserTest Extends TestCase
 
     public function testThrowsOnInvalidUrl(): void
     {
-        self::expectException(ParsingException::class);
+        self::expectException(ParseException::class);
 
         $this->parser->parse('@#://invalid');
     }
