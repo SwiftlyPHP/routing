@@ -14,7 +14,7 @@ Class DefaultParserTest Extends TestCase
 
     public function setUp(): void
     {
-        $this->parser = new Parser();
+        $this->parser = new DefaultParser();
     }
 
     public function testCanParseStaticUrl(): void
