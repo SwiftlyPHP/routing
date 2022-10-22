@@ -44,8 +44,9 @@ Final Class UrlGenerator
      * @throws InvalidArgumentException If a given argument is invalid
      * @param string $name              Route name
      * @param mixed[] $args             Route arguments
+     * @return string                   Generated URL
      */
-    public function generate(string $name, array $args = []) : string
+    public function generate(string $name, array $args = []): string
     {
         $route = $this->routes->get($name);
 
