@@ -41,9 +41,9 @@ Class StringComponentTest Extends TestCase
         self::assertFalse($this->component->accepts('')); // Empty string
     }
 
-    public function testCanFormatValue(): void
+    public function testCanEscapeValue(): void
     {
-        $formatted = $this->component->format('a-url');
+        $formatted = $this->component->escape('a-url');
 
         self::assertSame('a-url', $formatted);
     }
@@ -52,6 +52,6 @@ Class StringComponentTest Extends TestCase
     {
         self::expectException(FormatException::class);
 
-        $this->component->format('a-url-with?query=string');
+        $this->component->escape('a-url-with?query=string');
     }
 }

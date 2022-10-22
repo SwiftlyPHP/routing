@@ -54,9 +54,9 @@ Class EnumComponentTest Extends TestCase
         self::assertFalse($this->component->accepts('remove'));
     }
 
-    public function testCanFormatValue(): void
+    public function testCanEscapeValue(): void
     {
-        $formatted = $this->component->format('view');
+        $formatted = $this->component->escape('view');
 
         self::assertSame('view', $formatted);
     }
@@ -65,6 +65,6 @@ Class EnumComponentTest Extends TestCase
     {
         self::expectException(FormatException::class);
 
-        $this->component->format('remove');
+        $this->component->escape('remove');
     }
 }

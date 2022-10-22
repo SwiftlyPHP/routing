@@ -39,9 +39,9 @@ Class IntegerComponentTest Extends TestCase
         self::assertFalse($this->component->accepts('fortytwo'));
     }
 
-    public function testCanFormatValue(): void
+    public function testCanEscapeValue(): void
     {
-        $formatted = $this->component->format(42);
+        $formatted = $this->component->escape(42);
 
         self::assertSame('42', $formatted);
     }
@@ -50,6 +50,6 @@ Class IntegerComponentTest Extends TestCase
     {
         self::expectException(FormatException::class);
 
-        $this->component->format(4.2);
+        $this->component->escape(4.2);
     }
 }
