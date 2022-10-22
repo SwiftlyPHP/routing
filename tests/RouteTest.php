@@ -37,24 +37,12 @@ Class RouteTest Extends TestCase
         self::assertSame('/admin', $component);
     }
 
-    public function testThrowsOnInvalidComponentIndex(): void
-    {
-        self::expectException(OutOfBoundsException::class);
-
-        $this->route->getComponent(1); // Index doesn't exist
-    }
-
     public function testCanGetHandler(): void
     {
         $handler = $this->route->getHandler();
 
         self::assertIsCallable($handler);
         self::assertSame('hello', $handler());
-    }
-
-    public function testCanCheckIfRouteIsStatic(): void
-    {
-        self::assertTrue($this->route->isStatic());
     }
 
     public function testCanGetMethods(): void
@@ -68,18 +56,6 @@ Class RouteTest Extends TestCase
         self::assertNotContains('POST', $methods);
     }
 
-    public function testCanCheckIfMethodSupported(): void
-    {
-        self::assertTrue($this->route->supports('GET'));
-        self::assertFalse($this->route->supports('POST'));
-    }
-
-    public function testCanCheckIfMethodSupportedRegardlessOfCase(): void
-    {
-        self::assertTrue($this->route->supports('get'));
-        self::assertFalse($this->route->supports('post'));
-    }
-
     public function testCanGetTags(): void
     {
         $tags = $this->route->getTags();
@@ -91,15 +67,45 @@ Class RouteTest Extends TestCase
         self::assertNotContains('cacheable', $tags);
     }
 
+    public function testCanCheckIfRouteIsStatic(): void
+    {
+        self::assertTrue($this->route->isStatic());
+    }
+
+    public function testCanCheckIfHttpMethodSupported(): void
+    {
+        self::assertTrue($this->route->supports('GET'));
+        self::assertFalse($this->route->supports('POST'));
+    }
+
+    /**
+     * @testdox Can check if http method supported (case-insensitive)
+     */
+    public function testCanCheckIfHttpMethodSupportedRegardlessOfCase(): void
+    {
+        self::assertTrue($this->route->supports('get'));
+        self::assertFalse($this->route->supports('post'));
+    }
+
     public function testCanCheckIfRouteHasTag(): void
     {
         self::assertTrue($this->route->hasTag('admin'));
         self::assertFalse($this->route->hasTag('cacheable'));
     }
 
+    /**
+     * @testdox Can check if route has tag (case-insensitive)
+     */
     public function testCanCheckIfRouteHasTagRegardlessOfCase(): void
     {
         self::assertTrue($this->route->hasTag('ADMIN'));
         self::assertFalse($this->route->hasTag('CACHEABLE'));
+    }
+
+    public function testThrowsOnInvalidComponentIndex(): void
+    {
+        self::expectException(OutOfBoundsException::class);
+
+        $this->route->getComponent(1); // Index doesn't exist
     }
 }
