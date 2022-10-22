@@ -7,10 +7,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Routing\UrlGenerator;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Route;
 use Swiftly\Routing\Exception\UndefinedRouteException;
 use Swiftly\Routing\Exception\MissingArgumentException;
-use Swiftly\Routing\Exception\InvalidArgumentException;
 use Swiftly\Routing\Exception\FormatException;
+use Swiftly\Routing\Exception\InvalidArgumentException;
 
 Class UrlGeneratorTest Extends TestCase
 {
@@ -22,7 +23,7 @@ Class UrlGeneratorTest Extends TestCase
 
     public function setUp(): void
     {
-        $this->collection = self::createMock(Collection::class);
+        $this->collection = $this->createMock(Collection::class);
         $this->generator = new UrlGenerator($this->collection);
     }
 
@@ -34,9 +35,9 @@ Class UrlGeneratorTest Extends TestCase
      * @param string[]|ComponentInterface[] $components Route components
      * @return Route&MockObject                         Mocked route
      */
-    private static function createMockRoute(array $components): Route
+    private function createMockRoute(array $components): Route
     {
-        $route = self::createMock(Route::class);
+        $route = $this->createMock(Route::class);
         $route->method('getComponents')
             ->willReturn($components);
 
@@ -49,9 +50,9 @@ Class UrlGeneratorTest Extends TestCase
      * @param string $name                   Component name
      * @return ComponentInterface&MockObject Mocked component
      */
-    private static function createMockComponent(string $name): ComponentInterface
+    private function createMockComponent(string $name): ComponentInterface
     {
-        $component = self::createMock(ComponentInterface::class);
+        $component = $this->createMock(ComponentInterface::class);
         $component->method('name')
             ->willReturn($name);
 
@@ -60,7 +61,7 @@ Class UrlGeneratorTest Extends TestCase
 
     public function testCanGenerateUrlForStaticRoute(): void
     {
-        $route = self::createMockRoute(['/admin']);
+        $route = $this->createMockRoute(['/admin']);
 
         $this->collection->method('get')
             ->with('admin')
@@ -73,17 +74,17 @@ Class UrlGeneratorTest Extends TestCase
 
     public function testCanGenerateUrlForDynamicRoute(): void
     {
-        $component = self::createMockComponent('id');
-        $component->method('format')
+        $component = $this->createMockComponent('id');
+        $component->method('escape')
             ->willReturnArgument(0);
 
-        $route = self::createMockRoute(['/admin/', $component]);
+        $route = $this->createMockRoute(['/admin/', $component]);
 
         $this->collection->method('get')
             ->with('edit')
             ->willReturn($route);
 
-        $url = $this->generator->generate('edit', ['id' => 42]);
+        $url = $this->generator->generate('edit', ['id' => '42']);
 
         self::assertSame('/admin/42', $url);
     }
@@ -102,12 +103,12 @@ Class UrlGeneratorTest Extends TestCase
 
     public function testThrowsOnMissingRouteArgument(): void
     {
-        $component = self::createMockComponent('id');
-        $route = self::createMockRoute(['/admin/', $component]);
+        $component = $this->createMockComponent('id');
+        $route = $this->createMockRoute(['/admin/', $component]);
 
         $this->collection->method('get')
             ->with('edit')
-            ->willReturn($component);
+            ->willReturn($route);
 
         self::expectException(MissingArgumentException::class);
 
@@ -117,11 +118,11 @@ Class UrlGeneratorTest Extends TestCase
 
     public function testThrowsOnInvalidRouteArgument(): void
     {
-        $component = self::createMockComponent('id');
-        $component->method('format')
+        $component = $this->createMockComponent('id');
+        $component->method('escape')
             ->willThrowException(self::createStub(FormatException::class));
 
-        $route = self::createMockRoute(['/admin/', $component]);
+        $route = $this->createMockRoute(['/admin/', $component]);
 
         $this->collection->method('get')
             ->with('edit')

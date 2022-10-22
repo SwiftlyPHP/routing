@@ -6,6 +6,8 @@ use Swiftly\Routing\Exception\FormatException;
 
 /**
  * Interface representing a flexible/variable part of a URL
+ *
+ * @psalm-immutable
  */
 Interface ComponentInterface
 {
