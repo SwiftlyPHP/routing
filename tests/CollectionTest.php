@@ -18,9 +18,9 @@ Class CollectionTest Extends TestCase
     public function setUp(): void
     {
         $this->collection = new Collection([
-            'view'   => self::createMockRoute(true),
-            'edit'   => self::createMockRoute(false),
-            'delete' => self::createMockRoute(false),
+            'view'   => $this->createMockRoute(true),
+            'edit'   => $this->createMockRoute(false),
+            'delete' => $this->createMockRoute(false),
         ]);
     }
 
@@ -30,9 +30,9 @@ Class CollectionTest Extends TestCase
      * @param bool $is_static   Route considered static
      * @return Route&MockObject
      */
-    private static function createMockRoute(bool $is_static): Route
+    private function createMockRoute(bool $is_static): Route
     {
-        $route = self::createMock(Route::class);
+        $route = $this->createMock(Route::class);
         $route->method('isStatic')
             ->willReturn($is_static);
 
@@ -64,7 +64,7 @@ Class CollectionTest Extends TestCase
         $static = $this->collection->static();
 
         self::assertIsArray($static);
-        self::AsserCount(1, $static);
+        self::AssertCount(1, $static);
         self::assertContainsOnlyInstancesOf(Route::class, $static);
 
         // Route names MUST be maintained
