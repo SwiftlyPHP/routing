@@ -4,6 +4,7 @@ namespace Swiftly\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Route;
+use OutOfBoundsException;
 
 Class RouteTest Extends TestCase
 {
@@ -12,6 +13,7 @@ Class RouteTest Extends TestCase
 
     public function setUp(): void
     {
+        // TODO: Update here when Route constructor finalised
         $this->route = new Route();
     }
 
@@ -22,6 +24,20 @@ Class RouteTest Extends TestCase
         self::assertIsArray($components);
         self::assertIsNotEmpty($components);
         self::assertContainsOnly('string', $components);
+    }
+
+    public function testCanGetComponentAtIndex(): void
+    {
+        $component = $this->route->getComponent(0);
+
+        self::assertSame('/admin', $component);
+    }
+
+    public function testThrowsOnInvalidComponentIndex(): void
+    {
+        self::expectException(OutOfBoundsException::class);
+
+        $this->route->getComponent(1); // Index doesn't exist
     }
 
     public function testCanCheckIfRouteIsStatic(): void
