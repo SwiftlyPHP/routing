@@ -17,7 +17,7 @@ use function strtolower;
  *
  * @psalm-immutable
  */
-Final Class Route
+Class Route
 {
     /**
      * @psalm-var non-empty-list<string|ComponentInterface> $components
