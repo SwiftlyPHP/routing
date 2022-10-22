@@ -30,15 +30,15 @@ Class StringComponentTest Extends TestCase
         self::assertSame('([A-Za-z0-9\-\_\@\.]+)', $regex);
     }
 
-    public function testCanCheckIfValueIsValid(): void
+    public function testCanCheckIfValueIsAccepted(): void
     {
-        self::assertTrue($this->component->valid('news'));
-        self::assertTrue($this->component->valid('example-url'));
-        self::assertTrue($this->component->valid('a-url_with@symbols.42'));
-        self::assertFalse($this->component->valid('a/url/with/parts'));
-        self::assertFalse($this->component->valid('a-url-with#fragment'));
-        self::assertFalse($this->component->valid('a-url-with?query=string'));
-        self::assertFalse($this->component->valid('')); // Empty string
+        self::assertTrue($this->component->accepts('news'));
+        self::assertTrue($this->component->accepts('example-url'));
+        self::assertTrue($this->component->accepts('a-url_with@symbols.42'));
+        self::assertFalse($this->component->accepts('a/url/with/parts'));
+        self::assertFalse($this->component->accepts('a-url-with#fragment'));
+        self::assertFalse($this->component->accepts('a-url-with?query=string'));
+        self::assertFalse($this->component->accepts('')); // Empty string
     }
 
     public function testCanFormatValue(): void

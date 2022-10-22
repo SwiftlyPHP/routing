@@ -30,13 +30,13 @@ Class IntegerComponentTest Extends TestCase
         self::assertSame('(\d+)', $regex);
     }
 
-    public function testCanCheckIfValueIsValid(): void
+    public function testCanCheckIfValueIsAccepted(): void
     {
-        self::assertTrue($this->component->valid(42));
-        self::assertTrue($this->component->valid('42'));
-        self::assertFalse($this->component->valid(4.2));
-        self::assertFalse($this->component->valid('4.2'));
-        self::assertFalse($this->component->valid('fortytwo'));
+        self::assertTrue($this->component->accepts(42));
+        self::assertTrue($this->component->accepts('42'));
+        self::assertFalse($this->component->accepts(4.2));
+        self::assertFalse($this->component->accepts('4.2'));
+        self::assertFalse($this->component->accepts('fortytwo'));
     }
 
     public function testCanFormatValue(): void

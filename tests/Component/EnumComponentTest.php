@@ -44,14 +44,14 @@ Class EnumComponentTest Extends TestCase
         self::assertContains('delete', $values);
     }
 
-    public function testCanCheckIfValueIsValid(): void
+    public function testCanCheckIfValueIsAccepted(): void
     {
-        self::assertTrue($this->component->valid('view'));
-        self::assertTrue($this->component->valid('edit'));
-        self::assertTrue($this->component->valid('delete'));
-        self::assertFalse($this->component->valid('look'));
-        self::assertFalse($this->component->valid('update'));
-        self::assertFalse($this->component->valid('remove'));
+        self::assertTrue($this->component->accepts('view'));
+        self::assertTrue($this->component->accepts('edit'));
+        self::assertTrue($this->component->accepts('delete'));
+        self::assertFalse($this->component->accepts('look'));
+        self::assertFalse($this->component->accepts('update'));
+        self::assertFalse($this->component->accepts('remove'));
     }
 
     public function testCanFormatValue(): void
