@@ -30,24 +30,14 @@ Class StaticMatcherTest Extends TestCase
         $this->collection->method('static')
             ->willReturn(['view' => $route]);
 
-        $matched = $this->matcher->match('/admin');
+        $match = $this->matcher->match('/admin');
 
-        /*
-         * Expected return format is: [0 => 'name', 1 => Route, 2 => string[]]
-         *
-         * 0 => The actual route name, in this case 'view'
-         * 1 => The matched Route object
-         * 2 => Any matched URL args (in this case none)
+        /**
+         * Matchers now return a dedicated @see {Match} P.O.D
          */
-        self::assertIsArray($matched);
-        self::assertCount(3, $matched);
-
-        self::assertArrayHasKey(0, $matched); // Route name
-        self::assertSame('view', $matched[0]);
-        self::assertArrayHasKey(1, $matched); // Route object
-        self::assertSame($route, $matched[1]);
-        self::assertArrayHasKey(2, $matched); // Additional args
-        self::assertIsArray(2, $matched[2]);
-        self::assertIsEmpty(2, $matched[2]);
+        self::assertInstanceOf(Match::class, $match);
+        self::assertSame('view', $match->name);
+        self::assertSame($route, $match->route);
+        self::assertEmpty($match->args);
     }
 }

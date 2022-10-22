@@ -8,6 +8,7 @@ use Swiftly\Routing\Matcher\RegexMatcher;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Match;
 
 Class RegexMatcherTest Extends TestCase
 {
@@ -45,25 +46,15 @@ Class RegexMatcherTest Extends TestCase
         $this->collection->method('dynamic')
             ->willReturn(['view' => $route]);
 
-        $matched = $this->matcher->match('/admin/users');
+        $match = $this->matcher->match('/admin/users');
 
-        /*
-         * Expected return format is: [0 => 'name', 1 => Route, 2 => string[]]
-         *
-         * 0 => The actual route name, in this case 'view'
-         * 1 => The matched Route object
-         * 2 => Any matched URL args (in this case 'users')
+        /**
+         * Matchers now return a dedicated @see {Match} P.O.D
          */
-        self::assertIsArray($matched);
-        self::assertCount(3, $matched);
-
-        self::assertArrayHasKey(0, $matched); // Route name
-        self::assertSame('view', $matched[0]);
-        self::assertArrayHasKey(1, $matched); // Route object
-        self::assertSame($route, $matched[1]);
-        self::assertArrayHasKey(2, $matched); // Additional args
-        self::assertIsArray(2, $matched[2]);
-        self::assertArrayHasKey('page', $matched[2]);
-        self::assertSame('users', $matched[2]['page']);
+        self::assertInstanceOf(Match::class, $match);
+        self::assertSame('view', $match->name);
+        self::assertSame($route, $match->route);
+        self::assertArrayHasKey('page', $match->args);
+        self::assertSame('users', $match->args['page']);
     }
 }
