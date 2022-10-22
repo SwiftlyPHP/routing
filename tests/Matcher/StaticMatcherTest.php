@@ -22,10 +22,20 @@ Class StaticMatcherTest Extends TestCase
         $this->matcher = new StaticMatcher($this->collection);
     }
 
+    public static function createMockRoute(): Route
+    {
+        $route = self::createMock(Route::class);
+        $route->expects($this->once())
+            ->method('getComponent')
+            ->with($this->equalTo(0))
+            ->willReturn('/admin');
+
+        return $route;
+    }
+
     public function testCanMatchStaticRoute(): void
     {
-        // TODO: Make route return static component at index [0]
-        $route = self::createMock(Route::class);
+        $route = self::createMockRoute();
 
         $this->collection->method('static')
             ->willReturn(['view' => $route]);
