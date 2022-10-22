@@ -6,6 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Provider\ArrayProvider;
 use Swiftly\Routing\Route;
 
+/**
+ * @covers \Swiftly\Routing\Provider\ArrayProvider
+ * @uses \Swiftly\Routing\Route
+ */
 Class ArrayProviderTest Extends TestCase
 {
     /** @var ArrayProvider $provider */

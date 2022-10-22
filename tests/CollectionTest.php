@@ -6,6 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 
+/**
+ * @covers \Swiftly\Routing\Collection
+ * @uses \Swiftly\Routing\Route
+ */
 Class CollectionTest Extends TestCase
 {
     /** @var Collection $collection */

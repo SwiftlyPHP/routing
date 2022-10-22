@@ -10,6 +10,10 @@ use Swiftly\Routing\Route;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Match;
 
+/**
+ * @covers \Swiftly\Routing\Matcher\RegexMatcher
+ * @uses \Swiftly\Routing\Match
+ */
 Class RegexMatcherTest Extends TestCase
 {
     /** @var Collection&MockObject $collection */
@@ -24,7 +28,7 @@ Class RegexMatcherTest Extends TestCase
         $this->matcher = new RegexMatcher($this->collection);
     }
 
-    private function createMockRoute(): Route
+    private static function createMockRoute(): Route
     {
         $component = self::createMock(ComponentInterface::class);
         $component->method('name')

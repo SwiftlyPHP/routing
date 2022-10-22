@@ -7,7 +7,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Routing\Matcher\StaticMatcher;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
+use Swiftly\Routing\Match;
 
+/**
+ * @covers \Swiftly\Routing\Matcher\StaticMatcher
+ * @uses \Swiftly\Routing\Match
+ */
 Class StaticMatcherTest Extends TestCase
 {
     /** @var Collection&MockObject $collection */
@@ -25,9 +30,9 @@ Class StaticMatcherTest Extends TestCase
     public static function createMockRoute(): Route
     {
         $route = self::createMock(Route::class);
-        $route->expects($this->once())
+        $route->expects(self::once())
             ->method('getComponent')
-            ->with($this->equalTo(0))
+            ->with(self::equalTo(0))
             ->willReturn('/admin');
 
         return $route;
