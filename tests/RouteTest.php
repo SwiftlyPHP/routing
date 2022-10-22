@@ -74,6 +74,12 @@ Class RouteTest Extends TestCase
         self::assertFalse($this->route->supports('POST'));
     }
 
+    public function testCanCheckIfMethodSupportedRegardlessOfCase(): void
+    {
+        self::assertTrue($this->route->supports('get'));
+        self::assertFalse($this->route->supports('post'));
+    }
+
     public function testCanGetTags(): void
     {
         $tags = $this->route->getTags();
@@ -89,5 +95,11 @@ Class RouteTest Extends TestCase
     {
         self::assertTrue($this->route->hasTag('admin'));
         self::assertFalse($this->route->hasTag('cacheable'));
+    }
+
+    public function testCanCheckIfRouteHasTagRegardlessOfCase(): void
+    {
+        self::assertTrue($this->route->hasTag('ADMIN'));
+        self::assertFalse($this->route->hasTag('CACHEABLE'));
     }
 }

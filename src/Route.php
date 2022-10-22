@@ -9,6 +9,8 @@ use function count;
 use function is_string;
 use function in_array;
 use function array_map;
+use function strtoupper;
+use function strtolower;
 
 /**
  * Represents a single endpoint in a HTTP aware application
@@ -35,7 +37,7 @@ Final Class Route
     private $methods;
 
     /**
-     * @psalm-var list<string> $tags
+     * @psalm-var list<lowercase-string> $tags
      * @var string[] $tags
      */
     private $tags;
@@ -60,8 +62,8 @@ Final Class Route
     ) {
         $this->components = $components;
         $this->handler = $handler;
-        $this->methods = $methods;
-        $this->tags = $tags;
+        $this->methods = array_map('strtoupper', $methods);
+        $this->tags = array_map('strtolower', $tags);
     }
 
     /**
@@ -118,7 +120,7 @@ Final Class Route
     /**
      * Return all tags applied to this route
      *
-     * @psalm-return list<string>
+     * @psalm-return list<lowercase-string>
      *
      * @return string[]
      */
@@ -149,8 +151,9 @@ Final Class Route
      */
     public function supports(string $method): bool
     {
-        // TODO: Make HTTP method check case-insensitive
-        return empty($this->methods) || in_array($method, $this->methods, true);
+        return (empty($this->methods)
+            || in_array(strtoupper($method), $this->methods, true)
+        );
     }
 
     /**
@@ -163,7 +166,6 @@ Final Class Route
      */
     public function hasTag(string $tag): bool
     {
-        // TODO: Make tag check case-insensitive
-        return in_array($tag, $this->tags, true);
+        return in_array(strtolower($tag), $this->tags, true);
     }
 }
