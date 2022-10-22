@@ -3,12 +3,12 @@
 namespace Swiftly\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 
 /**
  * @covers \Swiftly\Routing\Collection
- * @uses \Swiftly\Routing\Route
  */
 Class CollectionTest Extends TestCase
 {
@@ -17,12 +17,26 @@ Class CollectionTest Extends TestCase
 
     public function setUp(): void
     {
-        // TODO: Update here when Route constructor finalised
         $this->collection = new Collection([
-            'view'   => new Route(),
-            'edit'   => new Route(),
-            'delete' => new Route()
+            'view'   => self::createMockRoute(true),
+            'edit'   => self::createMockRoute(false),
+            'delete' => self::createMockRoute(false),
         ]);
+    }
+
+    /**
+     * Create a new mock route, specifying whether or not it is static
+     *
+     * @param bool $is_static   Route considered static
+     * @return Route&MockObject
+     */
+    private static function createMockRoute(bool $is_static): Route
+    {
+        $route = self::createMock(Route::class);
+        $route->method('isStatic')
+            ->willReturn($is_static);
+
+        return $route;
     }
 
     public function testCanCheckIfRouteExists(): void

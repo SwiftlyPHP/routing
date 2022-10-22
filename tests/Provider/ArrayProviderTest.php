@@ -8,7 +8,6 @@ use Swiftly\Routing\Route;
 
 /**
  * @covers \Swiftly\Routing\Provider\ArrayProvider
- * @uses \Swiftly\Routing\Route
  */
 Class ArrayProviderTest Extends TestCase
 {
@@ -17,11 +16,10 @@ Class ArrayProviderTest Extends TestCase
 
     public function setUp(): void
     {
-        // TODO: Update here when Route constructor finalised
         $this->provider = new ArrayProvider([
-            'view'   => new Route(),
-            'edit'   => new Route(),
-            'delete' => new Route()
+            'view'   => self::createStub(Route::class),
+            'edit'   => self::createStub(Route::class),
+            'delete' => self::createStub(Route::class)
         ]);
     }
 
@@ -39,8 +37,7 @@ Class ArrayProviderTest Extends TestCase
 
     public function testCanAddSingleRoute(): void
     {
-        // TODO: Update here when Route constructor finalised
-        $this->provider->add('delete', new Route());
+        $this->provider->add('delete', self::createStub(Route::class));
 
         $routes = $this->provider->provide();
 

@@ -13,8 +13,12 @@ Class RouteTest Extends TestCase
 
     public function setUp(): void
     {
-        // TODO: Update here when Route constructor finalised
-        $this->route = new Route();
+        $this->route = new Route(
+            ['/admin'],
+            function () { return 'hello'; },
+            ['GET'],
+            ['admin']
+        );
     }
 
     public function testCanGetComponents(): void
@@ -22,7 +26,7 @@ Class RouteTest Extends TestCase
         $components = $this->route->getComponents();
 
         self::assertIsArray($components);
-        self::assertIsNotEmpty($components);
+        self::assertNotEmpty($components);
         self::assertContainsOnly('string', $components);
     }
 
@@ -40,6 +44,14 @@ Class RouteTest Extends TestCase
         $this->route->getComponent(1); // Index doesn't exist
     }
 
+    public function testCanGetHandler(): void
+    {
+        $handler = $this->route->getHandler();
+
+        self::assertIsCallable($handler);
+        self::assertSame('hello', $handler());
+    }
+
     public function testCanCheckIfRouteIsStatic(): void
     {
         self::assertTrue($this->route->isStatic());
@@ -50,7 +62,7 @@ Class RouteTest Extends TestCase
         $methods = $this->route->getMethods();
 
         self::assertIsArray($methods);
-        self::assertIsNotEmpty($methods);
+        self::assertNotEmpty($methods);
         self::assertContainsOnly('string', $methods);
         self::assertContains('GET', $methods);
         self::assertNotContains('POST', $methods);
@@ -67,7 +79,7 @@ Class RouteTest Extends TestCase
         $tags = $this->route->getTags();
 
         self::assertIsArray($tags);
-        self::assertIsNotEmpty($tags);
+        self::assertNotEmpty($tags);
         self::assertContainsOnly('string', $tags);
         self::assertContains('admin', $tags);
         self::assertNotContains('cacheable', $tags);
