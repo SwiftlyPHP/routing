@@ -15,9 +15,9 @@ Class ArrayProviderTest Extends TestCase
     {
         // TODO: Update here when Route constructor finalised
         $this->provider = new ArrayProvider([
-            'index'  => new Route(),
             'view'   => new Route(),
-            'edit'   => new Route()
+            'edit'   => new Route(),
+            'delete' => new Route()
         ]);
     }
 
@@ -52,8 +52,8 @@ Class ArrayProviderTest Extends TestCase
         self::assertContainsOnlyInstancesOf(Route::class, $routes);
 
         // Route names MUST be maintained
-        self::assertArrayHasKey('index', $routes);
         self::assertArrayHasKey('view', $routes);
         self::assertArrayHasKey('edit', $routes);
+        self::assertArrayHasKey('delete', $routes);
     }
 }

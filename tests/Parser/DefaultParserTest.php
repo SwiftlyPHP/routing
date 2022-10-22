@@ -19,12 +19,12 @@ Class DefaultParserTest Extends TestCase
 
     public function testCanParseStaticUrl(): void
     {
-        $components = $this->parser->parse('/admin/users');
+        $components = $this->parser->parse('/admin');
 
         self::assertIsArray($components);
         self::assertCount(1, $components);
         self::assertContainsOnly('string', $components);
-        self::assertContains('/admin/users');
+        self::assertContains('/admin');
     }
 
     public function testCanParseDynamicUrl(): void

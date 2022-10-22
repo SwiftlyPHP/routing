@@ -16,9 +16,9 @@ Class JsonFileTest Extends TestCase
 
     // TODO: Finalise JSON file structure
     private const EXAMPLE_JSON = [
-        'index' => [],
-        'view'  => [],
-        'edit'  => []
+        'view'   => [],
+        'edit'   => [],
+        'delete' => []
     ];
 
     public function setUp(): void
@@ -42,9 +42,9 @@ Class JsonFileTest Extends TestCase
 
         self::assertIsArray($contents);
         self::assertCount(3, $contents);
-        self::assertArrayHasKey('index', $contents);
         self::assertArrayHasKey('view', $contents);
         self::assertArrayHasKey('edit', $contents);
+        self::assertArrayHasKey('delete', $contents);
     }
 
     public function testThrowsOnMalformedJson(): void
