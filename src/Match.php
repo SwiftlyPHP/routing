@@ -14,17 +14,20 @@ use Swiftly\Routing\Route;
 Class Match
 {
     /**
+     * @readonly
      * @psalm-var non-empty-string $name
      * @var string $name
      */
     public $name;
 
     /**
+     * @readonly
      * @var Route $route
      */
     public $route;
 
     /**
+     * @readonly
      * @psalm-var array<string,string> $args
      * @var string[] $args
      */

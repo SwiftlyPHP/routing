@@ -59,25 +59,33 @@ Final Class UrlGenerator
 
         foreach ($route->getComponents() as $component) {
             if (is_string($component)) {
-                $url .= $component;
-                continue;
+                $value = $component;
+            } else {
+                $value = $this->escape($component, $args);
             }
 
-            $parameter = $component->name();
-
-            if (!isset($args[$parameter])) {
-                // TODO: Message for this exception
-                throw new MissingArgumentException();
-            }
-
-            try {
-                $url .= $component->escape($args[$parameter]);
-            } catch (FormatException $e) {
-                // TODO: Message for this exception
-                throw new InvalidArgumentException('', 0, $e);
-            }
+            $url .= $value;
         }
 
         return $url;
+    }
+
+    private function escape(ComponentInterface $component, array $args): string
+    {
+        $name = $component->name();
+
+        if (!isset($args[$name])) {
+            // TODO: Message for this exception
+            throw new MissingArgumentException();
+        }
+
+        try {
+            $escaped = $component->escape($args[$name]);
+        } catch (FormatException $exception) {
+            // TODO: message for this exception
+            throw new InvalidArgumentException('', 0, $exception);
+        }
+
+        return $escaped;
     }
 }
