@@ -70,6 +70,15 @@ Final Class UrlGenerator
         return $url;
     }
 
+    /**
+     * Attempt to escape and format the value for a URL component
+     *
+     * @psalm-param array<string,mixed> $args
+     *
+     * @param ComponentInterface $component URL component
+     * @param mixed[] $args                 Route arguments
+     * @return string                       Escaped URL component
+     */
     private function escape(ComponentInterface $component, array $args): string
     {
         $name = $component->name();
