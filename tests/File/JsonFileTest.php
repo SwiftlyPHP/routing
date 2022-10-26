@@ -4,7 +4,7 @@ namespace Swiftly\Routing\Tests\File;
 
 use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\File\JsonFile;
-use Swiftly\Routing\Exception\ParseExcepton;
+use Swiftly\Routing\Exception\FileReadException;
 
 use function file_put_contents;
 use function json_encode;
@@ -15,13 +15,13 @@ Class JsonFileTest Extends TestCase
     private $file;
 
     private const EXAMPLE_CONTENT = [
-        'view'   => [
+        'view' => [
             'path'    => '/view',
             'handler' => null,
             'methods' => ['GET'],
             'tags'    => ['cacheable']
         ],
-        'edit'   => [
+        'edit' => [
             'path'    => '/edit',
             'handler' => null,
             'methods' => ['GET', 'POST'],
@@ -66,7 +66,7 @@ Class JsonFileTest Extends TestCase
     {
         file_put_contents('php://memory', '<?not_json>');
 
-        self::expectException(ParseExcepton::class);
+        self::expectException(FileReadException::class);
 
         $this->file->load();
     }
