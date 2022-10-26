@@ -52,7 +52,7 @@ Class JsonFileTest Extends TestCase
 
     public function testCanGetFileContents(): void
     {
-        $contents = $this->file->contents();
+        $contents = $this->file->load();
 
         self::assertIsArray($contents);
         self::assertCount(3, $contents);
@@ -68,6 +68,6 @@ Class JsonFileTest Extends TestCase
 
         self::expectException(ParseExcepton::class);
 
-        $this->file->contents();
+        $this->file->load();
     }
 }
