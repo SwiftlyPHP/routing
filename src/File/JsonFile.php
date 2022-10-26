@@ -41,10 +41,10 @@ Class JsonFile Implements FileInterface
         $content = $this->tryContent();
 
         if ($content === null) {
-            // TODO: Update exception messaging
-            throw new FileReadException();
+            throw new FileReadException($this->file_path);
         }
 
+        /** @psalm-suppress MixedAssignment */
         $json = json_decode($content, true);
         $json = is_array($json) ? $json : [];
 
