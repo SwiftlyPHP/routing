@@ -4,6 +4,7 @@ namespace Swiftly\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Route;
+use Swiftly\Routing\ComponentInterface;
 use OutOfBoundsException;
 
 Class RouteTest Extends TestCase
@@ -72,6 +73,14 @@ Class RouteTest Extends TestCase
         self::assertTrue($this->route->isStatic());
     }
 
+    public function testCanCheckIfRouteIsDynamic(): void
+    {
+        $component = self::createStub(ComponentInterface::class);
+        $route = new Route(['/', $component], function () {});
+
+        self::assertFalse($route->isStatic());
+    }
+
     public function testCanCheckIfHttpMethodSupported(): void
     {
         self::assertTrue($this->route->supports('GET'));
@@ -81,7 +90,7 @@ Class RouteTest Extends TestCase
     /**
      * @testdox Can check if http method supported (case-insensitive)
      */
-    public function testCanCheckIfHttpMethodSupportedRegardlessOfCase(): void
+    public function testCanCheckIfHttpMethodSupportedCaseInsensitive(): void
     {
         self::assertTrue($this->route->supports('get'));
         self::assertFalse($this->route->supports('post'));
@@ -96,7 +105,7 @@ Class RouteTest Extends TestCase
     /**
      * @testdox Can check if route has tag (case-insensitive)
      */
-    public function testCanCheckIfRouteHasTagRegardlessOfCase(): void
+    public function testCanCheckIfRouteHasTagCaseInsensitive(): void
     {
         self::assertTrue($this->route->hasTag('ADMIN'));
         self::assertFalse($this->route->hasTag('CACHEABLE'));
