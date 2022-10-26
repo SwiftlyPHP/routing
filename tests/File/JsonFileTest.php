@@ -14,11 +14,25 @@ Class JsonFileTest Extends TestCase
     /** @var JsonFile $file */
     private $file;
 
-    // TODO: Finalise JSON file structure
-    private const EXAMPLE_JSON = [
-        'view'   => [],
-        'edit'   => [],
-        'delete' => []
+    private const EXAMPLE_CONTENT = [
+        'view'   => [
+            'path'    => '/view',
+            'handler' => null,
+            'methods' => ['GET'],
+            'tags'    => ['cacheable']
+        ],
+        'edit'   => [
+            'path'    => '/edit',
+            'handler' => null,
+            'methods' => ['GET', 'POST'],
+            'tags'    => []
+        ],
+        'delete' => [
+            'path'    => '/delete',
+            'handler' => null,
+            'methods' => ['POST'],
+            'tags'    => ['admin']
+        ]
     ];
 
     public function setUp(): void
@@ -28,7 +42,7 @@ Class JsonFileTest Extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        file_put_contents('php://memory', json_encode(self::EXAMPLE_JSON));
+        file_put_contents('php://memory', json_encode(self::EXAMPLE_CONTENT));
     }
 
     public static function tearDownAfterClass(): void
@@ -45,6 +59,7 @@ Class JsonFileTest Extends TestCase
         self::assertArrayHasKey('view', $contents);
         self::assertArrayHasKey('edit', $contents);
         self::assertArrayHasKey('delete', $contents);
+        self::assertSame(self::EXAMPLE_CONTENT, $contents);
     }
 
     public function testThrowsOnMalformedJson(): void
