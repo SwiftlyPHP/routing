@@ -30,20 +30,6 @@ Class EnumComponentTest Extends TestCase
         self::assertSame('(view|edit|delete)', $regex);
     }
 
-    public function testCanGetAllowedValues(): void
-    {
-        $values = $this->components->values();
-
-        self::assertIsArray($values);
-        self::assertCount(3, $values);
-        self::assertContainsOnly('string', $values);
-
-        // Return order is NOT important
-        self::assertContains('view', $values);
-        self::assertContains('edit', $values);
-        self::assertContains('delete', $values);
-    }
-
     public function testCanCheckIfValueIsAccepted(): void
     {
         self::assertTrue($this->component->accepts('view'));

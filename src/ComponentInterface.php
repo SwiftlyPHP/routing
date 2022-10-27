@@ -39,8 +39,6 @@ Interface ComponentInterface
     /**
      * Attempt to escape the given value for use in a URL
      *
-     * @psalm-return non-empty-string
-     *
      * @throws FormatException If value cannot be escaped
      * @param mixed $value     Value to format
      * @return string
