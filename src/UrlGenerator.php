@@ -84,8 +84,7 @@ Final Class UrlGenerator
         $name = $component->name();
 
         if (!isset($args[$name])) {
-            // TODO: Message for this exception
-            throw new MissingArgumentException();
+            throw new MissingArgumentException($name);
         }
 
         try {
