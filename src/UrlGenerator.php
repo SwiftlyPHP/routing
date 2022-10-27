@@ -51,8 +51,7 @@ Final Class UrlGenerator
         $route = $this->routes->get($name);
 
         if ($route === null) {
-            // TODO: Message for this exception
-            throw new UndefinedRouteException();
+            throw new UndefinedRouteException($name);
         }
 
         $url = '';
