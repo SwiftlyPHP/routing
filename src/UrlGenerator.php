@@ -90,8 +90,7 @@ Final Class UrlGenerator
         try {
             $escaped = $component->escape($args[$name]);
         } catch (FormatException $exception) {
-            // TODO: message for this exception
-            throw new InvalidArgumentException('', 0, $exception);
+            throw new InvalidArgumentException($name, $args[$name]);
         }
 
         return $escaped;
