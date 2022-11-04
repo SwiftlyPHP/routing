@@ -38,6 +38,8 @@ Class EnumComponentTest Extends TestCase
         self::assertFalse($this->component->accepts('look'));
         self::assertFalse($this->component->accepts('update'));
         self::assertFalse($this->component->accepts('remove'));
+        self::assertFalse($this->component->accepts([]));
+        self::assertFalse($this->component->accepts(null));
     }
 
     public function testCanEscapeValue(): void
