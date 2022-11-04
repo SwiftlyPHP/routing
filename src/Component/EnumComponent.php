@@ -74,8 +74,7 @@ Final Class EnumComponent Implements ComponentInterface
     public function escape($value): string
     {
         if (!$this->accepts($value)) {
-            // TODO: Write exception message
-            throw new FormatException();
+            throw new FormatException($this->name(), $value);
         }
 
         return (string)$value;
