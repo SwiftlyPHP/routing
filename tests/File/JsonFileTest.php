@@ -5,6 +5,7 @@ namespace Swiftly\Routing\Tests\File;
 use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\File\JsonFile;
 use Swiftly\Routing\Exception\FileReadException;
+use Swiftly\Routing\Exception\FileParseException;
 
 use function file_put_contents;
 use function json_encode;
@@ -68,5 +69,14 @@ Class JsonFileTest Extends TestCase
         self::expectException(FileReadException::class);
 
         $file->load();
+    }
+
+    public function testThrowsOnMalformedJson(): void
+    {
+        file_put_contents(self::TEMP_FILE, '<?xml version="1.0" ?>');
+
+        self::expectException(FileParseException::class);
+
+        $this->file->load();
     }
 }
