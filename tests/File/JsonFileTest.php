@@ -8,6 +8,7 @@ use Swiftly\Routing\Exception\FileReadException;
 
 use function file_put_contents;
 use function json_encode;
+use function unlink;
 
 Class JsonFileTest Extends TestCase
 {
@@ -35,19 +36,17 @@ Class JsonFileTest Extends TestCase
         ]
     ];
 
+    private const TEMP_FILE = __DIR__ . '/temp.json';
+
     public function setUp(): void
     {
-        $this->file = new JsonFile('php://memory');
+        $this->file = new JsonFile(self::TEMP_FILE);
+        file_put_contents(self::TEMP_FILE, json_encode(self::EXAMPLE_CONTENT));
     }
 
-    public static function setUpBeforeClass(): void
+    public function tearDown(): void
     {
-        file_put_contents('php://memory', json_encode(self::EXAMPLE_CONTENT));
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        file_put_contents('php://memory', '');
+        unlink(self::TEMP_FILE);
     }
 
     public function testCanGetFileContents(): void
@@ -62,12 +61,12 @@ Class JsonFileTest Extends TestCase
         self::assertSame(self::EXAMPLE_CONTENT, $contents);
     }
 
-    public function testThrowsOnMalformedJson(): void
+    public function testThrowsOnUnreadableFile(): void
     {
-        file_put_contents('php://memory', '<?not_json>');
+        $file = new JsonFile('some_unreadable.json');
 
         self::expectException(FileReadException::class);
 
-        $this->file->load();
+        $file->load();
     }
 }

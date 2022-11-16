@@ -88,7 +88,6 @@ Class Route
     public function getComponent(int $index) // : string|ComponentInterface
     {
         if (!isset($this->components[$index])) {
-            // TODO: Tidy up this message
             throw new OutOfBoundsException("No component exists at offset ($index)");
         }
 
