@@ -7,11 +7,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Routing\Matcher\StaticMatcher;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
-use Swiftly\Routing\Match;
+use Swiftly\Routing\MatchedRoute;
 
 /**
  * @covers \Swiftly\Routing\Matcher\StaticMatcher
- * @uses \Swiftly\Routing\Match
+ * @uses \Swiftly\Routing\MatchedRoute
  */
 Class StaticMatcherTest Extends TestCase
 {
@@ -27,9 +27,9 @@ Class StaticMatcherTest Extends TestCase
         $this->matcher = new StaticMatcher($this->collection);
     }
 
-    public static function createMockRoute(): Route
+    public function createMockRoute(): Route
     {
-        $route = self::createMock(Route::class);
+        $route = $this->createMock(Route::class);
         $route->expects(self::once())
             ->method('getComponent')
             ->with(self::equalTo(0))
@@ -40,7 +40,7 @@ Class StaticMatcherTest Extends TestCase
 
     public function testCanMatchStaticRoute(): void
     {
-        $route = self::createMockRoute();
+        $route = $this->createMockRoute();
 
         $this->collection->method('static')
             ->willReturn(['view' => $route]);
@@ -48,9 +48,9 @@ Class StaticMatcherTest Extends TestCase
         $match = $this->matcher->match('/admin');
 
         /**
-         * Matchers now return a dedicated @see {Match} P.O.D
+         * Matchers now return a dedicated @see {MatchedRoute} P.O.D
          */
-        self::assertInstanceOf(Match::class, $match);
+        self::assertInstanceOf(MatchedRoute::class, $match);
         self::assertSame('view', $match->name);
         self::assertSame($route, $match->route);
         self::assertEmpty($match->args);
