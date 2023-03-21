@@ -48,7 +48,7 @@ Class JsonFile Implements FileInterface
 
         // TODO: Swap to json_validate when we can
         if (!self::isJsonLike($content)) {
-            throw new FileParseException($this->file_path);
+            throw new FileParseException($this->file_path, "json");
         }
 
         /** @psalm-suppress MixedAssignment */
