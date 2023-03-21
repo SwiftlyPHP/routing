@@ -8,7 +8,7 @@ use Swiftly\Routing\Route;
 
 Class MatchedRouteTest Extends TestCase
 {
-    /** @var Match $match */
+    /** @var MatchedRoute $match */
     private $match;
 
     public function setUp(): void
