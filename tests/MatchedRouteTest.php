@@ -3,17 +3,21 @@
 namespace Swiftly\Routing\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Swiftly\Routing\Match;
+use Swiftly\Routing\MatchedRoute;
 use Swiftly\Routing\Route;
 
-Class MatchTest Extends TestCase
+Class MatchedRouteTest Extends TestCase
 {
     /** @var Match $match */
     private $match;
 
     public function setUp(): void
     {
-        $this->match = new Match('view', self::createStub(Route::class), []);
+        $this->match = new MatchedRoute(
+            'view',
+            self::createStub(Route::class),
+            []
+        );
     }
 
     public function testCanAccessProperties(): void
