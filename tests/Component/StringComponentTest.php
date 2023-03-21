@@ -39,6 +39,9 @@ Class StringComponentTest Extends TestCase
         self::assertFalse($this->component->accepts('a-url-with#fragment'));
         self::assertFalse($this->component->accepts('a-url-with?query=string'));
         self::assertFalse($this->component->accepts('')); // Empty string
+        self::assertFalse($this->component->accepts(null));
+        self::assertFalse($this->component->accepts(42));
+        self::assertFalse($this->component->accepts([]));
     }
 
     public function testCanEscapeValue(): void
