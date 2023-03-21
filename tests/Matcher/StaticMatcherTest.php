@@ -30,7 +30,7 @@ Class StaticMatcherTest Extends TestCase
     public function createMockRoute(): Route
     {
         $route = $this->createMock(Route::class);
-        $route->expects(self::once())
+        $route->expects(self::exactly(2))
             ->method('getComponent')
             ->with(self::equalTo(0))
             ->willReturn('/admin');
@@ -54,5 +54,10 @@ Class StaticMatcherTest Extends TestCase
         self::assertSame('view', $match->name);
         self::assertSame($route, $match->route);
         self::assertEmpty($match->args);
+
+        /**
+         * Validate matcher returns null on non-existant route
+         */
+        self::assertNull($this->matcher->match('/settings'));
     }
 }

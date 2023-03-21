@@ -8,11 +8,11 @@ use Swiftly\Routing\Matcher\RegexMatcher;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 use Swiftly\Routing\ComponentInterface;
-use Swiftly\Routing\Match;
+use Swiftly\Routing\MatchedRoute;
 
 /**
  * @covers \Swiftly\Routing\Matcher\RegexMatcher
- * @uses \Swiftly\Routing\Match
+ * @uses \Swiftly\Routing\MatchedRoute
  */
 Class RegexMatcherTest Extends TestCase
 {
@@ -28,9 +28,9 @@ Class RegexMatcherTest Extends TestCase
         $this->matcher = new RegexMatcher($this->collection);
     }
 
-    private static function createMockRoute(): Route
+    private function createMockRoute(): Route
     {
-        $component = self::createMock(ComponentInterface::class);
+        $component = $this->createMock(ComponentInterface::class);
         $component->method('name')
             ->willReturn('page');
         $component->method('regex')
@@ -45,20 +45,29 @@ Class RegexMatcherTest Extends TestCase
 
     public function testCanMatchDynamicRoute(): void
     {
-        $route = self::createMockRoute(Route::class);
+        $route = self::createMockRoute();
 
         $this->collection->method('dynamic')
             ->willReturn(['view' => $route]);
 
+        $this->collection->method('get')
+            ->with("view")
+            ->willReturn($route);
+
         $match = $this->matcher->match('/admin/users');
 
         /**
-         * Matchers now return a dedicated @see {Match} P.O.D
+         * Matchers now return a dedicated @see {MatchedRoute} P.O.D
          */
-        self::assertInstanceOf(Match::class, $match);
+        self::assertInstanceOf(MatchedRoute::class, $match);
         self::assertSame('view', $match->name);
         self::assertSame($route, $match->route);
         self::assertArrayHasKey('page', $match->args);
         self::assertSame('users', $match->args['page']);
+
+        /**
+         * Validate matcher returns null on non-existant route
+         */
+        self::assertNull($this->matcher->match('/admin/settings'));
     }
 }
