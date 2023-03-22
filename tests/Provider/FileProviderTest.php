@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Routing\Provider\FileProvider;
 use Swiftly\Routing\FileLoaderInterface;
+use Swiftly\Routing\ParserInterface;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Route;
 
@@ -17,6 +18,9 @@ Class FileProviderTest Extends TestCase
 {
     /** @var FileLoaderInterface&MockObject $loader */
     private $loader;
+
+    /** @var ParserInterface&MockObject $parser */
+    private $parser;
 
     /** @var FileProvider $provider */
     private $provider;
@@ -45,7 +49,8 @@ Class FileProviderTest Extends TestCase
     public function setUp(): void
     {
         $this->loader = self::createMock(FileLoaderInterface::class);
-        $this->provider = new FileProvider($this->loader);
+        $this->parser = self::createMock(ParserInterface::class);
+        $this->provider = new FileProvider($this->loader, $this->parser);
     }
 
     public function setUpBeforeClass(): void
@@ -123,6 +128,20 @@ Class FileProviderTest Extends TestCase
         $loader->expects(self::once())
             ->method('load')
             ->willReturn(self::EXAMPLE_ROUTES);
+
+        $parser = &$this->parser;
+        $parser->expects(self::exactly(3))
+            ->method('parse')
+            ->withConsecutive(
+                self::EXAMPLE_ROUTES['view']['path'],
+                self::EXAMPLE_ROUTES['edit']['path'],
+                self::EXAMPLE_ROUTES['delete']['path']
+            )
+            ->willReturn(
+                self::$EXAMPLE_COMPONENTS['view'],
+                self::$EXAMPLE_COMPONENTS['edit'],
+                self::$EXAMPLE_COMPONENTS['delete']
+            );
 
         $routes = $this->provider->provide();
 
