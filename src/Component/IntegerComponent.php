@@ -17,8 +17,8 @@ use const FILTER_VALIDATE_INT;
 class IntegerComponent implements ComponentInterface
 {
     /**
-     * @psalm-param non-empty-string $name
-     * @param string $name
+     * @psalm-var non-empty-string $name
+     * @var string $name
      */
     private $name;
 

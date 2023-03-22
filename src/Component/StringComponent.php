@@ -16,8 +16,8 @@ use function preg_match;
 class StringComponent implements ComponentInterface
 {
     /**
-     * @psalm-param non-empty-string $name
-     * @param string $name
+     * @psalm-var non-empty-string $name
+     * @var string $name
      */
     private $name;
 

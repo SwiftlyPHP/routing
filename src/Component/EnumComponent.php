@@ -20,14 +20,14 @@ use function is_scalar;
 Final Class EnumComponent Implements ComponentInterface
 {
     /**
-     * @psalm-param non-empty-string $name
-     * @param string $name
+     * @psalm-var non-empty-string $name
+     * @var string $name
      */
     private $name;
 
     /**
-     * @psalm-param list<string> $allowed
-     * @param string[] $allowed
+     * @psalm-var list<string> $allowed
+     * @var string[] $allowed
      */
     private $allowed;
 
@@ -83,6 +83,8 @@ Final Class EnumComponent Implements ComponentInterface
     /**
      * Determine if the given variable can be casted into a string
      *
+     * @psalm-assert-if-true scalar|Stringable $value
+     * 
      * @param mixed $value Subject variable
      * @return bool
      */
