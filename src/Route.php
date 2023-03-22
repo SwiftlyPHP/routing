@@ -56,7 +56,7 @@ Class Route
      */
     public function __construct(
         array $components,
-        callable $handler,
+        $handler,
         array $methods = [],
         array $tags = []
     ) {
@@ -101,7 +101,7 @@ Class Route
      *
      * @return callable
      */
-    public function getHandler(): callable
+    public function getHandler() // : callable
     {
         return $this->handler;
     }
