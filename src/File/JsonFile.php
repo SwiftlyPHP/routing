@@ -35,7 +35,8 @@ Class JsonFile Implements FileInterface
     /**
      * Attempts to load the file, parse it and then return its contents
      *
-     * @throws FileReadException If file cannot be read
+     * @throws FileReadException  If file cannot be read
+     * @throws FileParseException If file is not valid JSON
      * @return mixed[]
      */
     public function load(): array
@@ -51,7 +52,7 @@ Class JsonFile Implements FileInterface
             throw new FileParseException($this->file_path, "json");
         }
 
-        /** @psalm-suppress MixedAssignment */
+        /** @var array|null @json */
         $json = json_decode($content, true);
         $json = is_array($json) ? $json : [];
 
