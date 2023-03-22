@@ -134,6 +134,7 @@ Class Route
      * Determine if this route is static or dynamic
      *
      * @psalm-assert-if-true array{0:string} $this->components
+     * @psalm-assert-if-true array{0:string} $this->getComponents()
      * 
      * @return bool
      */
