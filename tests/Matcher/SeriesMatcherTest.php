@@ -66,7 +66,7 @@ class SeriesMatcherTest extends TestCase
 
         $matcher2 = $this->createMock(MatcherInterface::class);
         $matcher2->expects(self::never())
-            ->method('method');
+            ->method('match');
 
         $series = new SeriesMatcher([
             $matcher1,
