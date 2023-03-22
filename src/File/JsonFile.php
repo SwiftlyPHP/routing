@@ -81,10 +81,10 @@ Class JsonFile Implements FileInterface
      * Can swap to using `json_validate` when support reaches PHP 8.1
      * 
      * @param string $content Subject string
-     * @return 
+     * @return bool           Content is JSON
      */
     private function isJsonLike(string $content): bool
     {
-        return preg_match("/^\s*[{]\s*[\"\[]/", $content) === 1;
+        return preg_match("/^\s*(?:{\s*\")|(?:\[\s*{)/", $content) === 1;
     }
 }
