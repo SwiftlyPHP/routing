@@ -2,7 +2,7 @@
 
 namespace Swiftly\Routing\File;
 
-use Swiftly\Routing\FileInterface;
+use Swiftly\Routing\FileLoaderInterface;
 use Swiftly\Routing\Exception\FileReadException;
 use Swiftly\Routing\Exception\FileParseException;
 
@@ -15,7 +15,7 @@ use function preg_match;
 /**
  * Utility class used to load and parse JSON files
  */
-Class JsonFile Implements FileInterface
+Class JsonFile Implements FileLoaderInterface
 {
     /**
      * @var string $file_path
