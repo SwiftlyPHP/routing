@@ -24,7 +24,7 @@ Class DefaultParserTest Extends TestCase
         self::assertIsArray($components);
         self::assertCount(1, $components);
         self::assertContainsOnly('string', $components);
-        self::assertContains('/admin');
+        self::assertContains('/admin', $components);
     }
 
     public function testCanParseDynamicUrl(): void
