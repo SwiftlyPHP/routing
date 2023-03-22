@@ -10,8 +10,11 @@ use Swiftly\Routing\ParserInterface;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Route;
 
+use function strpos;
+use function explode;
+
 /**
- * @covers \Swiftly\Routing\FileProvider
+ * @covers \Swiftly\Routing\Provider\FileProvider
  * @uses \Swiftly\Routing\Route
  */
 Class FileProviderTest Extends TestCase
@@ -38,7 +41,8 @@ Class FileProviderTest Extends TestCase
             'tags'    => ['admin', 'no-cache']
         ],
         'delete' => [
-            'handler' => 'some_functional_controller',
+            // Functional controllers are allowed too!
+            'handler' => 'phpinfo',
             'path'    => '/delete/[i:user_id]/posts',
             'methods' => ['GET', 'POST']
         ]
@@ -48,17 +52,14 @@ Class FileProviderTest Extends TestCase
 
     public function setUp(): void
     {
-        $this->loader = self::createMock(FileLoaderInterface::class);
-        $this->parser = self::createMock(ParserInterface::class);
+        $this->loader = $this->createMock(FileLoaderInterface::class);
+        $this->parser = $this->createMock(ParserInterface::class);
         $this->provider = new FileProvider($this->loader, $this->parser);
-    }
 
-    public function setUpBeforeClass(): void
-    {
         self::$EXAMPLE_COMPONENTS = [
             'view'   => ['/posts'],
-            'edit'   => ['/edit/', self::createMock(ComponentInterface::class)],
-            'delete' => ['/delete/', self::createMock(ComponentInterface::class), '/posts']
+            'edit'   => ['/edit/', $this->createMock(ComponentInterface::class)],
+            'delete' => ['/delete/', $this->createMock(ComponentInterface::class), '/posts']
         ];
     }
 
@@ -77,6 +78,11 @@ Class FileProviderTest Extends TestCase
         string $name
     ): void {
         $expected_handler = self::EXAMPLE_ROUTES[$name]['handler'];
+
+        // Provider should convert to callable array syntax for us
+        if (strpos($expected_handler, '::', 1) !== false) {
+            $expected_handler = explode('::', $expected_handler, 2);
+        }
 
         self::assertSame(
             $expected_handler,
@@ -133,9 +139,9 @@ Class FileProviderTest Extends TestCase
         $parser->expects(self::exactly(3))
             ->method('parse')
             ->withConsecutive(
-                self::EXAMPLE_ROUTES['view']['path'],
-                self::EXAMPLE_ROUTES['edit']['path'],
-                self::EXAMPLE_ROUTES['delete']['path']
+                [self::EXAMPLE_ROUTES['view']['path']],
+                [self::EXAMPLE_ROUTES['edit']['path']],
+                [self::EXAMPLE_ROUTES['delete']['path']]
             )
             ->willReturn(
                 self::$EXAMPLE_COMPONENTS['view'],

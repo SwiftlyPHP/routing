@@ -10,6 +10,8 @@ use Swiftly\Routing\Exception\RouteParseException;
 
 use function is_string;
 use function is_array;
+use function strpos;
+use function explode;
 use function function_exists;
 use function array_values;
 use function array_filter;
@@ -38,12 +40,20 @@ class FileProvider implements ProviderInterface
         $routes = [];
 
         /** @var mixed $block */
-        foreach ($this->loader->load() as $index => $block) {
-            if (!is_string($index)) {
-                throw new RouteParseException('');
+        foreach ($this->loader->load() as $name => $block) {
+            if (!is_string($name)) {
+                throw new RouteParseException(
+                    "Could not add unnamed route '$name'"
+                );
             }
 
-            $routes[$index] = $this->tryParseBlock($index, $block);
+            if (!is_array($block)) {
+                throw new RouteParseException(
+                    "Could not add route '$name' as it has no definition"
+                );
+            }
+
+            $routes[$name] = $this->tryParseBlock($name, $block);
         }
 
         return $routes;
@@ -53,29 +63,31 @@ class FileProvider implements ProviderInterface
      * Attempt to parse a route definition block into a Route object
      * 
      * @param string $name Route name
-     * @param mixed $block Route definition block
+     * @param array $block Route definition block
      * @return Route       Parsed route
      */
-    private function tryParseBlock(string $name, $block): Route
+    private function tryParseBlock(string $name, array $block): Route
     {
-        if (!is_array($block)) {
-            throw new RouteParseException(
-                "Route '$name' definition is not valid"
-            );
-        }
-
         if (!isset($block['path'])
             || !is_string($block['path'])
             || empty($block['path'])
         ) {
             throw new RouteParseException(
-                "Route '$name' is missing required 'path' attribute"
+                "Route '$name' is missing required 'path' attribute or it is a valid value"
             );
+        }
+
+        // To allow the "Controller::method" syntax, we need to do this here
+        if (isset($block['handler'])
+            && is_string($block['handler'])
+            && strpos($block['handler'], '::', 1) !== false
+        ) {
+            $block['handler'] = explode('::', $block['handler'], 2);
         }
 
         if (!isset($block['handler']) || !self::isCallable($block['handler'])) {
             throw new RouteParseException(
-                "Route '$name' is missing required 'handler' attribute"
+                "Route '$name' is missing required 'handler' attribute or it is not a valid callable function"
             );
         }
 
