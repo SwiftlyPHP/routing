@@ -9,12 +9,14 @@ use Swiftly\Routing\FileLoaderInterface;
 use Swiftly\Routing\ParserInterface;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Route;
+use Swiftly\Routing\Exception\RouteParseException;
 
 use function strpos;
 use function explode;
 
 /**
  * @covers \Swiftly\Routing\Provider\FileProvider
+ * @covers \Swiftly\Routing\Exception\RouteParseException
  * @uses \Swiftly\Routing\Route
  */
 Class FileProviderTest Extends TestCase
@@ -164,5 +166,85 @@ Class FileProviderTest Extends TestCase
         self::assertRouteMatchesExample($routes['view'], 'view');
         self::assertRouteMatchesExample($routes['edit'], 'edit');
         self::assertRouteMatchesExample($routes['delete'], 'delete');
+    }
+
+    public function testThrowsOnMissingRouteName(): void
+    {
+        $loader = &$this->loader;
+        $loader->expects(self::once())
+            ->method('load')
+            ->willReturn([
+                [
+                    'handler' => 'PostController::view',
+                    'path'    => '/posts'
+                ]
+            ]);
+
+        $this->expectException(RouteParseException::class);
+
+        $this->provider->provide();
+    }
+
+    public function testThrowsOnMissingRouteDefinition(): void
+    {
+        $loader = &$this->loader;
+        $loader->expects(self::once())
+            ->method('load')
+            ->willReturn([
+                'view' => null
+            ]);
+
+        $this->expectException(RouteParseException::class);
+
+        $this->provider->provide();
+    }
+
+    public function testThrowsOnMissingRoutePath(): void
+    {
+        $loader = &$this->loader;
+        $loader->expects(self::once())
+            ->method('load')
+            ->willReturn([
+                'view' => [
+                    'handler' => 'PostController::view'
+                ]
+            ]);
+
+        $this->expectException(RouteParseException::class);
+
+        $this->provider->provide();
+    }
+
+    public function testThrowsOnMissingRouteHandler(): void
+    {
+        $loader = &$this->loader;
+        $loader->expects(self::once())
+            ->method('load')
+            ->willReturn([
+                'view' => [
+                    'path' => '/posts'
+                ]
+            ]);
+
+        $this->expectException(RouteParseException::class);
+
+        $this->provider->provide();
+    }
+
+    public function testThrowsWhenHandlerIsNotAFunction(): void
+    {
+        $loader = &$this->loader;
+        $loader->expects(self::once())
+            ->method('load')
+            ->willReturn([
+                'view' => [
+                    'path'    => '/posts',
+                    'handler' => 'some_unknown_func'
+                ]
+            ]);
+
+        $this->expectException(RouteParseException::class);
+
+        $this->provider->provide();
     }
 }
