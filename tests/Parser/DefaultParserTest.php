@@ -36,7 +36,7 @@ Class DefaultParserTest Extends TestCase
 
         // Return order *IS* important
         self::assertArrayHasKey(0, $components);
-        self::assertSame('/posts/', $components[0]);
+        self::assertSame('/post/', $components[0]);
 
         self::assertArrayHasKey(1, $components);
         self::assertInstanceOf(ComponentInterface::class, $components[1]);
@@ -50,7 +50,7 @@ Class DefaultParserTest Extends TestCase
 
     public function testThrowsOnInvalidUrl(): void
     {
-        self::expectException(ParseException::class);
+        self::expectException(UrlParseException::class);
 
         $this->parser->parse('@#://invalid');
     }
