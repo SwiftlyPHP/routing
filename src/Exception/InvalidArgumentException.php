@@ -5,7 +5,7 @@ namespace Swiftly\Routing\Exception;
 use InvalidArgumentException as BaseException;
 
 use function sprintf;
-use function get_debug_type;
+use function gettype;
 
 /**
  * Exception to be thrown when a given route argument is the wrong type
@@ -24,7 +24,7 @@ Class InvalidArgumentException Extends BaseException
             sprintf(
                 'Invalid value provided for route argument "%s", recieved "%s"',
                 $argument,
-                get_debug_type($provided)
+                gettype($provided)
             )
         );
     }

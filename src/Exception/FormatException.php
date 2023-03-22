@@ -6,7 +6,7 @@ use DomainException;
 
 use function sprintf;
 use function is_scalar;
-use function get_debug_type;
+use function gettype;
 
 /**
  * Exception to be thrown when a value cannot be used as a route argument
@@ -35,6 +35,6 @@ Class FormatException Extends DomainException
      */
     private static function typeToString($value): string
     {
-        return (is_scalar($value) ? (string)$value : get_debug_type($value));
+        return (is_scalar($value) ? (string)$value : gettype($value));
     }
 }
