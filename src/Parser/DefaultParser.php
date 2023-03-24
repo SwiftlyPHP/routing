@@ -14,15 +14,17 @@ use function explode;
 use function array_map;
 
 use const PREG_SET_ORDER;
-use const PREG_OFFSET_CAPTURE;
 
 /**
  * Handles parsing the Swiftly URL syntax
  * 
+ * @psalm-type ComponentMatch=array{type:'i'|'s'|'e',name:non-empty-string,values:string}
+ * @psalm-type UrlMatch=array{0:string}
  * @psalm-external-mutation-free
  */
 class DefaultParser implements ParserInterface
 {
+    private const ALLOWED_CHARACTERS = '[a-zA-Z\-_\.\~\/]+';
     private const IDENTIFIER = '[A-Za-z_]+';
     private const INTEGER_COMPONENT = 'i';
     private const STRING_COMPONENT = 's';
@@ -36,15 +38,38 @@ class DefaultParser implements ParserInterface
                 . '(?P<type>' . self::STRING_COMPONENT . ')|'
                 . '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
             . '):(?P<name>' . self::IDENTIFIER . ')'
-        . '\])/';
-
-    private const FLAGS = PREG_SET_ORDER|PREG_OFFSET_CAPTURE;
+        . '\]|' . self::ALLOWED_CHARACTERS . ')/';
 
     public function parse(string $path): array
     {
-        $result = preg_match_all(self::REGEX, $path, $matches, self::FLAGS);
+        if (!preg_match_all(self::REGEX, $path, $matches, PREG_SET_ORDER)) {
+            throw new UrlParseException($path);
+        }
+        
+        /** @var non-empty-list<ComponentMatch&UrlMatch> $matches */
+        return $this->convert($matches);
+    }
 
-        return [];
+    /**
+     * Convert the regex matches into a components array
+     * 
+     * @psalm-param non-empty-list<ComponentMatch&UrlMatch> $matches
+     * @psalm-return non-empty-list<ComponentInterface|string>
+     * 
+     * @param string[][] $matches            Regex matches
+     * @return ComponentInterface[]|string[] Route components
+     */
+    private function convert(array $matches): array
+    {
+        $components = [];
+
+        foreach ($matches as $match) {
+            $components[] = isset($match['type'])
+                ? $this->make($match['type'], $match)
+                : $match[0];
+        }
+
+        return $components;
     }
 
     /**
@@ -53,7 +78,7 @@ class DefaultParser implements ParserInterface
      * We can swap to using match when we get to PHP 8
      * 
      * @psalm-param 'i'|'s'|'e' $type
-     * @psalm-param array{name:non-empty-string, values:string} $data
+     * @psalm-param ComponentMatch $data
      * 
      * @param string $type   Component type
      * @param string[] $data Component data
@@ -70,8 +95,6 @@ class DefaultParser implements ParserInterface
                     $data['name'],
                     array_map('trim', explode(',', $data['values']))
                 );
-            default:
-                throw new Exception();
         }
     }
 }
