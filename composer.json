@@ -6,7 +6,7 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^7.1 || ^8",
+        "php": ">= 7.2",
         "ext-json": "*"
     },
     "autoload": {
@@ -14,8 +14,13 @@
             "Swiftly\\Routing\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Swiftly\\Routing\\Tests\\": "tests/"
+        }
+    },
     "require-dev": {
-        "vimeo/psalm": "^4.8",
+        "vimeo/psalm": "^4.29",
         "phpunit/phpunit": "^9.5"
     }
 }

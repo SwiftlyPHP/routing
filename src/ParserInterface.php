@@ -2,22 +2,23 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\CollectionInterface;
+use Swiftly\Routing\ComponentInterface;
 
 /**
- * Interface for classes that parse route files
- *
- * @author clvarley
+ * Capable of parsing a path into a sequence of route components
+ * 
+ * @psalm-immutable
  */
-Interface ParserInterface
+interface ParserInterface
 {
-
     /**
-     * Parse the given routes file and return an array of routes
-     *
-     * @param string $filename                          Path to file
-     * @return CollectionInterface                      Route collection
+     * Parse a URL path into relevant components
+     * 
+     * @psalm-param non-empty-string $path
+     * @psalm-return non-empty-list<string|ComponentInterface>
+     * 
+     * @param string $path                      URL path to parse
+     * @return array<string|ComponentInterface> Components
      */
-    public function parse( string $filename ) : CollectionInterface;
-
+    public function parse(string $path): array;
 }
