@@ -5,6 +5,7 @@ namespace Swiftly\Routing\Provider;
 use Swiftly\Routing\ProviderInterface;
 use Swiftly\Routing\FileLoaderInterface;
 use Swiftly\Routing\ParserInterface;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 use Swiftly\Routing\Exception\RouteParseException;
 
@@ -35,13 +36,13 @@ class FileProvider implements ProviderInterface
         $this->parser = $parser;
     }
 
-    public function provide(): array
+    public function provide(): Collection
     {
         $routes = [];
 
         /** @var mixed $block */
         foreach ($this->loader->load() as $name => $block) {
-            if (!is_string($name)) {
+            if (!is_string($name) || empty($name)) {
                 throw new RouteParseException(
                     "Could not add unnamed route '$name'"
                 );
@@ -56,7 +57,7 @@ class FileProvider implements ProviderInterface
             $routes[$name] = $this->tryParseBlock($name, $block);
         }
 
-        return $routes;
+        return new Collection($routes);
     }
 
     /**

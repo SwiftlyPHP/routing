@@ -9,6 +9,7 @@ use Swiftly\Routing\FileLoaderInterface;
 use Swiftly\Routing\ParserInterface;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Route;
+use Swiftly\Routing\Collection;
 use Swiftly\Routing\Exception\RouteParseException;
 
 use function strpos;
@@ -18,6 +19,7 @@ use function explode;
  * @covers \Swiftly\Routing\Provider\FileProvider
  * @covers \Swiftly\Routing\Exception\RouteParseException
  * @uses \Swiftly\Routing\Route
+ * @uses \Swiftly\Routing\Collection
  */
 Class FileProviderTest Extends TestCase
 {
@@ -153,19 +155,19 @@ Class FileProviderTest Extends TestCase
 
         $routes = $this->provider->provide();
 
-        self::assertIsArray($routes);
-        self::assertCount(3, $routes);
-        self::assertContainsOnlyInstancesOf(Route::class, $routes);
+        self::assertInstanceOf(Collection::class, $routes);
+        self::assertCount(3, $routes->all());
+        self::assertContainsOnlyInstancesOf(Route::class, $routes->all());
 
         // Route names MUST be maintained
-        self::assertArrayHasKey('view', $routes);
-        self::assertArrayHasKey('edit', $routes);
-        self::assertArrayHasKey('delete', $routes);
+        self::assertTrue($routes->has('view'));
+        self::assertTrue($routes->has('edit'));
+        self::assertTrue($routes->has('delete'));
 
         // Routes must match file definition
-        self::assertRouteMatchesExample($routes['view'], 'view');
-        self::assertRouteMatchesExample($routes['edit'], 'edit');
-        self::assertRouteMatchesExample($routes['delete'], 'delete');
+        self::assertRouteMatchesExample($routes->get('view'), 'view');
+        self::assertRouteMatchesExample($routes->get('edit'), 'edit');
+        self::assertRouteMatchesExample($routes->get('delete'), 'delete');
     }
 
     public function testThrowsOnMissingRouteName(): void
