@@ -3,41 +3,40 @@
 namespace Swiftly\Routing\Matcher;
 
 use Swiftly\Routing\MatcherInterface;
-use Swiftly\Routing\Route;
+use Swiftly\Routing\Collection;
+use Swiftly\Routing\MatchedRoute;
 
 /**
- * Class that matches URLs to static routes
- *
+ * Matches against static routes
+ * 
  * @psalm-immutable
  */
-Class StaticMatcher Implements MatcherInterface
+class StaticMatcher implements MatcherInterface
 {
-
-    /**
-     * @var Route[] $routes Mapped routes
-     */
+    /** @var Collection $routes Known routes */
     private $routes;
 
     /**
-     * Create a new static matcher
-     *
-     * Takes an array where the keys are the static URL and the value is the
-     * mapped `Route`.
-     *
-     * @psalm-param array<string,Route> $routes
-     *
-     * @param Route[] $routes Mapped routes
+     * Create a new static matcher around the given routes
+     * 
+     * @param Collection $routes Registered routes
      */
-    public function __construct( array $routes )
+    public function __construct(Collection $routes)
     {
         $this->routes = $routes;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function match( string $url ) : ?Route
+    public function match(string $url): ?MatchedRoute
     {
-        return $this->routes[$url] ?? null;
+        $matched = null;
+
+        foreach ($this->routes->static() as $name => $route) {
+            if ($route->getComponent(0) === $url) {
+                $matched = new MatchedRoute($name, $route);
+                break;
+            }
+        }
+
+        return $matched;
     }
 }

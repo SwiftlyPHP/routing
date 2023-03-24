@@ -1,21 +1,18 @@
 <?php
 
 namespace Swiftly\Routing;
-
-use Swiftly\Routing\Route;
+use Swiftly\Routing\MatchedRoute;
 
 /**
- * Interface for all classes capable of matching URLs to routes
+ * Class capable of taking a URL and matching it against known routes
  */
-Interface MatcherInterface
+interface MatcherInterface
 {
-
     /**
-     * Attempt to find a route that satisfies the given URL
-     *
-     * @param string $url Requested URL
-     * @return Route|null Matching route
+     * Attempt to find a route that matches the given URL path
+     * 
+     * @param string $url        URL path
+     * @return MatchedRoute|null Matched route
      */
-    public function match( string $url ) : ?Route;
-
+    public function match(string $url): ?MatchedRoute;
 }

@@ -2,40 +2,62 @@
 
 namespace Swiftly\Routing\Tests\Matcher;
 
-use Swiftly\Routing\Matcher\StaticMatcher;
-use Swiftly\Routing\Route;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Swiftly\Routing\Matcher\StaticMatcher;
+use Swiftly\Routing\Collection;
+use Swiftly\Routing\Route;
+use Swiftly\Routing\MatchedRoute;
 
 /**
- * @group Unit
+ * @covers \Swiftly\Routing\Matcher\StaticMatcher
+ * @uses \Swiftly\Routing\MatchedRoute
  */
 Class StaticMatcherTest Extends TestCase
 {
+    /** @var Collection&MockObject $collection */
+    private $collection;
 
-    /**
-     * @var StaticMatcher $matcher
-     */
+    /** @var StaticMatcher $matcher */
     private $matcher;
 
-    public function setUp() : void
+    public function setUp(): void
     {
-        $this->matcher = new StaticMatcher([
-            '/home'  => new Route( '/home', function () {} ),
-            '/about' => new Route( '/about', function () {} ),
-            '/team'  => new Route( '/team', function () {} )
-        ]);
+        $this->collection = self::createMock(Collection::class);
+        $this->matcher = new StaticMatcher($this->collection);
     }
 
-    public function testCanMatchRoute() : void
+    public function createMockRoute(): Route
     {
-        foreach ( ['/home', '/about', '/team'] as $url ) {
-            $route = $this->matcher->match( $url );
+        $route = $this->createMock(Route::class);
+        $route->expects(self::exactly(2))
+            ->method('getComponent')
+            ->with(self::equalTo(0))
+            ->willReturn('/admin');
 
-            self::assertInstanceOf( Route::class, $route );
-            self::assertSame( $url, $route->url );
-        }
+        return $route;
+    }
 
-        // Route not registered, returns null
-        self::assertNull( $this->matcher->match( '/contact' ) );
+    public function testCanMatchStaticRoute(): void
+    {
+        $route = $this->createMockRoute();
+
+        $this->collection->method('static')
+            ->willReturn(['view' => $route]);
+
+        $match = $this->matcher->match('/admin');
+
+        /**
+         * Matchers now return a dedicated @see {MatchedRoute} P.O.D
+         */
+        self::assertInstanceOf(MatchedRoute::class, $match);
+        self::assertSame('view', $match->name);
+        self::assertSame($route, $match->route);
+        self::assertEmpty($match->args);
+
+        /**
+         * Validate matcher returns null on non-existant route
+         */
+        self::assertNull($this->matcher->match('/settings'));
     }
 }

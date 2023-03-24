@@ -3,89 +3,95 @@
 namespace Swiftly\Routing;
 
 use Swiftly\Routing\Collection;
-use Swiftly\Routing\Exception\RouteNotFoundException;
+use Swiftly\Routing\Route;
+use Swiftly\Routing\Exception\UndefinedRouteException;
 use Swiftly\Routing\Exception\MissingArgumentException;
+use Swiftly\Routing\Exception\FormatException;
 use Swiftly\Routing\Exception\InvalidArgumentException;
-use Swiftly\Routing\ParameterInterface;
 
 use function is_string;
 
 /**
- * Generates URLs for routes based on provided args
+ * Utility class used to generate URLs for named routes
+ *
+ * @psalm-immutable
  */
-Class UrlGenerator
+Final Class UrlGenerator
 {
-
     /**
      * @var Collection $routes
      */
     private $routes;
 
     /**
-     * Create a new URL generator for the given routes
+     * Creates a new URL generator around the given routes
      *
      * @param Collection $routes Route collection
      */
-    public function __construct( Collection $routes )
+    public function __construct(Collection $routes)
     {
         $this->routes = $routes;
     }
 
     /**
-     * Generates a new URL for the named route using the provided args
+     * Generate a URL for the named route, optionally passing in any arguments
      *
-     * @psalm-param array<string, scalar> $args
+     * @psalm-param non-empty-string $name
+     * @psalm-param array<string,mixed> $args
      *
-     * @throws RouteNotFoundException   If the named route does not exist
-     * @throws MissingArgumentException If a required argument is missing
+     * @throws UndefinedRouteException  If the named route doesn't exist
+     * @throws MissingArgumentException If a required route argument is missing
      * @throws InvalidArgumentException If a given argument is invalid
-     *
-     * @param string $name Route name
-     * @param array $args  Route arguments
+     * @param string $name              Route name
+     * @param mixed[] $args             Route arguments
+     * @return string                   Generated URL
      */
-    public function generate( string $name, array $args = [] ) : string
+    public function generate(string $name, array $args = []): string
     {
-        $route = $this->routes->get( $name );
+        $route = $this->routes->get($name);
 
-        if ( !$route ) {
-            throw new RouteNotFoundException( $name );
+        if ($route === null) {
+            throw new UndefinedRouteException($name);
         }
 
         $url = '';
 
-        foreach ( $route->components() as $component ) {
-            if ( $component instanceof ParameterInterface ) {
-                $url .= $this->escape( $name, $component, $args );
+        foreach ($route->getComponents() as $component) {
+            if (is_string($component)) {
+                $value = $component;
             } else {
-                $url .= $component;
+                $value = $this->escape($component, $args);
             }
+
+            $url .= $value;
         }
 
         return $url;
     }
 
     /**
-     * Escape a URL parameter
+     * Attempt to escape and format the value for a URL component
      *
-     * @psalm-param array<string, scalar> $args
+     * @psalm-param array<string,mixed> $args
      *
-     * @param string $route                 Route name
-     * @param ParameterInterface $component URL component
-     * @param array $args                   Route arguments
-     * @return string                       Escaped component
+     * @param ComponentInterface $component URL component
+     * @param mixed[] $args                 Route arguments
+     * @return string                       Escaped URL component
      */
-    private function escape( string $route, ParameterInterface $component, array $args ) : string
+    private function escape(ComponentInterface $component, array $args): string
     {
         $name = $component->name();
 
-        if ( !isset( $args[$name] ) ) {
-            throw new MissingArgumentException( $route, $name );
+        if (!isset($args[$name])) {
+            throw new MissingArgumentException($name);
         }
 
-        if ( !$component->validate( $args[$name] ) ) {
-            throw new InvalidArgumentException( $route, $name );
+        try {
+            $escaped = $component->escape($args[$name]);
+        } catch (FormatException $exception) {
+            throw new InvalidArgumentException($name, $args[$name]);
         }
 
-        return $component->escape( $args[$name] );
+        return $escaped;
     }
 }

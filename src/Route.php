@@ -2,223 +2,174 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\ParameterInterface;
-use Swiftly\Routing\Parameter\EnumParameter;
-use Swiftly\Routing\Parameter\NumericParameter;
-use Swiftly\Routing\Parameter\StringParameter;
+use Swiftly\Routing\ComponentInterface;
+use OutOfBoundsException;
 
+use function count;
+use function is_string;
 use function in_array;
-use function strpos;
-use function preg_match_all;
-use function preg_quote;
-use function explode;
-
-use const PREG_SET_ORDER;
-use const PREG_OFFSET_CAPTURE;
+use function array_map;
+use function strtoupper;
+use function strtolower;
 
 /**
- * Simple class used to represent a single route
+ * Represents a single endpoint in a HTTP aware application
+ *
+ * @psalm-immutable
  */
 Class Route
 {
-
     /**
-     * The regex used to strip out URL args
-     *
-     * @var string ARGS_REGEX Regular expression
+     * @psalm-var non-empty-list<string|ComponentInterface> $components
+     * @var string[]|ComponentInterface[] $components
      */
-    const ARGS_REGEX = '~\[(?:(?P<type>i|s|e)(?:<(?P<choices>[^>]+)>)?:)?(?P<name>\w+)\]|(?:[^\[]+)~ix';
+    private $components;
 
     /**
-     * Flags to be used on calls to `preg_match_all`
-     *
-     * @var int REGEX_FLAGS Flags
+     * @var callable $handler
      */
-    const REGEX_FLAGS = PREG_SET_ORDER | PREG_OFFSET_CAPTURE;
+    private $handler;
 
     /**
-     * The raw (unparsed) URL of this route
-     *
-     * @var string $url Route URL
+     * @psalm-var list<string> $methods
+     * @var string[] $methods
      */
-    public $url;
+    private $methods;
 
     /**
-     * URL components for this route
-     *
-     * @psalm-var list<string|ParameterInterface> $parts
-     *
-     * @var string[]|ParameterInterface[] $parts URL components
+     * @psalm-var list<lowercase-string> $tags
+     * @var string[] $tags
      */
-    private $components = [];
+    private $tags;
 
     /**
-    * Function used to handle this route
-    *
-    * @var callable $handler Route controller
-    */
-    public $handler;
-
-    /**
-     * Allowed HTTP methods for this route
+     * Create a new route from the given URL components
      *
-     * @var string[] $methods HTTP methods
+     * @psalm-param non-empty-list<string|ComponentInterface> $components
+     * @psalm-param list<string> $methods
+     * @psalm-param list<string> $tags
+     *
+     * @param string[]|ComponentInterface[] $components URL components
+     * @param callable $handler                         Controller for the route
+     * @param string[] $methods                         Supported HTTP methods
+     * @param string[] $tags                            Route tags
      */
-    public $methods = [];
-
-    /**
-     * Arguments to be passed to the handler
-     *
-     * @var string[] $args Route arguments
-     */
-    public $args = [];
-
-    /**
-     * List of tags that apply to this route
-     *
-     * @var string[] $tags Route tags
-     */
-    public $tags = [];
-
-    /**
-     * Associate a handler with a route
-     *
-     * It is worth noting: we cannot use the `callable` typehint here as it
-     * can cause "Non-static method" warnings when using the older `::` string
-     * syntax.
-     *
-     * @param string $url       Route URL
-     * @param callable $handler Route handler
-     */
-    public function __construct( string $url, $handler )
-    {
-        $this->url = $url;
+    public function __construct(
+        array $components,
+        $handler,
+        array $methods = [],
+        array $tags = []
+    ) {
+        $this->components = $components;
         $this->handler = $handler;
+        $this->methods = array_map('strtoupper', $methods);
+        $this->tags = array_map('strtolower', $tags);
     }
 
     /**
-     * Check to see if this route supports the given method
+     * Return all the URL components for this route
      *
-     * If the route has no HTTP methods defined, it is assumed that it should
-     * respond to all requests.
+     * @psalm-return non-empty-list<string|ComponentInterface>
      *
-     * @psalm-mutation-free
-     *
-     * @param string $method HTTP method
-     * @return bool          Supported method
+     * @return string[]|ComponentInterface[]
      */
-    public function supports( string $method ) : bool
+    public function getComponents(): array
     {
-        return empty( $method ) || in_array( $method, $this->methods );
-    }
-
-    /**
-     * Check to see if this route is static or dynamic
-     *
-     * @psalm-mutation-free
-     *
-     * @return bool Is static?
-     */
-    public function isStatic() : bool
-    {
-        return strpos( $this->url, '[', ) === false;
-    }
-
-    /**
-     * Compile the regex used to match this route
-     *
-     * @return string Compiled regex
-     */
-    public function compile() : string
-    {
-        // Static not dynamic route?
-        if ( $this->isStatic() ) {
-            return $this->url;
-        }
-
-        return $this->build();
-    }
-
-    /**
-     * Builds the regex for this route
-     *
-     * @return string Route regex
-     */
-    private function build() : string
-    {
-        $regex = '';
-
-        // Coerce any ParameterInterface into string
-        foreach ( $this->components() as $component ) {
-            $regex .= (string)$component;
-        }
-
-        return $regex;
-    }
-
-    /**
-     * Parse the URL and generate the components of this route
-     *
-     * @psalm-external-mutation-free
-     * @psalm-return list<string|ParameterInterface>
-     *
-     * @return string[]|ParameterInterface[] URL components
-     */
-    public function components() : array
-    {
-        if ( !empty( $this->components ) ) {
-            return $this->components;
-        }
-
-        // Static routes are just a single component
-        if ( $this->isStatic() ) {
-            return [ $this->url ];
-        }
-
-        // Parse the dynamic portion of the route
-        if ( !preg_match_all( self::ARGS_REGEX, $this->url, $matches, self::REGEX_FLAGS ) ) {
-            // TODO: Throw maybe?
-            return [ $this->url ];
-        }
-
-        foreach ( $matches as $match ) {
-            $this->components[] = $this->component( $match );
-        }
-
         return $this->components;
     }
 
     /**
-     * Turn the regex captured component into the correct type
+     * Return the URL component at the given index
      *
-     * @return string|ParameterInterface component
+     * @psalm-return ($index is 0 ? string : string|ComponentInterface)
+     * 
+     * @throws OutOfBoundsException      If no component exists at the offset
+     * @param int $index                 Component index
+     * @return string|ComponentInterface
      */
-    private function component( array $component ) // : string|ParameterInterface
+    public function getComponent(int $index) // : string|ComponentInterface
     {
-        if ( empty( $component['name'] ) ) {
-            return preg_quote( $component[0][0] );
+        if (!isset($this->components[$index])) {
+            throw new OutOfBoundsException("No component exists at offset ($index)");
         }
 
-        $name = $component['name'][0];
+        return $this->components[$index];
+    }
 
-        switch ( $component['type'][0] ) {
-            case 'e':
-                $component = new EnumParameter(
-                    $name,
-                    explode( ',', $component['choices'][0] )
-                );
-                break;
-            case 'i':
-                $component = new NumericParameter( $name );
-                break;
-            case 's':
-            default:
-                $component = new StringParameter( $name );
-                break;
-        }
+    /**
+     * Return the controller/handler attached to this route
+     *
+     * @return callable
+     */
+    public function getHandler() // : callable
+    {
+        return $this->handler;
+    }
 
-        $this->args[] = $name;
+    /**
+     * Return the HTTP methods supported by this route
+     *
+     * @psalm-return list<string>
+     *
+     * @return string[]
+     */
+    public function getMethods(): array
+    {
+        return $this->methods;
+    }
 
-        return $component;
+    /**
+     * Return all tags applied to this route
+     *
+     * @psalm-return list<lowercase-string>
+     *
+     * @return string[]
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Determine if this route is static or dynamic
+     *
+     * @psalm-assert-if-true array{0:string} $this->components
+     * @psalm-assert-if-true array{0:string} $this->getComponents()
+     * 
+     * @return bool
+     */
+    public function isStatic(): bool
+    {
+        return (count($this->components) === 1
+            && is_string($this->components[0])
+        );
+    }
+
+    /**
+     * Determine if this route supports the given HTTP method
+     *
+     * @psalm-param non-empty-string $method
+     *
+     * @param string $method HTTP method
+     * @return bool
+     */
+    public function supports(string $method): bool
+    {
+        return (empty($this->methods)
+            || in_array(strtoupper($method), $this->methods, true)
+        );
+    }
+
+    /**
+     * Determine if this route has the given tag
+     *
+     * @psalm-param non-empty-string $tag
+     *
+     * @param string $tag Route tag
+     * @return bool
+     */
+    public function hasTag(string $tag): bool
+    {
+        return in_array(strtolower($tag), $this->tags, true);
     }
 }

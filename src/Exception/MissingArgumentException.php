@@ -7,23 +7,20 @@ use LogicException;
 use function sprintf;
 
 /**
- * Exception thrown when a route is missing a required argument
+ * Exception to be thrown when a required route argument is missing
  */
 Class MissingArgumentException Extends LogicException
 {
-
     /**
-     * Indicates that the named route is missing the named argument
+     * Indicate the named `$argument` was not supplied
      *
-     * @param string $name     Route name
-     * @param string $argument Missing argument
+     * @param string $argument Argument name
      */
-    public function __construct( string $name, string $argument )
+    public function __construct(string $argument)
     {
         parent::__construct(
             sprintf(
-                'Route "%s" requires a value for parameter "%s" but none was given.',
-                $name,
+                'Route requires argument "%s" but it was not supplied',
                 $argument
             )
         );

@@ -2,82 +2,119 @@
 
 namespace Swiftly\Routing\Tests;
 
-use Swiftly\Routing\Route;
-use Swiftly\Routing\ParameterInterface;
 use PHPUnit\Framework\TestCase;
+use Swiftly\Routing\Route;
+use Swiftly\Routing\ComponentInterface;
+use OutOfBoundsException;
 
-use function count;
-use function implode;
-
-/**
- * @group Unit
- */
 Class RouteTest Extends TestCase
 {
+    /** @var Route $route */
+    private $route;
 
-    public function exampleUrlProvider() : array
+    public function setUp(): void
     {
-        return [
-            [
-                '/example/[s:name]',          // Route url
-                '/example/([a-zA-Z0-9-_]+)',  // Expected regex
-                [ 'name' ]                    // Expected args
-            ],
-            [
-                '/news/[i:year]/[i:month]',
-                '/news/(\d+)/(\d+)',
-                [ 'year', 'month' ]
-            ],
-            [
-                '/account/[i:id]/[s:page]',
-                '/account/(\d+)/([a-zA-Z0-9-_]+)',
-                [ 'id', 'page' ]
-            ],
-            [
-                '/static',
-                '/static',
-                []
-            ],
-            [
-                '/[s:slug]/gallery',
-                '/([a-zA-Z0-9-_]+)/gallery',
-                [ 'slug' ]
-            ]
-        ];
+        $this->route = new Route(
+            ['/admin'],
+            function () { return 'hello'; },
+            ['GET'],
+            ['admin']
+        );
     }
 
-    /** @dataProvider exampleUrlProvider */
-    public function testCanCompileRoutes( string $url, string $regex, array $args ) : void
+    public function testCanGetComponents(): void
     {
-        $route = new Route( $url, function () {} );
+        $components = $this->route->getComponents();
 
-        self::assertSame( $regex, $route->compile() );
-        self::assertSame( $args, $route->args );
+        self::assertIsArray($components);
+        self::assertNotEmpty($components);
+        self::assertContainsOnly('string', $components);
     }
 
-    /** @dataProvider exampleUrlProvider */
-    public function testCanGetComponents( string $url, string $regex, array $args ) : void
+    public function testCanGetComponentAtIndex(): void
     {
-        $route = new Route( $url, function () {} );
+        $component = $this->route->getComponent(0);
 
-        $components = $route->components();
-
-        self::assertSame( $regex, implode( "", $components ) );
-
-        foreach ( $components as $component ) {
-            if ( $component instanceof ParameterInterface ) {
-                self::assertContains( $component->name(), $args );
-            } else {
-                self::assertStringContainsString( $component, $url );
-            }
-        }
+        self::assertSame('/admin', $component);
     }
 
-    /** @dataProvider exampleUrlProvider */
-    public function testCanTellIfStatic( string $url, string $regex, array $args ) : void
+    public function testCanGetHandler(): void
     {
-        $route = new Route( $url, function () {} );
+        $handler = $this->route->getHandler();
 
-        self::assertSame( empty( $args ), $route->isStatic() );
+        self::assertIsCallable($handler);
+        self::assertSame('hello', $handler());
+    }
+
+    public function testCanGetMethods(): void
+    {
+        $methods = $this->route->getMethods();
+
+        self::assertIsArray($methods);
+        self::assertNotEmpty($methods);
+        self::assertContainsOnly('string', $methods);
+        self::assertContains('GET', $methods);
+        self::assertNotContains('POST', $methods);
+    }
+
+    public function testCanGetTags(): void
+    {
+        $tags = $this->route->getTags();
+
+        self::assertIsArray($tags);
+        self::assertNotEmpty($tags);
+        self::assertContainsOnly('string', $tags);
+        self::assertContains('admin', $tags);
+        self::assertNotContains('cacheable', $tags);
+    }
+
+    public function testCanCheckIfRouteIsStatic(): void
+    {
+        self::assertTrue($this->route->isStatic());
+    }
+
+    public function testCanCheckIfRouteIsDynamic(): void
+    {
+        $component = self::createStub(ComponentInterface::class);
+        $route = new Route(['/', $component], function () {});
+
+        self::assertFalse($route->isStatic());
+    }
+
+    public function testCanCheckIfHttpMethodSupported(): void
+    {
+        self::assertTrue($this->route->supports('GET'));
+        self::assertFalse($this->route->supports('POST'));
+    }
+
+    /**
+     * @testdox Can check if http method supported (case-insensitive)
+     */
+    public function testCanCheckIfHttpMethodSupportedCaseInsensitive(): void
+    {
+        self::assertTrue($this->route->supports('get'));
+        self::assertFalse($this->route->supports('post'));
+    }
+
+    public function testCanCheckIfRouteHasTag(): void
+    {
+        self::assertTrue($this->route->hasTag('admin'));
+        self::assertFalse($this->route->hasTag('cacheable'));
+    }
+
+    /**
+     * @testdox Can check if route has tag (case-insensitive)
+     */
+    public function testCanCheckIfRouteHasTagCaseInsensitive(): void
+    {
+        self::assertTrue($this->route->hasTag('ADMIN'));
+        self::assertFalse($this->route->hasTag('CACHEABLE'));
+    }
+
+    public function testThrowsOnInvalidComponentIndex(): void
+    {
+        self::expectException(OutOfBoundsException::class);
+
+        $this->route->getComponent(1); // Index doesn't exist
     }
 }

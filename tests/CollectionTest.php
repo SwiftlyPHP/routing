@@ -2,82 +2,99 @@
 
 namespace Swiftly\Routing\Tests;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
-use PHPUnit\Framework\TestCase;
 
 /**
- * @group Unit
+ * @covers \Swiftly\Routing\Collection
  */
 Class CollectionTest Extends TestCase
 {
-
     /** @var Collection $collection */
     private $collection;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->collection = new Collection([
-            'home'    => new Route( '/', function () {} ),
-            'about'   => new Route( '/about', function () {} ),
-            'login'   => new Route( '/login', function () {} ),
-            'dynamic' => new Route( '/[i:id]', function () {} ),
+            'view'   => $this->createMockRoute(true),
+            'edit'   => $this->createMockRoute(false),
+            'delete' => $this->createMockRoute(false),
         ]);
     }
 
-    public function testCanGetRoutes() : void
+    /**
+     * Create a new mock route, specifying whether or not it is static
+     *
+     * @param bool $is_static   Route considered static
+     * @return Route&MockObject
+     */
+    private function createMockRoute(bool $is_static): Route
     {
-        $route = $this->collection->get( 'home' );
+        $route = $this->createMock(Route::class);
+        $route->method('isStatic')
+            ->willReturn($is_static);
 
-        self::assertInstanceOf( Route::class, $route );
-        self::assertSame( '/', $route->url );
-        self::assertNull( $this->collection->get( 'nothing' ) );
+        return $route;
     }
 
-    public function testCanSetRoutes() : void
+    public function testCanCheckIfRouteExists(): void
     {
-        $route = new Route( '/posts', function () {} );
-
-        $this->collection->set( 'posts', $route );
-
-        self::assertInstanceOf( Route::class, $this->collection->get( 'posts' ) );
-        self::assertSame( $route, $this->collection->get( 'posts' ) );
+        self::assertTrue($this->collection->has('view'));
+        self::assertTrue($this->collection->has('edit'));
+        self::assertTrue($this->collection->has('delete'));
+        self::assertFalse($this->collection->has('look'));
+        self::assertFalse($this->collection->has('update'));
+        self::assertFalse($this->collection->has('remove'));
     }
 
-    public function testCanFilterRoutes() : void
+    public function testCanGetNamedRoute(): void
     {
-        $collection = $this->collection->filter( function ( $route ) {
-            return !$route->isStatic();
-        });
-
-        self::assertNotSame( $collection, $this->collection );
-        self::assertInstanceOf( Route::class, $collection->get( 'dynamic' ) );
-        self::assertNull( $collection->get( 'home' ) );
-        self::assertNull( $collection->get( 'about' ) );
-        self::assertNull( $collection->get( 'login' ) );
+        self::assertInstanceOf(Route::class, $this->collection->get('view'));
+        self::assertInstanceOf(Route::class, $this->collection->get('edit'));
+        self::assertInstanceOf(Route::class, $this->collection->get('delete'));
+        self::assertNull($this->collection->get('look'));
+        self::assertNull($this->collection->get('update'));
+        self::assertNull($this->collection->get('remove'));
     }
 
-    public function testCanGetAllRoutes() : void
+    public function testCanGetStaticRoutes(): void
+    {
+        $static = $this->collection->static();
+
+        self::assertIsArray($static);
+        self::AssertCount(1, $static);
+        self::assertContainsOnlyInstancesOf(Route::class, $static);
+
+        // Route names MUST be maintained
+        self::assertArrayHasKey('view', $static);
+    }
+
+    public function testCanGetDynamicRoutes(): void
+    {
+        $dynamic = $this->collection->dynamic();
+
+        self::assertIsArray($dynamic);
+        self::AssertCount(2, $dynamic);
+        self::assertContainsOnlyInstancesOf(Route::class, $dynamic);
+
+        // Route names MUST be maintained
+        self::assertArrayHasKey('edit', $dynamic);
+        self::assertArrayHasKey('delete', $dynamic);
+    }
+
+    public function testCanGetAllRoutes(): void
     {
         $routes = $this->collection->all();
 
-        self::assertCount( 4, $routes );
-        self::assertArrayHasKey( 'home', $routes );
-        self::assertArrayHasKey( 'about', $routes );
-        self::assertArrayHasKey( 'login', $routes );
-        self::assertArrayHasKey( 'dynamic', $routes );
-        self::assertInstanceOf( Route::class, $routes['home'] );
-        self::assertInstanceOf( Route::class, $routes['about'] );
-        self::assertInstanceOf( Route::class, $routes['login'] );
-        self::assertInstanceOf( Route::class, $routes['dynamic'] );
-    }
+        self::assertIsArray($routes);
+        self::assertCount(3, $routes);
+        self::assertContainsOnlyInstancesOf(Route::class, $routes);
 
-    public function testCanTellIfEmpty() : void
-    {
-        self::assertFalse( $this->collection->isEmpty() );
-
-        $empty_collection = new Collection([]);
-
-        self::assertTrue( $empty_collection->isEmpty() );
+        // Route names MUST be maintained
+        self::assertArrayHasKey('view', $routes);
+        self::assertArrayHasKey('edit', $routes);
+        self::assertArrayHasKey('delete', $routes);
     }
 }

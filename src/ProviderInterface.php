@@ -5,19 +5,12 @@ namespace Swiftly\Routing;
 use Swiftly\Routing\Collection;
 
 /**
- * Interface for classes that can provide/load route definitions
+ * Implemented by classes capable of providing a collection of routes
  */
-Interface ProviderInterface
+interface ProviderInterface
 {
-
     /**
-     * Populate the collection with routes from this provider
-     *
-     * @psalm-flow ($collection) -> return
-     *
-     * @param Collection $collection Route collection
-     * @return Collection            Updated collection
+     * Provide a collection
      */
-    public function populate( Collection $collection ) : Collection;
-
+    public function provide(): Collection;
 }

@@ -4,65 +4,112 @@ namespace Swiftly\Routing\Matcher;
 
 use Swiftly\Routing\MatcherInterface;
 use Swiftly\Routing\Collection;
+use Swiftly\Routing\MatchedRoute;
 use Swiftly\Routing\Route;
+use Swiftly\Routing\ComponentInterface;
 
-use function preg_match_all;
-
-use const PREG_SET_ORDER;
+use function assert;
+use function implode;
+use function preg_match;
 
 /**
- * Class that uses regex to match a URL to a route
+ * Provides matching for dynamic routes
+ * 
+ * @psalm-external-mutation-free
  */
-Class RegexMatcher Implements MatcherInterface
+class RegexMatcher implements MatcherInterface
 {
-
-    /**
-     * @psalm-var array<string, Route> $routes
-     *
-     * @var array $routes Dynamic routes
-     */
+    /** @var Collection $routes Known routes */
     private $routes;
 
-    /**
-     * @var string $regex Match expression
-     */
-    private $regex;
+    /** @var string|null $compiled Compiled regex */
+    private $compiled = null;
 
     /**
-     * Create a new regex matcher using the routes and expression provided
-     *
-     * @psalm-param array<string, Route> $routes
-     *
-     * @param Route[] $routes Dynamic routes
-     * @param string $regex   Match expression
+     * Create a new matcher for dynamic routes
+     * 
+     * @param Collection $routes Registered routes
      */
-    public function __construct( array $routes, string $regex )
+    public function __construct(Collection $routes)
     {
         $this->routes = $routes;
-        $this->regex = $regex;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function match( string $url ) : ?Route
+    public function match(string $url): ?MatchedRoute
     {
-        if ( !preg_match_all( $this->regex, $url, $matches, PREG_SET_ORDER ) ) {
+        $regex = $this->getRegex();
+            
+        if (!preg_match($regex, $url, $matches) || empty($matches["MARK"])) {
             return null;
         }
 
-        // Get the named route
-        $route = $this->routes[$matches[0]['MARK']];
+        $name = $matches["MARK"];
+        $route = $this->routes->get($name);
 
-        // Handle params (if any)
+        // TODO: Getting Psalm to understand matching is a nightmare, think of
+        // longer term workaround.
+        assert($route instanceof Route);
+
+        // Index 0 of $matches is the full match, offset
+        $index = 1;
         $args = [];
 
-        foreach ( $route->args as $index => $param ) {
-            $args[$param] = $matches[0][$index + 1] ?? null;
+        foreach ($route->getComponents() as $component) {
+            if ($component instanceof ComponentInterface === false) continue;
+
+            $args[$component->name()] = $matches[$index++];
         }
 
-        $route->args = $args;
+        return new MatchedRoute($name, $route, $args);
+    }
 
-        return $route;
+    /**
+     * Returns the regex required for matching against routes
+     * 
+     * @param string Regular expression
+     */
+    private function getRegex(): string
+    {
+        if ($this->compiled === null) {
+            $this->compiled = $this->compileRegex();
+        }
+
+        return $this->compiled;
+    }
+
+    /**
+     * Compiles the regex used for matching against routes
+     * 
+     * @return string Regular expression
+     */
+    private function compileRegex(): string
+    {
+        $regexes = [];
+
+        foreach ($this->routes->dynamic() as $name => $route) {
+            $regexes[] = "(?>{$this->compileRoute($route)}(*:{$name}))";
+        }
+
+        return '~^(?|' . implode('|', $regexes) . ')$~ixX';
+    }
+
+    /**
+     * Creates the regex required for matching a single route
+     * 
+     * @return string Regular expression
+     */
+    private function compileRoute(Route $route): string
+    {
+        $regex = "";
+
+        foreach ($route->getComponents() as $component) {
+            if ($component instanceof ComponentInterface) {
+                $component = $component->regex();
+            }
+
+            $regex .= $component;
+        }
+
+        return $regex;
     }
 }

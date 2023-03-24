@@ -4,99 +4,97 @@ namespace Swiftly\Routing;
 
 use Swiftly\Routing\Route;
 
-/**
- * Represents a collection of named routes
- */
-Final Class Collection
-{
+use function array_filter;
 
+/**
+ * Used to store and manage a collection of routes
+ *
+ * @internal
+ *
+ * @psalm-immutable
+ */
+Class Collection
+{
     /**
-     * Underlying collection of routes
-     *
-     * @psalm-var array<string, Route> $routes
-     *
+     * @psalm-var array<non-empty-string,Route> $routes
      * @var Route[] $routes
      */
     private $routes;
 
     /**
-     * Creates a new route collection
+     * Create a new collection around the given routes
      *
-     * @psalm-param array<string, Route> $routes
+     * @psalm-param array<non-empty-string,Route> $routes
      *
-     * @param Route[] $routes
+     * @param Route[] $routes Named routes
      */
-    public function __construct( array $routes = [] )
+    public function __construct(array $routes)
     {
         $this->routes = $routes;
     }
 
     /**
-     * Adds a new route to the collection
+     * Determine if a named route exists within the collection
+     *
+     * @psalm-param non-empty-string $name
      *
      * @param string $name Route name
-     * @param Route $route Route definition
+     * @return bool
      */
-    public function set( string $name, Route $route ) : void
+    public function has(string $name): bool
     {
-        $this->routes[$name] = $route;
+        return isset($this->routes[$name]);
     }
 
     /**
-     * Retrieves a named route from the collection
+     * Return the named route from the collection
      *
-     * @psalm-mutation-free
+     * @psalm-param non-empty-string $name
      *
      * @param string $name Route name
-     * @return Route|null  Route definition
+     * @return Route|null
      */
-    public function get( string $name ) : ?Route
+    public function get(string $name): ?Route
     {
         return $this->routes[$name] ?? null;
     }
 
     /**
-     * Check to see if this collection contains any routes
+     * Return all static routes from the collection
      *
-     * @psalm-mutation-free
-     *
-     * @return bool Is empty?
-     */
-    public function isEmpty() : bool
-    {
-        return empty( $this->routes );
-    }
-
-    /**
-     * Return a new collection of routes that pass the provided filter
-     *
-     * @psalm-mutation-free
-     * @psalm-param pure-callable(Route):bool $filter
-     *
-     * @param callable $filter Filter function
-     */
-    public function filter( callable $filter ) : Collection
-    {
-        $routes = [];
-
-        foreach ( $this->routes as $name => $route ) {
-            if ( $filter( $route ) ) {
-                $routes[$name] = $route;
-            }
-        }
-
-        return new self( $routes );
-    }
-
-    /**
-     * Returns the underlying Route array
-     *
-     * @psalm-mutation-free
-     * @psalm-return array<string, Route>
+     * @psalm-return array<non-empty-string,Route>
      *
      * @return Route[]
      */
-    public function all() : array
+    public function static(): array
+    {
+        return array_filter($this->routes, function (Route $route): bool {
+            return $route->isStatic();
+        });
+    }
+
+    /**
+     * Return all dynamic routes from the collection
+     *
+     * @psalm-return array<non-empty-string,Route>
+     *
+     * @return Route[]
+     */
+    public function dynamic(): array
+    {
+        return array_filter($this->routes, function (Route $route): bool {
+            return !$route->isStatic();
+        });
+    }
+
+    /**
+     * Return all the routes stored in this collection
+     *
+     * @psalm-return array<non-empty-string,Route>
+     *
+     * @return Route[]
+     */
+    public function all(): array
     {
         return $this->routes;
     }
