@@ -28,6 +28,16 @@ Class DefaultParserTest Extends TestCase
         $this->parser = new DefaultParser();
     }
 
+    public function testCanParseIndexUrl(): void
+    {
+        $components = $this->parser->parse('/');
+
+        self::assertIsArray($components);
+        self::assertCount(1, $components);
+        self::assertContainsOnly('string', $components);
+        self::assertContains('/', $components);
+    }
+
     public function testCanParseStaticUrl(): void
     {
         $components = $this->parser->parse('/admin');
