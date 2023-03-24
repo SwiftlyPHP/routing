@@ -117,7 +117,7 @@ Class DefaultParserTest Extends TestCase
     // {
     //     self::expectException(ComponentParseException::class);
 
-    //     // Note: Component tag is unclosed
-    //     $this->parser->parse('/posts/[i:post_id');
+    //     // Note: Missing enum values
+    //     $this->parser->parse('/posts/[e:post_type]');
     // }
 }
