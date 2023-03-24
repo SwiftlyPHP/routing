@@ -33,7 +33,7 @@ class DefaultParser implements ParserInterface
     private const ENUM_COMPONENT = 'e';
     private const ENUM_VALUES = '<(?P<values>[A-Za-z_, ]+)>';
 
-    private const VALIDATION_REGEX = '/^\/(?>(?:[a-zA-Z0-9\-_\.\~\/]+|\[[a-zA-Z:<>]{3,}\])+)$/';
+    private const VALIDATION_REGEX = '/^\/(?>(?:[a-zA-Z0-9\-_\.\~\/]+|\[[a-zA-Z:<>,]{3,}\])+)$/';
 
     private const SPLIT_REGEX = 
         '/(?>'

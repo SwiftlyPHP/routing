@@ -15,7 +15,7 @@ class ComponentParseException extends Exception
     {
         parent::__construct(
             sprintf(
-                "Failed to parse components in (%s), possible syntax error",
+                "Failed to parse components in '%s', possible syntax error",
                 $url
             )
         );

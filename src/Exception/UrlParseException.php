@@ -15,7 +15,7 @@ class UrlParseException extends Exception
     {
         parent::__construct(
             sprintf(
-                "Failed to parse (%s) it does not look like a valid URL",
+                "Failed to parse '%s' it does not look like a valid URL",
                 $url
             )
         );
