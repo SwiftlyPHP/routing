@@ -4,11 +4,13 @@ namespace Swiftly\Routing\Parser;
 
 use Swiftly\Routing\ParserInterface;
 use Swiftly\Routing\Exception\UrlParseException;
+use Swiftly\Routing\Exception\ComponentParseException;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Component\IntegerComponent;
 use Swiftly\Routing\Component\StringComponent;
 use Swiftly\Routing\Component\EnumComponent;
 
+use function preg_match;
 use function preg_match_all;
 use function explode;
 use function array_map;
@@ -24,30 +26,71 @@ use const PREG_SET_ORDER;
  */
 class DefaultParser implements ParserInterface
 {
-    private const ALLOWED_CHARACTERS = '[a-zA-Z\-_\.\~\/]+';
+    private const ALLOWED_URL_CHARACTERS = '[a-zA-Z0-9\-_\.\~\/]+';
     private const IDENTIFIER = '[A-Za-z_]+';
     private const INTEGER_COMPONENT = 'i';
     private const STRING_COMPONENT = 's';
     private const ENUM_COMPONENT = 'e';
     private const ENUM_VALUES = '<(?P<values>[A-Za-z_, ]+)>';
 
-    private const REGEX = 
-        '/(?>\['
-            . '(?|'
-                . '(?P<type>' . self::INTEGER_COMPONENT . ')|'
-                . '(?P<type>' . self::STRING_COMPONENT . ')|'
-                . '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
-            . '):(?P<name>' . self::IDENTIFIER . ')'
-        . '\]|' . self::ALLOWED_CHARACTERS . ')/';
+    private const VALIDATION_REGEX = '/^\/(?>(?:[a-zA-Z0-9\-_\.\~\/]+|\[[a-zA-Z:<>]{3,}\])+)$/';
+
+    private const SPLIT_REGEX = 
+        '/(?>'
+        .   '(' . self::ALLOWED_URL_CHARACTERS . ')|'
+        .   '(?:'
+            .   '\['
+            .   '(?|'
+                .   '(?P<type>' . self::INTEGER_COMPONENT . ')|'
+                .   '(?P<type>' . self::STRING_COMPONENT . ')|'
+                .   '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
+            .   '):(?P<name>' . self::IDENTIFIER . ')'
+            .   '\]'
+        .   ')'
+    .   ')/';
 
     public function parse(string $path): array
     {
-        if (!preg_match_all(self::REGEX, $path, $matches, PREG_SET_ORDER)) {
+        // Does it look URL-like?
+        if (!$this->validate($path)) {
             throw new UrlParseException($path);
         }
+
+        // Did we strip any components?
+        if (($parts = $this->split($path)) === null) {
+            throw new ComponentParseException($path);
+        }
         
-        /** @var non-empty-list<ComponentMatch&UrlMatch> $matches */
-        return $this->convert($matches);
+        /** @var non-empty-list<ComponentMatch&UrlMatch> $parts */
+        return $this->convert($parts);
+    }
+
+    /**
+     * Determine if the given path looks like a valid URL
+     * 
+     * @psalm-param non-empty-string $path
+     * 
+     * @param string $path Subject path
+     * @return bool        Is valid?
+     */
+    private function validate(string $path): bool
+    {
+        return preg_match(self::VALIDATION_REGEX, $path) === 1;
+    }
+
+    /**
+     * Perform the regex used to split a path into a sequence of components
+     * 
+     * @param string $path Subject path
+     * @return array       Components parts
+     */
+    private function split(string $path): ?array
+    {
+        if (!preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
+            return null;
+        }
+
+        return $matches;
     }
 
     /**

@@ -5,7 +5,8 @@ namespace Swiftly\Routing\Tests\Parser;
 use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Parser\DefaultParser;
 use Swiftly\Routing\ComponentInterface;
-use Swiftly\Routing\Exception\ParseException;
+use Swiftly\Routing\Exception\UrlParseException;
+use Swiftly\Routing\Exception\ComponentParseException;
 
 Class DefaultParserTest Extends TestCase
 {
@@ -44,7 +45,7 @@ Class DefaultParserTest Extends TestCase
         self::assertArrayHasKey(2, $components);
         self::assertSame('/', $components[2]);
 
-        self::assertInstanceOf(3, $components);
+        self::assertArrayHasKey(3, $components);
         self::assertInstanceOf(ComponentInterface::class, $components[3]);
     }
 
@@ -54,4 +55,12 @@ Class DefaultParserTest Extends TestCase
 
         $this->parser->parse('@#://invalid');
     }
+
+    // public function testThrowsOnInvalidComponent(): void
+    // {
+    //     self::expectException(ComponentParseException::class);
+
+    //     // Note: Component tag is unclosed
+    //     $this->parser->parse('/posts/[i:post_id');
+    // }
 }
