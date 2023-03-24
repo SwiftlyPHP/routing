@@ -32,19 +32,24 @@ class DefaultParser implements ParserInterface
     private const ENUM_VALUES = '<(?P<values>[A-Za-z_, ]+)>';
 
     private const REGEX = 
-        '/(?>\['
-            . '(?|'
-                . '(?P<type>' . self::INTEGER_COMPONENT . ')|'
-                . '(?P<type>' . self::STRING_COMPONENT . ')|'
-                . '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
-            . '):(?P<name>' . self::IDENTIFIER . ')'
-        . '\]|' . self::ALLOWED_CHARACTERS . ')/';
+        '/^(?>'
+        .   self::ALLOWED_CHARACTERS . '|'
+        .   '\['
+            .   '(?|'
+                .   '(?P<type>' . self::INTEGER_COMPONENT .  ')|'
+                .   '(?P<type>' . self::STRING_COMPONENT . ')|'
+                .   '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
+            .   '):(?P<name>' . self::IDENTIFIER . ')'
+        .   '\]'
+    .   ')+$/';
 
     public function parse(string $path): array
     {
         if (!preg_match_all(self::REGEX, $path, $matches, PREG_SET_ORDER)) {
             throw new UrlParseException($path);
         }
+
+        file_put_contents(__DIR__ . '/regex.txt', self::REGEX);
         
         /** @var non-empty-list<ComponentMatch&UrlMatch> $matches */
         return $this->convert($matches);
