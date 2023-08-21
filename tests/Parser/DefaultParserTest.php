@@ -127,7 +127,6 @@ Class DefaultParserTest Extends TestCase
     // {
     //     self::expectException(ComponentParseException::class);
 
-    //     // Note: Missing enum values
-    //     $this->parser->parse('/posts/[e:post_type]');
+    //     $this->parser->parse('/[_:abc]');
     // }
 }
