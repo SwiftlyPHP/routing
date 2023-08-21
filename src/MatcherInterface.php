@@ -1,6 +1,7 @@
 <?php
 
 namespace Swiftly\Routing;
+
 use Swiftly\Routing\MatchedRoute;
 
 /**

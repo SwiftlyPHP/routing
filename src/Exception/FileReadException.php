@@ -9,7 +9,7 @@ use function sprintf;
 /**
  * Exception to be thrown when a file read fails (for whatever reason)
  */
-Class FileReadException Extends Exception
+class FileReadException extends Exception
 {
     /**
      * Indicate the given `$file_path` failed to load
@@ -20,7 +20,7 @@ Class FileReadException Extends Exception
     {
         parent::__construct(
             sprintf(
-                'Failed to read: "%s", are you sure the file exists and is readable?',
+                "Failed to read: '%s', are you sure the file exists and is readable?",
                 $file_path
             )
         );

@@ -10,7 +10,7 @@ use function gettype;
 /**
  * Exception to be thrown when a given route argument is the wrong type
  */
-Class InvalidArgumentException Extends BaseException
+class InvalidArgumentException extends BaseException
 {
     /**
      * Indicate the named `$argument` was of the wrong type
@@ -22,7 +22,7 @@ Class InvalidArgumentException Extends BaseException
     {
         parent::__construct(
             sprintf(
-                'Invalid value provided for route argument "%s", recieved "%s"',
+                "Invalid value provided for route argument '%s', recieved '%s'",
                 $argument,
                 gettype($provided)
             )

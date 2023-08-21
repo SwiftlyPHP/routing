@@ -5,10 +5,10 @@ namespace Swiftly\Routing;
 use Swiftly\Routing\ComponentInterface;
 use OutOfBoundsException;
 
+use function array_map;
 use function count;
 use function is_string;
 use function in_array;
-use function array_map;
 use function strtoupper;
 use function strtolower;
 
@@ -17,30 +17,22 @@ use function strtolower;
  *
  * @psalm-immutable
  */
-Class Route
+class Route
 {
     /**
      * @psalm-var non-empty-list<string|ComponentInterface> $components
      * @var string[]|ComponentInterface[] $components
      */
-    private $components;
+    private array $components;
 
-    /**
-     * @var callable $handler
-     */
+    /** @var callable $handler */
     private $handler;
 
-    /**
-     * @psalm-var list<string> $methods
-     * @var string[] $methods
-     */
-    private $methods;
+    /** @psalm-var list<string> $methods */
+    private array $methods;
 
-    /**
-     * @psalm-var list<lowercase-string> $tags
-     * @var string[] $tags
-     */
-    private $tags;
+    /** @psalm-var list<lowercase-string> $tags */
+    private array $tags;
 
     /**
      * Create a new route from the given URL components

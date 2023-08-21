@@ -3,7 +3,7 @@
 /composer.lock
 
 # PHPUnit
-/coverage
+/reports
 
 # Misc
 .DS_Store

@@ -9,7 +9,7 @@ use function sprintf;
 /**
  * Exception to be thrown when a required route argument is missing
  */
-Class MissingArgumentException Extends LogicException
+class MissingArgumentException extends LogicException
 {
     /**
      * Indicate the named `$argument` was not supplied
@@ -20,7 +20,7 @@ Class MissingArgumentException Extends LogicException
     {
         parent::__construct(
             sprintf(
-                'Route requires argument "%s" but it was not supplied',
+                "Route requires argument '%s' but it was not supplied",
                 $argument
             )
         );

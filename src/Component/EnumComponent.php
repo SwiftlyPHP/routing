@@ -13,23 +13,17 @@ use function in_array;
 use function is_scalar;
 
 /**
- *
+ * Component representing a variable restricted to a set of allowed values
  *
  * @psalm-immutable
  */
-Final Class EnumComponent Implements ComponentInterface
+final class EnumComponent implements ComponentInterface
 {
-    /**
-     * @psalm-var non-empty-string $name
-     * @var string $name
-     */
-    private $name;
+    /** @psalm-var non-empty-string $name */
+    private string $name;
 
-    /**
-     * @psalm-var list<string> $allowed
-     * @var string[] $allowed
-     */
-    private $allowed;
+    /** @psalm-var list<string> $allowed */
+    private array $allowed;
 
     /**
      * Create a new enum URL component that accepts the `$allowed` values
@@ -46,11 +40,13 @@ Final Class EnumComponent Implements ComponentInterface
         $this->allowed = $allowed;
     }
 
+    /** {@inheritDoc} */
     public function name(): string
     {
         return $this->name;
     }
 
+    /** {@inheritDoc} */
     public function regex(): string
     {
         $allowed = array_map('preg_quote', $this->allowed);
@@ -59,6 +55,7 @@ Final Class EnumComponent Implements ComponentInterface
         return "($allowed)";
     }
 
+    /** {@inheritDoc} */
     public function accepts($value): bool
     {
         if (!$this->isStringable($value)) {
@@ -71,6 +68,7 @@ Final Class EnumComponent Implements ComponentInterface
         return in_array($value, array_map('strtolower', $this->allowed), true);
     }
 
+    /** {@inheritDoc} */
     public function escape($value): string
     {
         if (!$this->accepts($value)) {
@@ -86,7 +84,7 @@ Final Class EnumComponent Implements ComponentInterface
      * @psalm-assert-if-true scalar|Stringable $value
      * 
      * @param mixed $value Subject variable
-     * @return bool
+     * @return bool        Subject can be represented as a string?
      */
     private function isStringable($value): bool
     {

@@ -19,11 +19,10 @@ use function preg_match;
  */
 class RegexMatcher implements MatcherInterface
 {
-    /** @var Collection $routes Known routes */
-    private $routes;
+    private Collection $routes;
 
-    /** @var string|null $compiled Compiled regex */
-    private $compiled = null;
+    /** @psalm-var non-empty-string|null $compiled */
+    private ?string $compiled = null;
 
     /**
      * Create a new matcher for dynamic routes
@@ -55,7 +54,9 @@ class RegexMatcher implements MatcherInterface
         $args = [];
 
         foreach ($route->getComponents() as $component) {
-            if ($component instanceof ComponentInterface === false) continue;
+            if ($component instanceof ComponentInterface === false) {
+                continue;
+            }
 
             $args[$component->name()] = $matches[$index++];
         }
@@ -65,6 +66,8 @@ class RegexMatcher implements MatcherInterface
 
     /**
      * Returns the regex required for matching against routes
+     * 
+     * @psalm-return non-empty-string
      * 
      * @param string Regular expression
      */
@@ -79,6 +82,8 @@ class RegexMatcher implements MatcherInterface
 
     /**
      * Compiles the regex used for matching against routes
+     * 
+     * @psalm-return non-empty-string
      * 
      * @return string Regular expression
      */
@@ -96,7 +101,8 @@ class RegexMatcher implements MatcherInterface
     /**
      * Creates the regex required for matching a single route
      * 
-     * @return string Regular expression
+     * @param Route $route Subject route
+     * @return string      Regular expression
      */
     private function compileRoute(Route $route): string
     {

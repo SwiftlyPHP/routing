@@ -13,20 +13,15 @@ use function array_filter;
  *
  * @psalm-immutable
  */
-Class Collection
+class Collection
 {
-    /**
-     * @psalm-var array<non-empty-string,Route> $routes
-     * @var Route[] $routes
-     */
-    private $routes;
+    /** @var array<non-empty-string,Route> $routes */
+    private array $routes;
 
     /**
      * Create a new collection around the given routes
      *
-     * @psalm-param array<non-empty-string,Route> $routes
-     *
-     * @param Route[] $routes Named routes
+     * @param array<non-empty-string,Route> $routes
      */
     public function __construct(array $routes)
     {

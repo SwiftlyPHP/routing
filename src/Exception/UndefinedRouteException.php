@@ -9,7 +9,7 @@ use function sprintf;
 /**
  * Exception to be thrown when trying to reference a non-existent route
  */
-Class UndefinedRouteException Extends LogicException
+class UndefinedRouteException extends LogicException
 {
     /**
      * Indicates the named `$route` could not be found or does not exists
@@ -20,7 +20,7 @@ Class UndefinedRouteException Extends LogicException
     {
         parent::__construct(
             sprintf(
-                'Failed to find a route named "%s", are you sure it exists?',
+                "Failed to find a route named '%s', are you sure it exists?",
                 $route
             )
         );

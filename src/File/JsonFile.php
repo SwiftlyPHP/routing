@@ -15,12 +15,10 @@ use function preg_match;
 /**
  * Utility class used to load and parse JSON files
  */
-Class JsonFile Implements FileLoaderInterface
+class JsonFile implements FileLoaderInterface
 {
-    /**
-     * @var string $file_path
-     */
-    private $file_path;
+    /** @var string $file_path */
+    private string $file_path;
 
     /**
      * Wraps the given `$file_path` to be loaded and parsed as JSON
@@ -37,7 +35,7 @@ Class JsonFile Implements FileLoaderInterface
      *
      * @throws FileReadException  If file cannot be read
      * @throws FileParseException If file is not valid JSON
-     * @return mixed[]
+     * @return mixed[]            Parsed values
      */
     public function load(): array
     {
@@ -47,7 +45,7 @@ Class JsonFile Implements FileLoaderInterface
             throw new FileReadException($this->file_path);
         }
 
-        // TODO: Swap to json_validate when we can
+        // @php:8.3 Swap to json_validate when we can
         if (!self::isJsonLike($content)) {
             throw new FileParseException($this->file_path, "json");
         }
@@ -79,7 +77,7 @@ Class JsonFile Implements FileLoaderInterface
     /**
      * Determine if the given string looks JSON-like
      * 
-     * Can swap to using `json_validate` when support reaches PHP 8.1
+     * Can swap to using `json_validate` when support reaches PHP 8.3
      * 
      * @param string $content Subject string
      * @return bool           Content is JSON

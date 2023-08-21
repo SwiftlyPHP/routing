@@ -17,13 +17,13 @@ use function function_exists;
 use function array_values;
 use function array_filter;
 
+/**
+ * Provider allowing consumers to load route definitions from local files
+ */
 class FileProvider implements ProviderInterface
 {
-    /** @var FileLoaderInterface $loader */
-    private $loader;
-
-    /** @var ParserInterface $parser */
-    private $parser;
+    private FileLoaderInterface $loader;
+    private ParserInterface $parser;
 
     /**
      * Create a provider around the given file, using the given parsing method
@@ -36,6 +36,7 @@ class FileProvider implements ProviderInterface
         $this->parser = $parser;
     }
 
+    /** {@inheritDoc} */
     public function provide(): Collection
     {
         $routes = [];
@@ -44,13 +45,13 @@ class FileProvider implements ProviderInterface
         foreach ($this->loader->load() as $name => $block) {
             if (!is_string($name) || empty($name)) {
                 throw new RouteParseException(
-                    "Could not add unnamed route '$name'"
+                    "Could not add unnamed route '{$name}'"
                 );
             }
 
             if (!is_array($block)) {
                 throw new RouteParseException(
-                    "Could not add route '$name' as it has no definition"
+                    "Could not add route '{$name}' as it has no definition"
                 );
             }
 
@@ -74,7 +75,7 @@ class FileProvider implements ProviderInterface
             || empty($block['path'])
         ) {
             throw new RouteParseException(
-                "Route '$name' is missing required 'path' attribute or it is a valid value"
+                "Route '{$name}' is missing required 'path' attribute or it is a valid value"
             );
         }
 
