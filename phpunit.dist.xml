@@ -14,7 +14,7 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <clover outputFile="coverage/clover.xml"/>
+            <clover outputFile="reports/clover.xml"/>
         </report>
     </coverage>
 </phpunit>
