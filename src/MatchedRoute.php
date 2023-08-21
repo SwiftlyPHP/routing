@@ -11,27 +11,27 @@ use Swiftly\Routing\Route;
  *
  * @psalm-immutable
  */
-Class MatchedRoute
+class MatchedRoute
 {
     /**
      * @readonly
      * @psalm-var non-empty-string $name
      * @var string $name
      */
-    public $name;
+    public string $name;
 
     /**
      * @readonly
      * @var Route $route
      */
-    public $route;
+    public Route $route;
 
     /**
      * @readonly
      * @psalm-var array<string,string> $args
      * @var string[] $args
      */
-    public $args;
+    public array $args;
 
     /**
      * Associate a route with the given name and arguments

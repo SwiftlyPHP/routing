@@ -11,7 +11,7 @@ use Swiftly\Routing\MatchedRoute;
 class SeriesMatcher implements MatcherInterface
 {
     /** @var MatcherInterface[] $matchers */
-    private $matchers;
+    private array $matchers;
 
     /**
      * Wrap the given matchers, allowing them to be called one after the other

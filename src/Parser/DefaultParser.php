@@ -20,7 +20,7 @@ use const PREG_SET_ORDER;
 /**
  * Handles parsing the Swiftly URL syntax
  * 
- * @psalm-type ComponentMatch=array{type:'i'|'s'|'e',name:non-empty-string,values:string}
+ * @psalm-type ComponentMatch=array{type:'i'|'s'|'e',name:non-empty-string,values:string,...}
  * @psalm-type UrlMatch=array{0:string}
  * @psalm-external-mutation-free
  */
@@ -32,9 +32,7 @@ class DefaultParser implements ParserInterface
     private const STRING_COMPONENT = 's';
     private const ENUM_COMPONENT = 'e';
     private const ENUM_VALUES = '<(?P<values>[A-Za-z_, ]+)>';
-
     private const VALIDATION_REGEX = '/^\/(?>(?:[a-zA-Z0-9\-_\.\~\/]+|\[[a-zA-Z_:<>,]{3,}\])*)$/';
-
     private const SPLIT_REGEX = 
         '/(?>'
         .   '(' . self::ALLOWED_URL_CHARACTERS . ')|'
@@ -49,6 +47,7 @@ class DefaultParser implements ParserInterface
         .   ')'
     .   ')/';
 
+    /** {@inheritDoc} */
     public function parse(string $path): array
     {
         // Does it look URL-like?
@@ -81,15 +80,19 @@ class DefaultParser implements ParserInterface
     /**
      * Perform the regex used to split a path into a sequence of components
      * 
+     * @psalm-param non-empty-string $path
+     * @psalm-return list<ComponentMatch&UrlMatch>|null
+     * 
      * @param string $path Subject path
-     * @return array       Components parts
+     * @return array|null  Components parts
      */
     private function split(string $path): ?array
     {
         if (!preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
             return null;
         }
-
+        
+        /** @var list<ComponentMatch&UrlMatch> $matches */
         return $matches;
     }
 
@@ -120,11 +123,13 @@ class DefaultParser implements ParserInterface
      * 
      * We can swap to using match when we get to PHP 8
      * 
+     * @php:8.0 Swap to using match expression
      * @psalm-param 'i'|'s'|'e' $type
      * @psalm-param ComponentMatch $data
      * 
-     * @param string $type   Component type
-     * @param string[] $data Component data
+     * @param string $type        Component type
+     * @param string[] $data      Component data
+     * @return ComponentInterface Prepared component instance
      */
     private function make(string $type, array $data): ComponentInterface
     {

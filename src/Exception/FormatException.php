@@ -11,7 +11,7 @@ use function gettype;
 /**
  * Exception to be thrown when a value cannot be used as a route argument
  */
-Class FormatException Extends DomainException
+class FormatException extends DomainException
 {
     /**
      * Indicate the `$provided` value could not be used for the route argument
@@ -23,7 +23,7 @@ Class FormatException Extends DomainException
     {
         parent::__construct(
             sprintf(
-                'Given value of "%s" is not supported by route argument "%s"',
+                "Given value of '%s' is not supported by route argument '%s'",
                 self::typeToString($provided),
                 $argument
             )

@@ -8,7 +8,7 @@ use Swiftly\Routing\Exception\FileParseException;
 /**
  * Interface to signify classes capable of loading files from the filesystem
  */
-Interface FileLoaderInterface
+interface FileLoaderInterface
 {
     /**
      * Load this file, perform any required processing and return its content

@@ -9,17 +9,14 @@ use function is_string;
 use function preg_match;
 
 /**
- * 
+ * Component that accepts a string of URL allowed characters
  *
  * @psalm-immutable
  */
 class StringComponent implements ComponentInterface
 {
-    /**
-     * @psalm-var non-empty-string $name
-     * @var string $name
-     */
-    private $name;
+    /** @psalm-var non-empty-string $name */
+    private string $name;
 
     /**
      * Create a new URL component
@@ -33,16 +30,19 @@ class StringComponent implements ComponentInterface
         $this->name = $name;
     }
 
+    /** {@inheritDoc} */
     public function name(): string
     {
         return $this->name;
     }
 
+    /** {@inheritDoc} */
     public function regex(): string
     {
         return "([A-Za-z0-9\-\_\@\.]+)";
     }
 
+    /** {@inheritDoc} */
     public function accepts($value): bool
     {
         if (!is_string($value)) {
@@ -52,6 +52,7 @@ class StringComponent implements ComponentInterface
         return preg_match("/^{$this->regex()}$/", $value) === 1;
     }
 
+    /** {@inheritDoc} */
     public function escape($value): string
     {
         if (!$this->accepts($value)) {

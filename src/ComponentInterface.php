@@ -9,7 +9,7 @@ use Swiftly\Routing\Exception\FormatException;
  *
  * @psalm-immutable
  */
-Interface ComponentInterface
+interface ComponentInterface
 {
     /**
      * Return the name of this URL component

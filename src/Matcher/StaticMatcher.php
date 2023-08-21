@@ -13,8 +13,7 @@ use Swiftly\Routing\MatchedRoute;
  */
 class StaticMatcher implements MatcherInterface
 {
-    /** @var Collection $routes Known routes */
-    private $routes;
+    private Collection $routes;
 
     /**
      * Create a new static matcher around the given routes
