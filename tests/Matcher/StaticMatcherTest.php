@@ -27,6 +27,9 @@ Class StaticMatcherTest Extends TestCase
         $this->matcher = new StaticMatcher($this->collection);
     }
 
+    /**
+     * @return MockObject&Route
+     */
     public function createMockRoute(): Route
     {
         $route = $this->createMock(Route::class);
@@ -41,15 +44,16 @@ Class StaticMatcherTest Extends TestCase
     public function testCanMatchStaticRoute(): void
     {
         $route = $this->createMockRoute();
+        $route->expects(self::exactly(2))
+            ->method('supports')
+            ->with('GET')
+            ->willReturn(true);
 
         $this->collection->method('static')
             ->willReturn(['view' => $route]);
 
         $match = $this->matcher->match('/admin');
 
-        /**
-         * Matchers now return a dedicated @see {MatchedRoute} P.O.D
-         */
         self::assertInstanceOf(MatchedRoute::class, $match);
         self::assertSame('view', $match->name);
         self::assertSame($route, $match->route);

@@ -88,7 +88,7 @@ class DefaultParser implements ParserInterface
      */
     private function split(string $path): ?array
     {
-        if (!preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
+        if (false === preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
             return null;
         }
         

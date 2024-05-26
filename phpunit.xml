@@ -16,7 +16,7 @@
             <directory suffix=".php">src</directory>
         </include>
         <report>
-            <html outputDirectory="reports"/>
+            <html outputDirectory="coverage"/>
         </report>
     </coverage>
 </phpunit>

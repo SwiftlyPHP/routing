@@ -21,8 +21,8 @@ class RegexMatcher implements MatcherInterface
 {
     private Collection $routes;
 
-    /** @psalm-var non-empty-string|null $compiled */
-    private ?string $compiled = null;
+    /** @var array<string, non-empty-string> $compiled */
+    private array $compiled = [];
 
     /**
      * Create a new matcher for dynamic routes
@@ -34,9 +34,9 @@ class RegexMatcher implements MatcherInterface
         $this->routes = $routes;
     }
 
-    public function match(string $url): ?MatchedRoute
+    public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
-        $regex = $this->getRegex();
+        $regex = $this->getRegex($method);
             
         if (!preg_match($regex, $url, $matches) || empty($matches["MARK"])) {
             return null;
@@ -69,15 +69,16 @@ class RegexMatcher implements MatcherInterface
      * 
      * @psalm-return non-empty-string
      * 
-     * @param string Regular expression
+     * @param non-empty-string $method HTTP verb
+     * @return string                  Compiled regex
      */
-    private function getRegex(): string
+    private function getRegex(string $method): string
     {
-        if ($this->compiled === null) {
-            $this->compiled = $this->compileRegex();
+        if (!isset($this->compiled[$method])) {
+            $this->compiled[$method] = $this->compileRegex($method);
         }
 
-        return $this->compiled;
+        return $this->compiled[$method];
     }
 
     /**
@@ -85,14 +86,17 @@ class RegexMatcher implements MatcherInterface
      * 
      * @psalm-return non-empty-string
      * 
-     * @return string Regular expression
+     * @param non-empty-string $method HTTP verb
+     * @return string                  Regular expression
      */
-    private function compileRegex(): string
+    private function compileRegex(string $method): string
     {
         $regexes = [];
 
         foreach ($this->routes->dynamic() as $name => $route) {
-            $regexes[] = "(?>{$this->compileRoute($route)}(*:{$name}))";
+            if ($route->supports($method)) {
+                $regexes[] = "(?>{$this->compileRoute($route)}(*:{$name}))";
+            }
         }
 
         return '~^(?|' . implode('|', $regexes) . ')$~ixX';

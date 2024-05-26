@@ -28,6 +28,9 @@ Class RegexMatcherTest Extends TestCase
         $this->matcher = new RegexMatcher($this->collection);
     }
 
+    /**
+     * @return MockObject&Route
+     */
     private function createMockRoute(): Route
     {
         $component = $this->createMock(ComponentInterface::class);
@@ -46,6 +49,10 @@ Class RegexMatcherTest Extends TestCase
     public function testCanMatchDynamicRoute(): void
     {
         $route = self::createMockRoute();
+        $route->expects(self::once())
+            ->method('supports')
+            ->with('GET')
+            ->willReturn(true);
 
         $this->collection->method('dynamic')
             ->willReturn(['view' => $route]);

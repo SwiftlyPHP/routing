@@ -23,10 +23,12 @@ class SeriesMatcher implements MatcherInterface
         $this->matchers = $matchers;
     }
 
-    public function match(string $url): ?MatchedRoute
+    public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
         foreach ($this->matchers as $matcher) {
-            if (($match = $matcher->match($url)) !== null) return $match;
+            if (null !== ($match = $matcher->match($url, $method))) {
+                return $match;
+            }
         }
 
         return null;

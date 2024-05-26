@@ -25,12 +25,12 @@ class StaticMatcher implements MatcherInterface
         $this->routes = $routes;
     }
 
-    public function match(string $url): ?MatchedRoute
+    public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
         $matched = null;
 
         foreach ($this->routes->static() as $name => $route) {
-            if ($route->getComponent(0) === $url) {
+            if ($route->supports($method) && $route->getComponent(0) === $url) {
                 $matched = new MatchedRoute($name, $route);
                 break;
             }
