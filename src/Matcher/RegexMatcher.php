@@ -69,8 +69,8 @@ class RegexMatcher implements MatcherInterface
      * 
      * @psalm-return non-empty-string
      * 
-     * @param string $method HTTP verb
-     * @return string        Compiled regex
+     * @param non-empty-string $method HTTP verb
+     * @return string                  Compiled regex
      */
     private function getRegex(string $method): string
     {
@@ -86,8 +86,8 @@ class RegexMatcher implements MatcherInterface
      * 
      * @psalm-return non-empty-string
      * 
-     * @param string $method HTTP verb
-     * @return string        Regular expression
+     * @param non-empty-string $method HTTP verb
+     * @return string                  Regular expression
      */
     private function compileRegex(string $method): string
     {
