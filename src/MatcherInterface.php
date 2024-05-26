@@ -10,10 +10,14 @@ use Swiftly\Routing\MatchedRoute;
 interface MatcherInterface
 {
     /**
-     * Attempt to find a route that matches the given URL path
-     * 
+     * Attempt to find a route that matches the given URL path.
+     *
+     * Can provide a `$method` to filter by routes that support a given HTTP
+     * verb.
+     *
      * @param string $url        URL path
+     * @param string $method     Request method
      * @return MatchedRoute|null Matched route
      */
-    public function match(string $url): ?MatchedRoute;
+    public function match(string $url, string $method = 'GET'): ?MatchedRoute;
 }
