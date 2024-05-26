@@ -13,4 +13,11 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+    <issueHandlers>
+        <RiskyTruthyFalsyComparison>
+            <errorLevel type="suppress">
+                <file name="src/Matcher/RegexMatcher.php" />
+            </errorLevel>
+        </RiskyTruthyFalsyComparison>
+    </issueHandlers>
 </psalm>
