@@ -21,9 +21,9 @@ interface UrlGeneratorInterface
      * @throws InvalidArgumentException
      *          If a given route argument is invalid
      * 
-     * @param non-empty-string $route    Route name
+     * @param non-empty-string $name     Route name
      * @param array<string, mixed> $args Route arguments
      * @return string                    Generated URL
      */
-    public function generate(string $route, array $args): string;
+    public function generate(string $name, array $args): string;
 }
