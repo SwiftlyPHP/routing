@@ -2,6 +2,7 @@
 
 namespace Swiftly\Routing;
 
+use Swiftly\Routing\UrlGeneratorInterface;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Exception\UndefinedRouteException;
 use Swiftly\Routing\Exception\MissingArgumentException;
@@ -15,7 +16,7 @@ use function is_string;
  *
  * @psalm-immutable
  */
-final class UrlGenerator
+final class UrlGenerator implements UrlGeneratorInterface
 {
     private Collection $routes;
 
