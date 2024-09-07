@@ -82,7 +82,7 @@ final class EnumComponent implements ComponentInterface
      * Determine if the given variable can be casted into a string
      *
      * @psalm-assert-if-true scalar|Stringable $value
-     * 
+     *
      * @param mixed $value Subject variable
      * @return bool        Subject can be represented as a string?
      */

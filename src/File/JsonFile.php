@@ -47,7 +47,7 @@ class JsonFile implements FileLoaderInterface
 
         // @php:8.3 Swap to json_validate when we can
         if (!self::isJsonLike($content)) {
-            throw new FileParseException($this->file_path, "json");
+            throw new FileParseException($this->file_path, 'json');
         }
 
         /** @var array|null @json */
@@ -76,9 +76,9 @@ class JsonFile implements FileLoaderInterface
 
     /**
      * Determine if the given string looks JSON-like
-     * 
+     *
      * Can swap to using `json_validate` when support reaches PHP 8.3
-     * 
+     *
      * @param string $content Subject string
      * @return bool           Content is JSON
      */

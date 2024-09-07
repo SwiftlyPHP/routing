@@ -27,6 +27,9 @@ class FileProvider implements ProviderInterface
 
     /**
      * Create a provider around the given file, using the given parsing method
+     *
+     * @param FileLoaderInterface $loader File loader
+     * @param ParserInterface $parser     Route syntax parser
      */
     public function __construct(
         FileLoaderInterface $loader,
@@ -63,7 +66,7 @@ class FileProvider implements ProviderInterface
 
     /**
      * Attempt to parse a route definition block into a Route object
-     * 
+     *
      * @param string $name Route name
      * @param array $block Route definition block
      * @return Route       Parsed route
@@ -103,9 +106,9 @@ class FileProvider implements ProviderInterface
 
     /**
      * Attempt to determine if the given value is a callable
-     * 
+     *
      * @psalm-assert-if-true callable $subject
-     * 
+     *
      * @param mixed $subject
      * @return bool
      */
@@ -118,22 +121,22 @@ class FileProvider implements ProviderInterface
         if (is_array($subject) && self::isCallableArray($subject)) {
             return true;
         }
-        
+
         return false;
     }
 
     /**
      * Attempt to determine if the given array is a callable
-     * 
+     *
      * @psalm-assert-if-true callable $subject
      * @psalm-assert-if-true array{0:class-string,1:string} $subject
-     * 
+     *
      * @param array $subject
      * @return bool
      */
     private static function isCallableArray(array $subject): bool
     {
-        return (isset($subject[0], $subject[1]) 
+        return (isset($subject[0], $subject[1])
             && is_string($subject[0])
             && is_string($subject[1])
         );
@@ -141,9 +144,9 @@ class FileProvider implements ProviderInterface
 
     /**
      * Attempt to strip the HTTP methods from a route definition
-     * 
+     *
      * @psalm-return non-empty-list<string>
-     * 
+     *
      * @param array $block Route definition
      * @return string[]    HTTP methods
      */
@@ -160,9 +163,9 @@ class FileProvider implements ProviderInterface
 
     /**
      * Attempt to strip the tags from a route definition
-     * 
+     *
      * @psalm-return list<string>
-     * 
+     *
      * @param array $block Route definition
      * @return string[]    Route tags
      */

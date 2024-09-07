@@ -8,7 +8,7 @@ use Swiftly\Routing\MatchedRoute;
 
 /**
  * Matches against static routes
- * 
+ *
  * @psalm-immutable
  */
 class StaticMatcher implements MatcherInterface
@@ -17,7 +17,7 @@ class StaticMatcher implements MatcherInterface
 
     /**
      * Create a new static matcher around the given routes
-     * 
+     *
      * @param Collection $routes Registered routes
      */
     public function __construct(Collection $routes)

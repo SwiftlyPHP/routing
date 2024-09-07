@@ -20,7 +20,7 @@ class StringComponent implements ComponentInterface
 
     /**
      * Create a new URL component
-     * 
+     *
      * @psalm-param non-empty-string $name
      *
      * @param string $name      Component name

@@ -19,7 +19,7 @@ use const PREG_SET_ORDER;
 
 /**
  * Handles parsing the Swiftly URL syntax
- * 
+ *
  * @psalm-type ComponentMatch=array{type:'i'|'s'|'e',name:non-empty-string,values:string,...}
  * @psalm-type UrlMatch=array{0:string}
  * @psalm-external-mutation-free
@@ -33,19 +33,19 @@ class DefaultParser implements ParserInterface
     private const ENUM_COMPONENT = 'e';
     private const ENUM_VALUES = '<(?P<values>[A-Za-z_, ]+)>';
     private const VALIDATION_REGEX = '/^\/(?>(?:[a-zA-Z0-9\-_\.\~\/]+|\[[a-zA-Z_:<>,]{3,}\])*)$/';
-    private const SPLIT_REGEX = 
+    private const SPLIT_REGEX =
         '/(?>'
         .   '(' . self::ALLOWED_URL_CHARACTERS . ')|'
         .   '(?:'
-            .   '\['
-            .   '(?|'
-                .   '(?P<type>' . self::INTEGER_COMPONENT . ')|'
-                .   '(?P<type>' . self::STRING_COMPONENT . ')|'
-                .   '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
-            .   '):(?P<name>' . self::IDENTIFIER . ')'
-            .   '\]'
+        .       '\['
+        .       '(?|'
+        .           '(?P<type>' . self::INTEGER_COMPONENT . ')|'
+        .           '(?P<type>' . self::STRING_COMPONENT . ')|'
+        .           '(?P<type>' . self::ENUM_COMPONENT . ')' . self::ENUM_VALUES
+        .        '):(?P<name>' . self::IDENTIFIER . ')'
+        .       '\]'
         .   ')'
-    .   ')/';
+        .   ')/';
 
     /** {@inheritDoc} */
     public function parse(string $path): array
@@ -59,16 +59,16 @@ class DefaultParser implements ParserInterface
         if (($parts = $this->split($path)) === null) {
             throw new ComponentParseException($path);
         }
-        
+
         /** @var non-empty-list<ComponentMatch&UrlMatch> $parts */
         return $this->convert($parts);
     }
 
     /**
      * Determine if the given path looks like a valid URL
-     * 
+     *
      * @psalm-param non-empty-string $path
-     * 
+     *
      * @param string $path Subject path
      * @return bool        Is valid?
      */
@@ -79,10 +79,10 @@ class DefaultParser implements ParserInterface
 
     /**
      * Perform the regex used to split a path into a sequence of components
-     * 
+     *
      * @psalm-param non-empty-string $path
      * @psalm-return list<ComponentMatch&UrlMatch>|null
-     * 
+     *
      * @param string $path Subject path
      * @return array|null  Components parts
      */
@@ -91,17 +91,17 @@ class DefaultParser implements ParserInterface
         if (false === preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
             return null;
         }
-        
+
         /** @var list<ComponentMatch&UrlMatch> $matches */
         return $matches;
     }
 
     /**
      * Convert the regex matches into a components array
-     * 
+     *
      * @psalm-param non-empty-list<ComponentMatch&UrlMatch> $matches
      * @psalm-return non-empty-list<ComponentInterface|string>
-     * 
+     *
      * @param string[][] $matches            Regex matches
      * @return ComponentInterface[]|string[] Route components
      */
@@ -120,13 +120,13 @@ class DefaultParser implements ParserInterface
 
     /**
      * Create a component of the given type
-     * 
+     *
      * We can swap to using match when we get to PHP 8
-     * 
+     *
      * @php:8.0 Swap to using match expression
      * @psalm-param 'i'|'s'|'e' $type
      * @psalm-param ComponentMatch $data
-     * 
+     *
      * @param string $type        Component type
      * @param string[] $data      Component data
      * @return ComponentInterface Prepared component instance

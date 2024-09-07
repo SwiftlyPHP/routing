@@ -21,7 +21,7 @@ class IntegerComponent implements ComponentInterface
 
     /**
      * Create a new numeric only URL component
-     * 
+     *
      * @psalm-param non-empty-string $name
      *
      * @param string $name      Component name

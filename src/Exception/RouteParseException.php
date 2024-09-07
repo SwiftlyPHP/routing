@@ -6,7 +6,7 @@ use Exception;
 
 /**
  * Exception to be thrown if we fail while trying to parse a route definition
- * 
+ *
  * @todo Create specific 'missing attribute' sub-classes
  */
 class RouteParseException extends Exception

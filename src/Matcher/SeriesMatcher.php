@@ -15,7 +15,7 @@ class SeriesMatcher implements MatcherInterface
 
     /**
      * Wrap the given matchers, allowing them to be called one after the other
-     * 
+     *
      * @param MatcherInterface[] $matchers
      */
     public function __construct(array $matchers)

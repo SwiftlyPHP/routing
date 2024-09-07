@@ -74,7 +74,7 @@ class Route
      * Return the URL component at the given index
      *
      * @psalm-return ($index is 0 ? string : string|ComponentInterface)
-     * 
+     *
      * @throws OutOfBoundsException      If no component exists at the offset
      * @param int $index                 Component index
      * @return string|ComponentInterface
@@ -127,7 +127,7 @@ class Route
      *
      * @psalm-assert-if-true array{0:string} $this->components
      * @psalm-assert-if-true array{0:string} $this->getComponents()
-     * 
+     *
      * @return bool
      */
     public function isStatic(): bool

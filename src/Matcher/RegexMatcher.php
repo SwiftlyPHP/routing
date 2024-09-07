@@ -14,7 +14,7 @@ use function preg_match;
 
 /**
  * Provides matching for dynamic routes
- * 
+ *
  * @psalm-external-mutation-free
  */
 class RegexMatcher implements MatcherInterface
@@ -26,7 +26,7 @@ class RegexMatcher implements MatcherInterface
 
     /**
      * Create a new matcher for dynamic routes
-     * 
+     *
      * @param Collection $routes Registered routes
      */
     public function __construct(Collection $routes)
@@ -37,12 +37,12 @@ class RegexMatcher implements MatcherInterface
     public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
         $regex = $this->getRegex($method);
-            
-        if (!preg_match($regex, $url, $matches) || empty($matches["MARK"])) {
+
+        if (!preg_match($regex, $url, $matches) || empty($matches['MARK'])) {
             return null;
         }
 
-        $name = $matches["MARK"];
+        $name = $matches['MARK'];
         $route = $this->routes->get($name);
 
         // TODO: Getting Psalm to understand matching is a nightmare, think of
@@ -66,9 +66,9 @@ class RegexMatcher implements MatcherInterface
 
     /**
      * Returns the regex required for matching against routes
-     * 
+     *
      * @psalm-return non-empty-string
-     * 
+     *
      * @param non-empty-string $method HTTP verb
      * @return string                  Compiled regex
      */
@@ -83,9 +83,9 @@ class RegexMatcher implements MatcherInterface
 
     /**
      * Compiles the regex used for matching against routes
-     * 
+     *
      * @psalm-return non-empty-string
-     * 
+     *
      * @param non-empty-string $method HTTP verb
      * @return string                  Regular expression
      */
@@ -104,13 +104,13 @@ class RegexMatcher implements MatcherInterface
 
     /**
      * Creates the regex required for matching a single route
-     * 
+     *
      * @param Route $route Subject route
      * @return string      Regular expression
      */
     private function compileRoute(Route $route): string
     {
-        $regex = "";
+        $regex = '';
 
         foreach ($route->getComponents() as $component) {
             if ($component instanceof ComponentInterface) {
