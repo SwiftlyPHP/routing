@@ -14,21 +14,16 @@ use const FILTER_VALIDATE_INT;
  *
  * @psalm-immutable
  */
-class IntegerComponent implements ComponentInterface
+final class IntegerComponent implements ComponentInterface
 {
-    /** @psalm-var non-empty-string $name */
-    private string $name;
-
     /**
      * Create a new numeric only URL component
      *
-     * @psalm-param non-empty-string $name
-     *
-     * @param string $name      Component name
+     * @param non-empty-string $name Component name
      */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
+    public function __construct(
+        private string $name,
+    ) {
     }
 
     /** {@inheritDoc} */

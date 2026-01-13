@@ -10,17 +10,14 @@ use Swiftly\Routing\MatcherInterface;
  */
 class SeriesMatcher implements MatcherInterface
 {
-    /** @var MatcherInterface[] $matchers */
-    private array $matchers;
-
     /**
      * Wrap the given matchers, allowing them to be called one after the other
      *
      * @param MatcherInterface[] $matchers
      */
-    public function __construct(array $matchers)
-    {
-        $this->matchers = $matchers;
+    public function __construct(
+        private array $matchers,
+    ) {
     }
 
     public function match(string $url, string $method = 'GET'): ?MatchedRoute

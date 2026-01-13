@@ -50,7 +50,7 @@ class Route
         array $components,
         $handler,
         array $methods = [],
-        array $tags = []
+        array $tags = [],
     ) {
         $this->components = $components;
         $this->handler = $handler;

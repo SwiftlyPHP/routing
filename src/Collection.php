@@ -15,17 +15,14 @@ use function array_filter;
  */
 class Collection
 {
-    /** @var array<non-empty-string,Route> $routes */
-    private array $routes;
-
     /**
      * Create a new collection around the given routes
      *
      * @param array<non-empty-string,Route> $routes
      */
-    public function __construct(array $routes)
-    {
-        $this->routes = $routes;
+    public function __construct(
+        private array $routes,
+    ) {
     }
 
     /**

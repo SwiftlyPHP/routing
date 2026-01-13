@@ -13,21 +13,16 @@ use function preg_match;
  *
  * @psalm-immutable
  */
-class StringComponent implements ComponentInterface
+final class StringComponent implements ComponentInterface
 {
-    /** @psalm-var non-empty-string $name */
-    private string $name;
-
     /**
      * Create a new URL component
      *
-     * @psalm-param non-empty-string $name
-     *
-     * @param string $name      Component name
+     * @param non-empty-string $name Component name
      */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
+    public function __construct(
+        private string $name,
+    ) {
     }
 
     /** {@inheritDoc} */
@@ -59,6 +54,6 @@ class StringComponent implements ComponentInterface
             throw new FormatException($this->name(), $value);
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 }

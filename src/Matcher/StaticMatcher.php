@@ -13,16 +13,12 @@ use Swiftly\Routing\MatcherInterface;
  */
 class StaticMatcher implements MatcherInterface
 {
-    private Collection $routes;
-
     /**
      * Create a new static matcher around the given routes
-     *
-     * @param Collection $routes Registered routes
      */
-    public function __construct(Collection $routes)
-    {
-        $this->routes = $routes;
+    public function __construct(
+        private Collection $routes,
+    ) {
     }
 
     public function match(string $url, string $method = 'GET'): ?MatchedRoute

@@ -50,18 +50,14 @@ class DefaultParser implements ParserInterface
     /** {@inheritDoc} */
     public function parse(string $path): array
     {
-        // Does it look URL-like?
-        if (!$this->validate($path)) {
+        if (!self::validate($path)) {
             throw new UrlParseException($path);
         }
 
-        // Did we strip any components?
-        if (($parts = $this->split($path)) === null) {
-            throw new ComponentParseException($path);
-        }
+        $parts = self::split($path);
 
         /** @var non-empty-list<ComponentMatch&UrlMatch> $parts */
-        return $this->convert($parts);
+        return self::convert($parts);
     }
 
     /**
@@ -72,7 +68,7 @@ class DefaultParser implements ParserInterface
      * @param string $path Subject path
      * @return bool        Is valid?
      */
-    private function validate(string $path): bool
+    private static function validate(string $path): bool
     {
         return preg_match(self::VALIDATION_REGEX, $path) === 1;
     }
@@ -80,16 +76,16 @@ class DefaultParser implements ParserInterface
     /**
      * Perform the regex used to split a path into a sequence of components
      *
-     * @psalm-param non-empty-string $path
-     * @psalm-return list<ComponentMatch&UrlMatch>|null
+     * @psalm-return list<ComponentMatch&UrlMatch>
      *
-     * @param string $path Subject path
-     * @return array|null  Components parts
+     * @param non-empty-string $path
+     *
+     * @return array Components parts
      */
-    private function split(string $path): ?array
+    private static function split(string $path): ?array
     {
         if (false === preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
-            return null;
+            throw new ComponentParseException($path);
         }
 
         /** @var list<ComponentMatch&UrlMatch> $matches */
@@ -105,7 +101,7 @@ class DefaultParser implements ParserInterface
      * @param string[][] $matches            Regex matches
      * @return ComponentInterface[]|string[] Route components
      */
-    private function convert(array $matches): array
+    private static function convert(array $matches): array
     {
         $components = [];
 
@@ -119,16 +115,12 @@ class DefaultParser implements ParserInterface
     }
 
     /**
-     * Create a component of the given type
+     * Create a URL component using data from the route definition.
      *
-     * We can swap to using match when we get to PHP 8
-     *
-     * @php:8.0 Swap to using match expression
-     * @psalm-param 'i'|'s'|'e' $type
      * @psalm-param ComponentMatch $data
      *
-     * @param string $type        Component type
-     * @param string[] $data      Component data
+     * @param "i"|"s"|"e" $type   Component type
+     * @param string[] $data      Component definition
      * @return ComponentInterface Prepared component instance
      */
     private static function make(string $type, array $data): ComponentInterface

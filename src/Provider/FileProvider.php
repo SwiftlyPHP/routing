@@ -22,18 +22,12 @@ use function strpos;
  */
 class FileProvider implements ProviderInterface
 {
-    private FileLoaderInterface $loader;
-    private ParserInterface $parser;
-
     /**
      * Create a provider around the given file, using the given parsing method
-     *
-     * @param FileLoaderInterface $loader File loader
-     * @param ParserInterface $parser     Route syntax parser
      */
     public function __construct(
-        FileLoaderInterface $loader,
-        ParserInterface $parser
+        private FileLoaderInterface $loader,
+        private ParserInterface $parser,
     ) {
         $this->loader = $loader;
         $this->parser = $parser;

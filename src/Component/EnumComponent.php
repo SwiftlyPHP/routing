@@ -19,25 +19,19 @@ use function strtolower;
  */
 final class EnumComponent implements ComponentInterface
 {
-    /** @psalm-var non-empty-string $name */
-    private string $name;
-
-    /** @psalm-var list<string> $allowed */
-    private array $allowed;
-
     /**
      * Create a new enum URL component that accepts the `$allowed` values
      *
      * @psalm-param non-empty-string $name
      * @psalm-param list<string> $allowed
      *
-     * @param string $name      Component name
-     * @param string[] $allowed Allowed enum values
+     * @param non-empty-string $name Component name
+     * @param list<string> $allowed  Allowed enum values
      */
-    public function __construct(string $name, array $allowed)
-    {
-        $this->name = $name;
-        $this->allowed = $allowed;
+    public function __construct(
+        private string $name,
+        private array $allowed,
+    ) {
     }
 
     /** {@inheritDoc} */

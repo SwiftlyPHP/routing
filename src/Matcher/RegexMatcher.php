@@ -19,19 +19,15 @@ use function preg_match;
  */
 class RegexMatcher implements MatcherInterface
 {
-    private Collection $routes;
-
     /** @var array<string, non-empty-string> $compiled */
     private array $compiled = [];
 
     /**
      * Create a new matcher for dynamic routes
-     *
-     * @param Collection $routes Registered routes
      */
-    public function __construct(Collection $routes)
-    {
-        $this->routes = $routes;
+    public function __construct(
+        private Collection $routes,
+    ) {
     }
 
     public function match(string $url, string $method = 'GET'): ?MatchedRoute
@@ -108,7 +104,7 @@ class RegexMatcher implements MatcherInterface
      * @param Route $route Subject route
      * @return string      Regular expression
      */
-    private function compileRoute(Route $route): string
+    private static function compileRoute(Route $route): string
     {
         $regex = '';
 

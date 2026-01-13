@@ -17,17 +17,11 @@ use function preg_match;
  */
 class JsonFile implements FileLoaderInterface
 {
-    /** @var string $file_path */
-    private string $file_path;
-
     /**
-     * Wraps the given `$file_path` to be loaded and parsed as JSON
-     *
-     * @param string $file_path Absolute file path
+     * Wraps the given `$filePath` to be loaded and parsed as JSON
      */
-    public function __construct(string $file_path)
+    public function __construct(private string $filePath)
     {
-        $this->file_path = $file_path;
     }
 
     /**
@@ -42,12 +36,12 @@ class JsonFile implements FileLoaderInterface
         $content = $this->tryContent();
 
         if ($content === null) {
-            throw new FileReadException($this->file_path);
+            throw new FileReadException($this->filePath);
         }
 
         // @upgrade:php8.3 Swap to json_validate
         if (!self::isJsonLike($content)) {
-            throw new FileParseException($this->file_path, 'json');
+            throw new FileParseException($this->filePath, 'json');
         }
 
         /** @var array|null @json */
@@ -64,11 +58,11 @@ class JsonFile implements FileLoaderInterface
      */
     private function tryContent(): ?string
     {
-        if (!is_file($this->file_path)) {
+        if (!is_file($this->filePath)) {
             return null;
         }
 
-        $content = file_get_contents($this->file_path);
+        $content = file_get_contents($this->filePath);
         $content = $content !== false ? $content : null;
 
         return $content;

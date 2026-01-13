@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\MatchedRoute;
 use Swiftly\Routing\Matcher\SeriesMatcher;
 use Swiftly\Routing\MatcherInterface;
+use Swiftly\Routing\Route;
 
 /**
  * @covers \Swiftly\Routing\Matcher\SeriesMatcher
@@ -61,7 +62,7 @@ class SeriesMatcherTest extends TestCase
             ->method('match')
             ->with('/admin/users')
             ->willReturn(
-                $this->createMock(MatchedRoute::class)
+                new MatchedRoute('test', $this->createStub(Route::class), []),
             );
 
         $matcher2 = $this->createMock(MatcherInterface::class);

@@ -16,16 +16,12 @@ use Swiftly\Routing\UrlGeneratorInterface;
  */
 final class UrlGenerator implements UrlGeneratorInterface
 {
-    private Collection $routes;
-
     /**
      * Creates a new URL generator around the given routes
-     *
-     * @param Collection $routes Route collection
      */
-    public function __construct(Collection $routes)
-    {
-        $this->routes = $routes;
+    public function __construct(
+        private Collection $routes,
+    ) {
     }
 
     /**
