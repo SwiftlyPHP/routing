@@ -6,13 +6,12 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^7.4 || ^8",
-        "ext-json": "*"
+        "php": "^8"
     },
     "require-dev": {
-        "vimeo/psalm": "^5.15",
+        "vimeo/psalm": "^5.26",
         "phpunit/phpunit": "^9.6",
-        "friendsofphp/php-cs-fixer": "^3.64"
+        "friendsofphp/php-cs-fixer": "^3.84"
     },
     "autoload": {
         "psr-4": {
