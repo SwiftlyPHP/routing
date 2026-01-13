@@ -15,6 +15,7 @@ interface FileLoaderInterface
      *
      * @throws FileReadException  If file cannot be read
      * @throws FileParseException If the file cannot be parsed
+     *
      * @return mixed[]
      */
     public function load(): array;

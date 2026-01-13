@@ -28,10 +28,7 @@ class Collection
     /**
      * Determine if a named route exists within the collection
      *
-     * @psalm-param non-empty-string $name
-     *
-     * @param string $name Route name
-     * @return bool
+     * @param non-empty-string $name Route name
      */
     public function has(string $name): bool
     {
@@ -41,10 +38,7 @@ class Collection
     /**
      * Return the named route from the collection
      *
-     * @psalm-param non-empty-string $name
-     *
-     * @param string $name Route name
-     * @return Route|null
+     * @param non-empty-string $name
      */
     public function get(string $name): ?Route
     {
@@ -54,9 +48,7 @@ class Collection
     /**
      * Return all static routes from the collection
      *
-     * @psalm-return array<non-empty-string,Route>
-     *
-     * @return Route[]
+     * @return array<non-empty-string,Route>
      */
     public function static(): array
     {
@@ -69,9 +61,7 @@ class Collection
     /**
      * Return all dynamic routes from the collection
      *
-     * @psalm-return array<non-empty-string,Route>
-     *
-     * @return Route[]
+     * @return array<non-empty-string,Route>
      */
     public function dynamic(): array
     {
@@ -84,9 +74,7 @@ class Collection
     /**
      * Return all the routes stored in this collection
      *
-     * @psalm-return array<non-empty-string,Route>
-     *
-     * @return Route[]
+     * @return array<non-empty-string,Route>
      */
     public function all(): array
     {

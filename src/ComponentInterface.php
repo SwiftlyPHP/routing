@@ -14,34 +14,26 @@ interface ComponentInterface
     /**
      * Return the name of this URL component
      *
-     * @psalm-return non-empty-string
-     *
-     * @return string
+     * @return non-empty-string
      */
     public function name(): string;
 
     /**
      * Return the regex used to match values for this component
      *
-     * @psalm-return non-empty-string
-     *
-     * @return string
+     * @return non-empty-string
      */
     public function regex(): string;
 
     /**
      * Determine if the given value is accepted by this component
-     *
-     * @param mixed $value Value to check
      */
-    public function accepts($value): bool;
+    public function accepts(mixed $value): bool;
 
     /**
      * Attempt to escape the given value for use in a URL
      *
      * @throws FormatException If value cannot be escaped
-     * @param mixed $value     Value to format
-     * @return string
      */
-    public function escape($value): string;
+    public function escape(mixed $value): string;
 }

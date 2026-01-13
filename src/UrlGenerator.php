@@ -9,6 +9,8 @@ use Swiftly\Routing\Exception\MissingArgumentException;
 use Swiftly\Routing\Exception\UndefinedRouteException;
 use Swiftly\Routing\UrlGeneratorInterface;
 
+use function assert;
+
 /**
  * Utility class used to generate URLs for named routes
  *
@@ -27,16 +29,14 @@ final class UrlGenerator implements UrlGeneratorInterface
     /**
      * Generate a URL for the named route, optionally passing in any arguments
      *
-     * @psalm-param non-empty-string $name
-     * @psalm-param array<string,mixed> $args
-     *
      * @throws UndefinedRouteException  If the named route doesn't exist
      * @throws MissingArgumentException If a required route argument is missing
      * @throws InvalidArgumentException If a given argument is invalid
      *
-     * @param string $name              Route name
-     * @param mixed[] $args             Route arguments
-     * @return string                   Generated URL
+     * @param non-empty-string $name     Route name
+     * @param array<string, mixed> $args Route arguments
+     *
+     * @return non-empty-string
      */
     public function generate(string $name, array $args = []): string
     {
@@ -50,17 +50,17 @@ final class UrlGenerator implements UrlGeneratorInterface
             $url .= $component;
         }
 
+        assert('' !== $url);
+
         return $url;
     }
 
     /**
      * Attempt to escape and format the value for a URL component
      *
-     * @psalm-param array<string,mixed> $args
+     * @psalm-pure
      *
-     * @param ComponentInterface $component URL component
-     * @param mixed[] $args                 Route arguments
-     * @return string                       Escaped URL component
+     * @param array<string,mixed> $args Route arguments
      */
     private static function escape(
         ComponentInterface $component,

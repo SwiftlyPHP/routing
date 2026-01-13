@@ -63,10 +63,7 @@ class DefaultParser implements ParserInterface
     /**
      * Determine if the given path looks like a valid URL
      *
-     * @psalm-param non-empty-string $path
-     *
-     * @param string $path Subject path
-     * @return bool        Is valid?
+     * @param non-empty-string $path Subject path
      */
     private static function validate(string $path): bool
     {
@@ -79,10 +76,8 @@ class DefaultParser implements ParserInterface
      * @psalm-return list<ComponentMatch&UrlMatch>
      *
      * @param non-empty-string $path
-     *
-     * @return array Components parts
      */
-    private static function split(string $path): ?array
+    private static function split(string $path): array
     {
         if (false === preg_match_all(self::SPLIT_REGEX, $path, $matches, PREG_SET_ORDER)) {
             throw new ComponentParseException($path);
@@ -121,6 +116,7 @@ class DefaultParser implements ParserInterface
      *
      * @param "i"|"s"|"e" $type   Component type
      * @param string[] $data      Component definition
+     *
      * @return ComponentInterface Prepared component instance
      */
     private static function make(string $type, array $data): ComponentInterface

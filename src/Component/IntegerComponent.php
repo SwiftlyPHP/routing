@@ -39,13 +39,13 @@ final class IntegerComponent implements ComponentInterface
     }
 
     /** {@inheritDoc} */
-    public function accepts($value): bool
+    public function accepts(mixed $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_INT) !== false;
     }
 
     /** {@inheritDoc} */
-    public function escape($value): string
+    public function escape(mixed $value): string
     {
         if (!$this->accepts($value)) {
             throw new FormatException($this->name(), $value);

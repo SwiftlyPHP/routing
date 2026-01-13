@@ -25,26 +25,24 @@ class Route
      */
     private array $components;
 
-    /** @var callable $handler */
+    /** @var callable */
     private $handler;
 
-    /** @psalm-var list<string> $methods */
+    /** @var list<string> */
     private array $methods;
 
-    /** @psalm-var list<lowercase-string> $tags */
+    /** @var list<lowercase-string> $tags */
     private array $tags;
 
     /**
      * Create a new route from the given URL components
      *
      * @psalm-param non-empty-list<string|ComponentInterface> $components
-     * @psalm-param list<string> $methods
-     * @psalm-param list<string> $tags
      *
      * @param string[]|ComponentInterface[] $components URL components
      * @param callable $handler                         Controller for the route
-     * @param string[] $methods                         Supported HTTP methods
-     * @param string[] $tags                            Route tags
+     * @param list<string> $methods                     Supported HTTP methods
+     * @param list<string> $tags                        Route tags
      */
     public function __construct(
         array $components,
@@ -75,11 +73,9 @@ class Route
      *
      * @psalm-return ($index is 0 ? string : string|ComponentInterface)
      *
-     * @throws OutOfBoundsException      If no component exists at the offset
-     * @param int $index                 Component index
-     * @return string|ComponentInterface
+     * @throws OutOfBoundsException If no component exists at the offset
      */
-    public function getComponent(int $index) // : string|ComponentInterface
+    public function getComponent(int $index): ComponentInterface|string
     {
         if (!isset($this->components[$index])) {
             throw new OutOfBoundsException("No component exists at offset ($index)");
@@ -91,9 +87,10 @@ class Route
     /**
      * Return the controller/handler attached to this route
      *
-     * @return callable
+     * Will sometimes return an array callable where the controller has yet to
+     * be instantiated; hence the union return type.
      */
-    public function getHandler() // : callable
+    public function getHandler(): callable|array
     {
         return $this->handler;
     }
@@ -101,9 +98,7 @@ class Route
     /**
      * Return the HTTP methods supported by this route
      *
-     * @psalm-return list<string>
-     *
-     * @return string[]
+     * @return list<string>
      */
     public function getMethods(): array
     {
@@ -113,9 +108,7 @@ class Route
     /**
      * Return all tags applied to this route
      *
-     * @psalm-return list<lowercase-string>
-     *
-     * @return string[]
+     * @return list<lowercase-string>
      */
     public function getTags(): array
     {
@@ -127,8 +120,6 @@ class Route
      *
      * @psalm-assert-if-true array{0:string} $this->components
      * @psalm-assert-if-true array{0:string} $this->getComponents()
-     *
-     * @return bool
      */
     public function isStatic(): bool
     {
@@ -139,10 +130,7 @@ class Route
     /**
      * Determine if this route supports the given HTTP method
      *
-     * @psalm-param non-empty-string $method
-     *
-     * @param string $method HTTP method
-     * @return bool
+     * @param non-empty-string $method HTTP method
      */
     public function supports(string $method): bool
     {
@@ -153,10 +141,7 @@ class Route
     /**
      * Determine if this route has the given tag
      *
-     * @psalm-param non-empty-string $tag
-     *
-     * @param string $tag Route tag
-     * @return bool
+     * @param non-empty-string $tag Route tag
      */
     public function hasTag(string $tag): bool
     {

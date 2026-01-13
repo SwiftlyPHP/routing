@@ -27,9 +27,9 @@ class JsonFile implements FileLoaderInterface
     /**
      * Attempts to load the file, parse it and then return its contents
      *
-     * @throws FileReadException  If file cannot be read
-     * @throws FileParseException If file is not valid JSON
-     * @return mixed[]            Parsed values
+     * @throws FileReadException  If file cannot be read or isn't valid JSON
+     *
+     * @return mixed[]
      */
     public function load(): array
     {
@@ -53,8 +53,6 @@ class JsonFile implements FileLoaderInterface
 
     /**
      * Try to load the file in it's textual form
-     *
-     * @return string|null
      */
     private function tryContent(): ?string
     {
@@ -63,18 +61,13 @@ class JsonFile implements FileLoaderInterface
         }
 
         $content = file_get_contents($this->filePath);
-        $content = $content !== false ? $content : null;
+        $content = false !== $content ? $content : null;
 
         return $content;
     }
 
     /**
      * Determine if the given string looks JSON-like
-     *
-     * Can swap to using `json_validate` when support reaches PHP 8.3
-     *
-     * @param string $content Subject string
-     * @return bool           Content is JSON
      */
     private static function isJsonLike(string $content): bool
     {

@@ -33,7 +33,9 @@ class FileProvider implements ProviderInterface
         $this->parser = $parser;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public function provide(): Collection
     {
         $routes = [];
@@ -60,10 +62,6 @@ class FileProvider implements ProviderInterface
 
     /**
      * Attempt to parse a route definition block into a Route object
-     *
-     * @param string $name Route name
-     * @param array $block Route definition block
-     * @return Route       Parsed route
      */
     private function tryParseBlock(string $name, array $block): Route
     {
@@ -102,11 +100,8 @@ class FileProvider implements ProviderInterface
      * Attempt to determine if the given value is a callable
      *
      * @psalm-assert-if-true callable $subject
-     *
-     * @param mixed $subject
-     * @return bool
      */
-    private static function isCallable($subject): bool
+    private static function isCallable(mixed $subject): bool
     {
         if (is_string($subject) && function_exists($subject)) {
             return true;
@@ -124,9 +119,6 @@ class FileProvider implements ProviderInterface
      *
      * @psalm-assert-if-true callable $subject
      * @psalm-assert-if-true array{0:class-string,1:string} $subject
-     *
-     * @param array $subject
-     * @return bool
      */
     private static function isCallableArray(array $subject): bool
     {

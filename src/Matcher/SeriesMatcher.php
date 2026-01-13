@@ -20,6 +20,9 @@ class SeriesMatcher implements MatcherInterface
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
         foreach ($this->matchers as $matcher) {

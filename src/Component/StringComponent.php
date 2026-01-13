@@ -38,7 +38,7 @@ final class StringComponent implements ComponentInterface
     }
 
     /** {@inheritDoc} */
-    public function accepts($value): bool
+    public function accepts(mixed $value): bool
     {
         if (!is_string($value)) {
             return false;
@@ -48,7 +48,7 @@ final class StringComponent implements ComponentInterface
     }
 
     /** {@inheritDoc} */
-    public function escape($value): string
+    public function escape(mixed $value): string
     {
         if (!$this->accepts($value)) {
             throw new FormatException($this->name(), $value);

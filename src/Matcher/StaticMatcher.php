@@ -21,6 +21,9 @@ class StaticMatcher implements MatcherInterface
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
         foreach ($this->routes->static() as $name => $route) {

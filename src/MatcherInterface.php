@@ -15,8 +15,8 @@ interface MatcherInterface
      * Can provide a `$method` to filter by routes that support a given HTTP
      * verb.
      *
-     * @param string $url              URL path
      * @param non-empty-string $method Request method
+     *
      * @return MatchedRoute|null       Matched route
      */
     public function match(string $url, string $method = 'GET'): ?MatchedRoute;

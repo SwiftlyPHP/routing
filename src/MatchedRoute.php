@@ -18,9 +18,6 @@ final class MatchedRoute
     /**
      * Associate a route with the given name and arguments
      *
-     * @psalm-param non-empty-string $name
-     * @psalm-param array<string,string> $args
-     *
      * @param non-empty-string $name     Route name
      * @param Route $route               Matched route
      * @param array<string,string> $args Matched arguments

@@ -22,9 +22,6 @@ final class EnumComponent implements ComponentInterface
     /**
      * Create a new enum URL component that accepts the `$allowed` values
      *
-     * @psalm-param non-empty-string $name
-     * @psalm-param list<string> $allowed
-     *
      * @param non-empty-string $name Component name
      * @param list<string> $allowed  Allowed enum values
      */
@@ -50,7 +47,7 @@ final class EnumComponent implements ComponentInterface
     }
 
     /** {@inheritDoc} */
-    public function accepts($value): bool
+    public function accepts(mixed $value): bool
     {
         if (!self::isStringable($value)) {
             return false;
@@ -63,7 +60,7 @@ final class EnumComponent implements ComponentInterface
     }
 
     /** {@inheritDoc} */
-    public function escape($value): string
+    public function escape(mixed $value): string
     {
         if (!$this->accepts($value)) {
             throw new FormatException($this->name(), $value);
@@ -75,12 +72,11 @@ final class EnumComponent implements ComponentInterface
     /**
      * Determine if the given variable can be casted into a string
      *
-     * @psalm-assert-if-true scalar|Stringable $value
+     * @psalm-pure
      *
-     * @param mixed $value Subject variable
-     * @return bool        Subject can be represented as a string?
+     * @psalm-assert-if-true scalar|Stringable $value
      */
-    private static function isStringable($value): bool
+    private static function isStringable(mixed $value): bool
     {
         return is_scalar($value) || $value instanceof Stringable;
     }

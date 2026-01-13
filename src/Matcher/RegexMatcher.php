@@ -19,7 +19,7 @@ use function preg_match;
  */
 class RegexMatcher implements MatcherInterface
 {
-    /** @var array<string, non-empty-string> $compiled */
+    /** @var array<string, non-empty-string> */
     private array $compiled = [];
 
     /**
@@ -30,6 +30,9 @@ class RegexMatcher implements MatcherInterface
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
         $regex = $this->getRegex($method);
@@ -61,12 +64,11 @@ class RegexMatcher implements MatcherInterface
     }
 
     /**
-     * Returns the regex required for matching against routes
-     *
-     * @psalm-return non-empty-string
+     * Returns the regex required for matching against routes.
      *
      * @param non-empty-string $method HTTP verb
-     * @return string                  Compiled regex
+     *
+     * @return non-empty-string
      */
     private function getRegex(string $method): string
     {
@@ -78,12 +80,11 @@ class RegexMatcher implements MatcherInterface
     }
 
     /**
-     * Compiles the regex used for matching against routes
-     *
-     * @psalm-return non-empty-string
+     * Compiles the regex used for matching against routes.
      *
      * @param non-empty-string $method HTTP verb
-     * @return string                  Regular expression
+     *
+     * @return non-empty-string
      */
     private function compileRegex(string $method): string
     {
@@ -99,10 +100,7 @@ class RegexMatcher implements MatcherInterface
     }
 
     /**
-     * Creates the regex required for matching a single route
-     *
-     * @param Route $route Subject route
-     * @return string      Regular expression
+     * Creates the regex required for matching a single route.
      */
     private static function compileRoute(Route $route): string
     {

@@ -13,18 +13,15 @@ class FileParseException extends Exception
 {
     /**
      * Indicate the given `$file_path` did not parse
-     *
-     * @param string $file_path     Absolute file path
-     * @param string $expected_type Expected file type
      */
-    public function __construct(string $file_path, string $expected_type)
+    public function __construct(string $filePath, string $expectedType)
     {
         parent::__construct(
             sprintf(
                 "Failed to parse: '%s', are you sure it is valid %s?",
-                $file_path,
-                $expected_type
-            )
+                $filePath,
+                $expectedType,
+            ),
         );
     }
 }
