@@ -1,19 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Provider;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Swiftly\Routing\Provider\FileProvider;
+use PHPUnit\Framework\TestCase;
+use Swiftly\Routing\Collection;
+use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Exception\RouteParseException;
 use Swiftly\Routing\FileLoaderInterface;
 use Swiftly\Routing\ParserInterface;
-use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Provider\FileProvider;
 use Swiftly\Routing\Route;
-use Swiftly\Routing\Collection;
-use Swiftly\Routing\Exception\RouteParseException;
 
-use function strpos;
 use function explode;
+use function strpos;
 
 /**
  * @covers \Swiftly\Routing\Provider\FileProvider
@@ -21,7 +21,7 @@ use function explode;
  * @uses \Swiftly\Routing\Route
  * @uses \Swiftly\Routing\Collection
  */
-Class FileProviderTest Extends TestCase
+class FileProviderTest extends TestCase
 {
     /** @var FileLoaderInterface&MockObject $loader */
     private $loader;
@@ -34,7 +34,7 @@ Class FileProviderTest Extends TestCase
 
     private const EXAMPLE_ROUTES = [
         'view' => [
-            'handler' => 'PostController::view', 
+            'handler' => 'PostController::view',
             'path'    => '/posts',
             'methods' => ['GET', 'HEAD'],
             'tags'    => ['cacheable']
@@ -101,7 +101,7 @@ Class FileProviderTest Extends TestCase
     ): void {
         self::assertSame(
             self::$EXAMPLE_COMPONENTS[$name],
-            $route->getComponents(), 
+            $route->getComponents(),
             "Route '$name' does not have the correct components!"
         );
     }

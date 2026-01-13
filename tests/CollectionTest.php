@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\Route;
 
 /**
  * @covers \Swiftly\Routing\Collection
  */
-Class CollectionTest Extends TestCase
+class CollectionTest extends TestCase
 {
     /** @var Collection $collection */
     private $collection;

@@ -1,20 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Matcher;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Swiftly\Routing\Matcher\RegexMatcher;
+use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Collection;
-use Swiftly\Routing\Route;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\MatchedRoute;
+use Swiftly\Routing\Matcher\RegexMatcher;
+use Swiftly\Routing\Route;
 
 /**
  * @covers \Swiftly\Routing\Matcher\RegexMatcher
  * @uses \Swiftly\Routing\MatchedRoute
  */
-Class RegexMatcherTest Extends TestCase
+class RegexMatcherTest extends TestCase
 {
     /** @var Collection&MockObject $collection */
     private $collection;

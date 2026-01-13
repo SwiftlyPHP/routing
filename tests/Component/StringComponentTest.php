@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Component;
 
@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Component\StringComponent;
 use Swiftly\Routing\Exception\FormatException;
 
-Class StringComponentTest Extends TestCase
+class StringComponentTest extends TestCase
 {
     /** @var StringComponent $component */
     private $component;

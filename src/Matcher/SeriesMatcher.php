@@ -2,8 +2,8 @@
 
 namespace Swiftly\Routing\Matcher;
 
-use Swiftly\Routing\MatcherInterface;
 use Swiftly\Routing\MatchedRoute;
+use Swiftly\Routing\MatcherInterface;
 
 /**
  * A matcher that forwards calls to other matchers in sequence

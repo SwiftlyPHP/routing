@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Matcher;
 
 use PHPUnit\Framework\TestCase;
+use Swiftly\Routing\MatchedRoute;
 use Swiftly\Routing\Matcher\SeriesMatcher;
 use Swiftly\Routing\MatcherInterface;
-use Swiftly\Routing\MatchedRoute;
 
 /**
  * @covers \Swiftly\Routing\Matcher\SeriesMatcher

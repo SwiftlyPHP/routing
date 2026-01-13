@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Parser;
 
 use PHPUnit\Framework\TestCase;
-use Swiftly\Routing\Parser\DefaultParser;
-use Swiftly\Routing\ComponentInterface;
-use Swiftly\Routing\Component\StringComponent;
-use Swiftly\Routing\Component\IntegerComponent;
 use Swiftly\Routing\Component\EnumComponent;
-use Swiftly\Routing\Exception\UrlParseException;
+use Swiftly\Routing\Component\IntegerComponent;
+use Swiftly\Routing\Component\StringComponent;
+use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Exception\ComponentParseException;
+use Swiftly\Routing\Exception\UrlParseException;
+use Swiftly\Routing\Parser\DefaultParser;
 
 /**
  * @covers \Swiftly\Routing\Parser\DefaultParser
@@ -18,7 +18,7 @@ use Swiftly\Routing\Exception\ComponentParseException;
  * @uses \Swiftly\Routing\Component\IntegerComponent
  * @uses \Swiftly\Routing\Component\EnumComponent
  */
-Class DefaultParserTest Extends TestCase
+class DefaultParserTest extends TestCase
 {
     /** @var DefaultParser $parser */
     private $parser;

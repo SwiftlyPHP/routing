@@ -2,20 +2,20 @@
 
 namespace Swiftly\Routing\Provider;
 
-use Swiftly\Routing\ProviderInterface;
+use Swiftly\Routing\Collection;
+use Swiftly\Routing\Exception\RouteParseException;
 use Swiftly\Routing\FileLoaderInterface;
 use Swiftly\Routing\ParserInterface;
-use Swiftly\Routing\Collection;
+use Swiftly\Routing\ProviderInterface;
 use Swiftly\Routing\Route;
-use Swiftly\Routing\Exception\RouteParseException;
 
-use function is_string;
-use function is_array;
-use function strpos;
+use function array_filter;
+use function array_values;
 use function explode;
 use function function_exists;
-use function array_values;
-use function array_filter;
+use function is_array;
+use function is_string;
+use function strpos;
 
 /**
  * Provider allowing consumers to load route definitions from local files

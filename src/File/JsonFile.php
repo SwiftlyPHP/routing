@@ -2,14 +2,14 @@
 
 namespace Swiftly\Routing\File;
 
-use Swiftly\Routing\FileLoaderInterface;
-use Swiftly\Routing\Exception\FileReadException;
 use Swiftly\Routing\Exception\FileParseException;
+use Swiftly\Routing\Exception\FileReadException;
+use Swiftly\Routing\FileLoaderInterface;
 
-use function json_decode;
+use function file_get_contents;
 use function is_array;
 use function is_file;
-use function file_get_contents;
+use function json_decode;
 use function preg_match;
 
 /**
@@ -45,7 +45,7 @@ class JsonFile implements FileLoaderInterface
             throw new FileReadException($this->file_path);
         }
 
-        // @php:8.3 Swap to json_validate when we can
+        // @upgrade:php8.3 Swap to json_validate
         if (!self::isJsonLike($content)) {
             throw new FileParseException($this->file_path, 'json');
         }
@@ -82,7 +82,7 @@ class JsonFile implements FileLoaderInterface
      * @param string $content Subject string
      * @return bool           Content is JSON
      */
-    private function isJsonLike(string $content): bool
+    private static function isJsonLike(string $content): bool
     {
         return preg_match("/^\s*(?:{\s*\")|(?:\[\s*{)/", $content) === 1;
     }

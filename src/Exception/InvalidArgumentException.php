@@ -4,8 +4,8 @@ namespace Swiftly\Routing\Exception;
 
 use InvalidArgumentException as BaseException;
 
-use function sprintf;
 use function gettype;
+use function sprintf;
 
 /**
  * Exception to be thrown when a given route argument is the wrong type

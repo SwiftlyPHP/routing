@@ -4,9 +4,9 @@ namespace Swiftly\Routing\Exception;
 
 use DomainException;
 
-use function sprintf;
-use function is_scalar;
 use function gettype;
+use function is_scalar;
+use function sprintf;
 
 /**
  * Exception to be thrown when a value cannot be used as a route argument

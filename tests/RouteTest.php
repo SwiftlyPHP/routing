@@ -1,13 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Swiftly\Routing\Route;
-use Swiftly\Routing\ComponentInterface;
 use OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
+use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Route;
 
-Class RouteTest Extends TestCase
+class RouteTest extends TestCase
 {
     /** @var Route $route */
     private $route;

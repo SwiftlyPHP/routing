@@ -2,11 +2,11 @@
 
 namespace Swiftly\Routing\Matcher;
 
-use Swiftly\Routing\MatcherInterface;
 use Swiftly\Routing\Collection;
-use Swiftly\Routing\MatchedRoute;
-use Swiftly\Routing\Route;
 use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\MatchedRoute;
+use Swiftly\Routing\MatcherInterface;
+use Swiftly\Routing\Route;
 
 use function assert;
 use function implode;

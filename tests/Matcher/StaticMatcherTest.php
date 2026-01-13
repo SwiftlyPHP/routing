@@ -1,19 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Matcher;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Swiftly\Routing\Matcher\StaticMatcher;
+use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Collection;
-use Swiftly\Routing\Route;
 use Swiftly\Routing\MatchedRoute;
+use Swiftly\Routing\Matcher\StaticMatcher;
+use Swiftly\Routing\Route;
 
 /**
  * @covers \Swiftly\Routing\Matcher\StaticMatcher
  * @uses \Swiftly\Routing\MatchedRoute
  */
-Class StaticMatcherTest Extends TestCase
+class StaticMatcherTest extends TestCase
 {
     /** @var Collection&MockObject $collection */
     private $collection;

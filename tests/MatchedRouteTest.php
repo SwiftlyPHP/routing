@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests;
 
@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\MatchedRoute;
 use Swiftly\Routing\Route;
 
-Class MatchedRouteTest Extends TestCase
+class MatchedRouteTest extends TestCase
 {
     /** @var MatchedRoute $match */
     private $match;

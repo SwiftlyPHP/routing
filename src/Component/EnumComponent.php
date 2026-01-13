@@ -2,15 +2,15 @@
 
 namespace Swiftly\Routing\Component;
 
+use Stringable;
 use Swiftly\Routing\ComponentInterface;
 use Swiftly\Routing\Exception\FormatException;
-use Stringable;
 
 use function array_map;
 use function implode;
-use function strtolower;
 use function in_array;
 use function is_scalar;
+use function strtolower;
 
 /**
  * Component representing a variable restricted to a set of allowed values
@@ -58,11 +58,11 @@ final class EnumComponent implements ComponentInterface
     /** {@inheritDoc} */
     public function accepts($value): bool
     {
-        if (!$this->isStringable($value)) {
+        if (!self::isStringable($value)) {
             return false;
         }
 
-        $value = (string)$value;
+        $value = (string) $value;
         $value = strtolower($value);
 
         return in_array($value, array_map('strtolower', $this->allowed), true);
@@ -75,7 +75,7 @@ final class EnumComponent implements ComponentInterface
             throw new FormatException($this->name(), $value);
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -86,8 +86,8 @@ final class EnumComponent implements ComponentInterface
      * @param mixed $value Subject variable
      * @return bool        Subject can be represented as a string?
      */
-    private function isStringable($value): bool
+    private static function isStringable($value): bool
     {
-        return (is_scalar($value) || $value instanceof Stringable);
+        return is_scalar($value) || $value instanceof Stringable;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Swiftly\Routing\Matcher;
 
-use Swiftly\Routing\MatcherInterface;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\MatchedRoute;
+use Swiftly\Routing\MatcherInterface;
 
 /**
  * Matches against static routes
@@ -27,15 +27,12 @@ class StaticMatcher implements MatcherInterface
 
     public function match(string $url, string $method = 'GET'): ?MatchedRoute
     {
-        $matched = null;
-
         foreach ($this->routes->static() as $name => $route) {
             if ($route->supports($method) && $route->getComponent(0) === $url) {
-                $matched = new MatchedRoute($name, $route);
-                break;
+                return new MatchedRoute($name, $route);
             }
         }
 
-        return $matched;
+        return null;
     }
 }

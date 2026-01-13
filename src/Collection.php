@@ -63,9 +63,10 @@ class Collection
      */
     public function static(): array
     {
-        return array_filter($this->routes, function (Route $route): bool {
-            return $route->isStatic();
-        });
+        return array_filter(
+            $this->routes,
+            static fn (Route $route): bool => $route->isStatic(),
+        );
     }
 
     /**
@@ -77,9 +78,10 @@ class Collection
      */
     public function dynamic(): array
     {
-        return array_filter($this->routes, function (Route $route): bool {
-            return !$route->isStatic();
-        });
+        return array_filter(
+            $this->routes,
+            static fn (Route $route): bool => !$route->isStatic(),
+        );
     }
 
     /**

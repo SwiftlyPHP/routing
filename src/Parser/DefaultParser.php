@@ -2,18 +2,18 @@
 
 namespace Swiftly\Routing\Parser;
 
-use Swiftly\Routing\ParserInterface;
-use Swiftly\Routing\Exception\UrlParseException;
-use Swiftly\Routing\Exception\ComponentParseException;
-use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Component\EnumComponent;
 use Swiftly\Routing\Component\IntegerComponent;
 use Swiftly\Routing\Component\StringComponent;
-use Swiftly\Routing\Component\EnumComponent;
+use Swiftly\Routing\ComponentInterface;
+use Swiftly\Routing\Exception\ComponentParseException;
+use Swiftly\Routing\Exception\UrlParseException;
+use Swiftly\Routing\ParserInterface;
 
+use function array_map;
+use function explode;
 use function preg_match;
 use function preg_match_all;
-use function explode;
-use function array_map;
 
 use const PREG_SET_ORDER;
 
@@ -111,7 +111,7 @@ class DefaultParser implements ParserInterface
 
         foreach ($matches as $match) {
             $components[] = isset($match['type'])
-                ? $this->make($match['type'], $match)
+                ? self::make($match['type'], $match)
                 : $match[0];
         }
 
@@ -131,18 +131,15 @@ class DefaultParser implements ParserInterface
      * @param string[] $data      Component data
      * @return ComponentInterface Prepared component instance
      */
-    private function make(string $type, array $data): ComponentInterface
+    private static function make(string $type, array $data): ComponentInterface
     {
-        switch ($type) {
-            case self::INTEGER_COMPONENT:
-                return new IntegerComponent($data['name']);
-            case self::STRING_COMPONENT:
-                return new StringComponent($data['name']);
-            case self::ENUM_COMPONENT:
-                return new EnumComponent(
-                    $data['name'],
-                    array_map('trim', explode(',', $data['values']))
-                );
-        }
+        return match ($type) {
+            self::INTEGER_COMPONENT => new IntegerComponent($data['name']),
+            self::STRING_COMPONENT => new StringComponent($data['name']),
+            self::ENUM_COMPONENT => new EnumComponent(
+                $data['name'],
+                array_map('trim', explode(',', $data['values'])),
+            ),
+        };
     }
 }

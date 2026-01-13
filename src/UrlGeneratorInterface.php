@@ -23,7 +23,7 @@ interface UrlGeneratorInterface
      *
      * @param non-empty-string $name     Route name
      * @param array<string, mixed> $args Route arguments
-     * @return string                    Generated URL
+     * @return non-empty-string          Generated URL
      */
     public function generate(string $name, array $args): string;
 }

@@ -2,15 +2,15 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\ComponentInterface;
 use OutOfBoundsException;
+use Swiftly\Routing\ComponentInterface;
 
 use function array_map;
 use function count;
-use function is_string;
 use function in_array;
-use function strtoupper;
+use function is_string;
 use function strtolower;
+use function strtoupper;
 
 /**
  * Represents a single endpoint in a HTTP aware application
@@ -132,9 +132,8 @@ class Route
      */
     public function isStatic(): bool
     {
-        return (count($this->components) === 1
-            && is_string($this->components[0])
-        );
+        return count($this->components) === 1
+            && is_string($this->components[0]);
     }
 
     /**
@@ -147,9 +146,8 @@ class Route
      */
     public function supports(string $method): bool
     {
-        return (empty($this->methods)
-            || in_array(strtoupper($method), $this->methods, true)
-        );
+        return empty($this->methods)
+            || in_array(strtoupper($method), $this->methods, true);
     }
 
     /**

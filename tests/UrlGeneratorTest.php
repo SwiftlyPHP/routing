@@ -1,19 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Swiftly\Routing\UrlGenerator;
+use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Collection;
 use Swiftly\Routing\ComponentInterface;
-use Swiftly\Routing\Route;
-use Swiftly\Routing\Exception\UndefinedRouteException;
-use Swiftly\Routing\Exception\MissingArgumentException;
 use Swiftly\Routing\Exception\FormatException;
 use Swiftly\Routing\Exception\InvalidArgumentException;
+use Swiftly\Routing\Exception\MissingArgumentException;
+use Swiftly\Routing\Exception\UndefinedRouteException;
+use Swiftly\Routing\Route;
+use Swiftly\Routing\UrlGenerator;
 
-Class UrlGeneratorTest Extends TestCase
+class UrlGeneratorTest extends TestCase
 {
     /** @var Collection&MockObject $collection */
     private $collection;

@@ -1,17 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\File;
 
 use PHPUnit\Framework\TestCase;
-use Swiftly\Routing\File\JsonFile;
-use Swiftly\Routing\Exception\FileReadException;
 use Swiftly\Routing\Exception\FileParseException;
+use Swiftly\Routing\Exception\FileReadException;
+use Swiftly\Routing\File\JsonFile;
 
 use function file_put_contents;
 use function json_encode;
 use function unlink;
 
-Class JsonFileTest Extends TestCase
+class JsonFileTest extends TestCase
 {
     /** @var JsonFile $file */
     private $file;

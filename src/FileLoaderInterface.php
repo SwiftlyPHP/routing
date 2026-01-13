@@ -2,8 +2,8 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\Exception\FileReadException;
 use Swiftly\Routing\Exception\FileParseException;
+use Swiftly\Routing\Exception\FileReadException;
 
 /**
  * Interface to signify classes capable of loading files from the filesystem

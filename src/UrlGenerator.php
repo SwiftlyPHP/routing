@@ -2,14 +2,12 @@
 
 namespace Swiftly\Routing;
 
-use Swiftly\Routing\UrlGeneratorInterface;
 use Swiftly\Routing\Collection;
-use Swiftly\Routing\Exception\UndefinedRouteException;
-use Swiftly\Routing\Exception\MissingArgumentException;
 use Swiftly\Routing\Exception\FormatException;
 use Swiftly\Routing\Exception\InvalidArgumentException;
-
-use function is_string;
+use Swiftly\Routing\Exception\MissingArgumentException;
+use Swiftly\Routing\Exception\UndefinedRouteException;
+use Swiftly\Routing\UrlGeneratorInterface;
 
 /**
  * Utility class used to generate URLs for named routes
@@ -39,28 +37,21 @@ final class UrlGenerator implements UrlGeneratorInterface
      * @throws UndefinedRouteException  If the named route doesn't exist
      * @throws MissingArgumentException If a required route argument is missing
      * @throws InvalidArgumentException If a given argument is invalid
+     *
      * @param string $name              Route name
      * @param mixed[] $args             Route arguments
      * @return string                   Generated URL
      */
     public function generate(string $name, array $args = []): string
     {
-        $route = $this->routes->get($name);
-
-        if ($route === null) {
-            throw new UndefinedRouteException($name);
-        }
-
         $url = '';
 
-        foreach ($route->getComponents() as $component) {
-            if (is_string($component)) {
-                $value = $component;
-            } else {
-                $value = $this->escape($component, $args);
+        foreach ($this->getRoute($name)->getComponents() as $component) {
+            if ($component instanceof ComponentInterface) {
+                $component = self::escape($component, $args);
             }
 
-            $url .= $value;
+            $url .= $component;
         }
 
         return $url;
@@ -75,8 +66,10 @@ final class UrlGenerator implements UrlGeneratorInterface
      * @param mixed[] $args                 Route arguments
      * @return string                       Escaped URL component
      */
-    private function escape(ComponentInterface $component, array $args): string
-    {
+    private static function escape(
+        ComponentInterface $component,
+        array $args,
+    ): string {
         $name = $component->name();
 
         if (!isset($args[$name])) {
@@ -90,5 +83,21 @@ final class UrlGenerator implements UrlGeneratorInterface
         }
 
         return $escaped;
+    }
+
+    /**
+     * @throws UndefinedRouteException
+     *
+     * @param non-empty-string $name
+     */
+    private function getRoute(string $name): Route
+    {
+        $route = $this->routes->get($name);
+
+        if (null === $route) {
+            throw new UndefinedRouteException($name);
+        }
+
+        return $route;
     }
 }

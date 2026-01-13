@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Swiftly\Routing\Tests\Component;
 
@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Swiftly\Routing\Component\EnumComponent;
 use Swiftly\Routing\Exception\FormatException;
 
-Class EnumComponentTest Extends TestCase
+class EnumComponentTest extends TestCase
 {
     /** @var EnumComponent $component */
     private $component;
